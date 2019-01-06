@@ -17,8 +17,8 @@ import com.scg.util.PersonalName;
  *
  */
 public class ClientAccountTest {
-	private PersonalName personalName;
 	private ClientAccount clientAccount; 
+	private PersonalName personalName;
 	
 	/**
 	 * @throws java.lang.Exception

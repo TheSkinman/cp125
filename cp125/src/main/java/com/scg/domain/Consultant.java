@@ -8,10 +8,12 @@ import com.scg.util.PersonalName;
  *
  */
 public class Consultant {
-	
+
 	private PersonalName name;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -35,12 +37,10 @@ public class Consultant {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(PersonalName name) {
 		this.name = name;
 	}
-	
-	
-
 }

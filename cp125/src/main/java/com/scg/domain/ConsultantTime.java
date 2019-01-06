@@ -97,7 +97,6 @@ public class ConsultantTime {
 	 * @return The name of the Account
 	 */
 	public String getName() {
-		// TODO Auto-generated method stub
 		return account.getName();
 	}
 
@@ -123,7 +122,6 @@ public class ConsultantTime {
 	 * @return true if the time is billable otherwise false.
 	 */
 	public boolean isBillable() {
-		// TODO Auto-generated method stub
 		return account.isBillable();
 	}
 

@@ -5,71 +5,90 @@ package com.scg.domain;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import java.util.Objects;
+
 import org.junit.Test;
+
+import com.scg.util.PersonalName;
 
 /**
  * @author Norman Skinner
  *
  */
 public class ConsultantTest {
-
+	private Consultant consultant;
+	private PersonalName personalName;
+	
 	/**
-	 * @throws java.lang.Exception
+	 * Test method for {@link com.scg.domain.Consultant#Consultant(com.scg.util.PersonalName)}.
 	 */
-	@Before
-	public void setUp() throws Exception {
+	@Test
+	public void test_ConsultantConstructor() {
+		// ARRANGE
+		personalName = new PersonalName("Name-Last", "Name-First", "Name-Middle");
+		
+		// ACT
+		consultant = new Consultant(personalName);
+		
+		// ASSERT
+		assertNotNull(consultant);
+		assertNotNull(consultant.getName());
+		assertEquals("Name-Last",consultant.getName().getLastName());
+		assertEquals("Name-First",consultant.getName().getFirstName());
+		assertEquals("Name-Middle",consultant.getName().getMiddleName());
 	}
 
 	/**
 	 * Test method for {@link com.scg.domain.Consultant#toString()}.
 	 */
 	@Test
-	public void testToString() {
+	public void test_ToString() {
 		// ARRANGE
+		personalName = new PersonalName("Name-Last", "Name-First", "Name-Middle");
+		consultant = new Consultant(personalName);
 		
 		// ACT
+		String result = consultant.toString();
 		
 		// ASSERT
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link com.scg.domain.Consultant#Consultant(com.scg.util.PersonalName)}.
-	 */
-	@Test
-	public void testConsultant() {
-		// ARRANGE
-		
-		// ACT
-		
-		// ASSERT
-		fail("Not yet implemented");
+		assertEquals("Consultant: Name-Last, Name-First Name-Middle", result);
 	}
 
 	/**
 	 * Test method for {@link com.scg.domain.Consultant#getName()}.
 	 */
 	@Test
-	public void testGetName() {
+	public void test_GetName() {
 		// ARRANGE
+		personalName = new PersonalName("Name-Last", "Name-First", "Name-Middle");
+		consultant = new Consultant(personalName);
 		
 		// ACT
+		PersonalName result = consultant.getName(); 
 		
 		// ASSERT
-		fail("Not yet implemented");
+		assertTrue(Objects.equals(personalName, result));
 	}
 
 	/**
 	 * Test method for {@link com.scg.domain.Consultant#setName(com.scg.util.PersonalName)}.
 	 */
 	@Test
-	public void testSetName() {
+	public void test_SetName() {
 		// ARRANGE
+		personalName = new PersonalName("Name-Last", "Name-First", "Name-Middle");
+		consultant = new Consultant(personalName);
+		personalName.setFirstName("TestFirst");
+		personalName.setMiddleName("TestMiddle");
+		personalName.setLastName("TestLat");
 		
 		// ACT
+		consultant.setName(personalName);
 		
 		// ASSERT
-		fail("Not yet implemented");
+		assertNotNull(consultant.getName());
+		assertEquals("TestLat",consultant.getName().getLastName());
+		assertEquals("TestFirst",consultant.getName().getFirstName());
+		assertEquals("TestMiddle",consultant.getName().getMiddleName());
 	}
 }
