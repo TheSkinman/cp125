@@ -86,7 +86,7 @@ public class PersonalName {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s, %s %s", lastName, firstName, middleName);
+		return String.format("%s, %s %s", lastName, firstName, middleName).trim();
 	}
 	
 	/* (non-Javadoc)

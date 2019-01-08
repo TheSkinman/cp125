@@ -53,7 +53,7 @@ public class TimeCard {
 	 */
 	public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
-		List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream().filter(p -> p.isBillable())
+		List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream().filter(p -> p.isBillable() && p.getName() == clientName)
 				.collect(Collectors.toList());
 
 		return theReturn;
@@ -165,7 +165,6 @@ public class TimeCard {
 	public String toString() {
 		return "TimeCard [getConsultantHours()=" + getConsultantHours() + ", getTotalBillableHours()="
 				+ getTotalBillableHours() + ", getTotalHours()=" + getTotalHours() + ", getNonTotalBilableHours()="
-				+ getTotalNonBillableHours() + ", getWeekStartingDay()=" + getWeekStartingDay() + ", toString()="
-				+ super.toString() + "]";
+				+ getTotalNonBillableHours() + ", getWeekStartingDay()=" + getWeekStartingDay() + "]";
 	}
 }

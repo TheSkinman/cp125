@@ -23,6 +23,7 @@ public class ConsultantTimeTest {
 	private LocalDate date;
 	private Skill skillType;
 	private int hours;
+	
 
 	/**
 	 * @throws java.lang.Exception
@@ -81,20 +82,15 @@ public class ConsultantTimeTest {
 	@Test
 	public void test_HashCode_WithValues() { 
 		// ARRANGE
-		account = new Account() {
-			@Override public boolean isBillable() { return false; }
-			@Override public String getName() { return null; }
-		};
-		date = LocalDate.of(1111, 11, 11);
-		skillType = Skill.PROJECT_MANGER;
-		consultantTime = new ConsultantTime(date, account, skillType, 1);
+		ConsultantTime consultantTime1 = new ConsultantTime(date, account, skillType, 1);
+		ConsultantTime consultantTime2 = new ConsultantTime(date, account, skillType, 1);
 		
 		// ACT
-		int result = consultantTime.hashCode();
-		System.out.println(consultantTime.toString());
+		int result1 = consultantTime1.hashCode();
+		int result2 = consultantTime2.hashCode();
 		
 		// ASSERT
-		assertEquals(-1940149193, result);
+		assertEquals(result1, result2);
 	}
 
 	/**
