@@ -1,9 +1,15 @@
 package com.scg.domain;
 
+import com.scg.util.Address;
 import com.scg.util.PersonalName;
 
+/**
+ * 
+ * @author Norman Skinner (skinman@uw.edu)
+ *
+ */
 public class ClientAccount implements Account {
-
+	private Address address;
 	private String name;
 	private PersonalName contact;
 	private boolean billable;
@@ -11,20 +17,23 @@ public class ClientAccount implements Account {
 	/**
 	 * @param name Name of the Client Account.
 	 * @param contact Contact for the Client Account.
+	 * @param address Address for the Client Account.
 	 */
-	public ClientAccount(String name, PersonalName contact) {
-		this(name, contact, true);
+	public ClientAccount(String name, PersonalName contact, Address address) {
+		this(name, contact, address, true);
 	}
 	
 	/**
 	 * @param name Name of the Client Account.
 	 * @param contact Contact for the Client Account.
+	 * @param address Address for the Client Account.
 	 * @param billable Set true if the account is billable.
 	 */
-	public ClientAccount(String name, PersonalName contact, boolean billable) {
+	public ClientAccount(String name, PersonalName contact, Address address, boolean billable) {
 		super();
 		this.name = name;
 		this.contact = contact;
+		this.address = address;
 		this.billable = billable;
 	}
 
