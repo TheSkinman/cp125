@@ -10,7 +10,9 @@ import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.scg.util.Address;
 import com.scg.util.PersonalName;
+import com.scg.util.StateCode;
 
 /**
  * @author Norman Skinner
@@ -19,6 +21,7 @@ import com.scg.util.PersonalName;
 public class ClientAccountTest {
 	private ClientAccount clientAccount; 
 	private PersonalName personalName;
+	private Address address;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -26,6 +29,7 @@ public class ClientAccountTest {
 	@Before
 	public void setUp() throws Exception {
 		personalName = new PersonalName("last", "first", "middle");
+		address = new Address("1325 4th Ave #400", "Seattle", StateCode.WA, "98101");
 	}
 
 	/**
@@ -38,7 +42,7 @@ public class ClientAccountTest {
 		PersonalName contact = personalName;
 
 		// ACT
-		ClientAccount result = new ClientAccount(name, contact);
+		ClientAccount result = new ClientAccount(name, contact, address);
 		
 		// ASSERT
 		assertEquals(name, result.getName());
@@ -57,7 +61,7 @@ public class ClientAccountTest {
 		boolean billable = false;
 		
 		// ACT
-		ClientAccount result = new ClientAccount(name, contact, billable);
+		ClientAccount result = new ClientAccount(name, contact, address, billable);
 
 		// ASSERT
 		assertEquals(name, result.getName());
@@ -71,7 +75,7 @@ public class ClientAccountTest {
 	@Test
 	public void test_GetName() {
 		// ARRANGE
-		clientAccount = new ClientAccount("test", null);
+		clientAccount = new ClientAccount("test", null, null);
 		
 		// ACT
 		String result = clientAccount.getName();
@@ -86,7 +90,7 @@ public class ClientAccountTest {
 	@Test
 	public void test_IsBillable() {
 		// ARRANGE
-		clientAccount = new ClientAccount("test", null);
+		clientAccount = new ClientAccount("test", null, null);
 		
 		// ACT
 		boolean result = clientAccount.isBillable();
@@ -101,7 +105,7 @@ public class ClientAccountTest {
 	@Test
 	public void test_GetContact() {
 		// ARRANGE
-		clientAccount = new ClientAccount("test", personalName);
+		clientAccount = new ClientAccount("test", personalName, address);
 		
 		// ACT
 		PersonalName result = clientAccount.getContact();
@@ -116,7 +120,7 @@ public class ClientAccountTest {
 	@Test
 	public void test_SetContact() {
 		// ARRANGE
-		clientAccount = new ClientAccount("test", null);
+		clientAccount = new ClientAccount("test", null,null);
 		
 		// ACT
 		clientAccount.setContact(personalName);
