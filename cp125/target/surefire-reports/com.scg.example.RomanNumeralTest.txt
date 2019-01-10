@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.scg.example.RomanNumeralTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.077 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.034 sec - in com.scg.example.RomanNumeralTest
