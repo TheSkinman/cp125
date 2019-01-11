@@ -3,13 +3,15 @@
  */
 package com.scg.domain;
 
-import static org.junit.Assert.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.scg.util.PersonalName;
 
@@ -30,7 +32,7 @@ public class TimeCardTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		account1 = new Account() {
 			@Override public boolean isBillable() { return true; }
