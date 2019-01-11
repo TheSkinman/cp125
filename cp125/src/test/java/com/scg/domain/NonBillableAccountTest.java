@@ -3,8 +3,11 @@
  */
 package com.scg.domain;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author Norman Skinner

@@ -3,12 +3,15 @@
  */
 package com.scg.domain;
 
-import static org.junit.Assert.*;
-
 import java.util.Objects;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
@@ -26,7 +29,7 @@ public class ClientAccountTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		personalName = new PersonalName("last", "first", "middle");
 		address = new Address("1325 4th Ave #400", "Seattle", StateCode.WA, "98101");

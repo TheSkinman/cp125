@@ -3,12 +3,16 @@
  */
 package com.scg.util;
 
-import static org.junit.Assert.*;
-
 import java.time.LocalDate;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author Norman Skinner
@@ -16,13 +20,6 @@ import org.junit.Test;
  */
 public class PersonalNameTest {
 	private PersonalName personalName;
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
 
 	/**
 	 * Test method for {@link com.scg.util.PersonalName#hashCode()}.
