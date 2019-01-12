@@ -3,14 +3,15 @@
  */
 package com.scg.domain;
 
-import static org.junit.Assert.*;
-
-import java.sql.Date;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.Objects;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Norman Skinner
@@ -28,7 +29,7 @@ public class ConsultantTimeTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		account = new Account() {
 			private String name = "Company Name";
@@ -121,16 +122,15 @@ public class ConsultantTimeTest {
 	 * Test method for
 	 * {@link com.scg.domain.ConsultantTime#ConsultantTime(java.time.LocalDate, com.scg.domain.Account, com.scg.domain.Skill, int)}.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void test_ConsultantTimeConstructor_BadHour() {
 		// ARRANGE
 		hours = 0;
 		
-		// ACT
+		// ASSERT & ACT
+		assertThrows( IllegalArgumentException.class, () -> {
 		consultantTime = new ConsultantTime(date, account, skillType, hours);
-
-		// ASSERT
-		fail("Expeacted 'IllegalArgumentException' to be thrown but it was NOT!");
+		});
 	}
 
 	/**
@@ -147,6 +147,7 @@ public class ConsultantTimeTest {
 		boolean result01 = consultantTime.equals(consultantTime02);
 		boolean result02 = consultantTime.equals(consultantTime);
 		boolean result03 = consultantTime.equals(null);
+		@SuppressWarnings("unlikely-arg-type")
 		boolean result04 = consultantTime.equals(account);
 		consultantTime02 = new ConsultantTime(date, account, skillType, 1);
 		boolean result05 = consultantTime.equals(consultantTime02);
@@ -228,16 +229,15 @@ public class ConsultantTimeTest {
 	/**
 	 * Test method for {@link com.scg.domain.ConsultantTime#setHours(int)}.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void test_SetHours_BadHours() {
 		// ARRANGE
 		consultantTime = new ConsultantTime(date, account, skillType, hours);
 
-		// ACT
-		consultantTime.setHours(0);
-
-		// ASSERT
-		fail("Expeacted 'IllegalArgumentException' to be thrown but it was NOT!");
+		// ASSERT & ACT
+		assertThrows( IllegalArgumentException.class, () -> {
+				consultantTime.setHours(0);
+		});
 	}
 
 	/**
