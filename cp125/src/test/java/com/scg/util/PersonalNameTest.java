@@ -6,11 +6,9 @@ package com.scg.util;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -180,6 +178,7 @@ public class PersonalNameTest {
 		boolean result01 = personalName.equals(personalName);
 		boolean result02 = personalName.equals(null);
 		boolean result03 = personalName.equals(personalName2);
+		@SuppressWarnings("unlikely-arg-type")
 		boolean result04 = personalName.equals(LocalDate.now());
 		personalName2 = new PersonalName("a", "b", "c");
 		boolean result05 = personalName.equals(personalName2);

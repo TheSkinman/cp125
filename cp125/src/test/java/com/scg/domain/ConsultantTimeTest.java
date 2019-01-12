@@ -3,7 +3,6 @@
  */
 package com.scg.domain;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -131,17 +128,10 @@ public class ConsultantTimeTest {
 		// ARRANGE
 		hours = 0;
 		
-<<<<<<<
 		// ACT & ASSERT
 		assertThrows(IllegalArgumentException.class, () -> {
 			consultantTime = new ConsultantTime(date, account, skillType, hours);
 		});
-=======
-		// ASSERT & ACT
-		assertThrows( IllegalArgumentException.class, () -> {
-		consultantTime = new ConsultantTime(date, account, skillType, hours);
-		});
->>>>>>>
 	}
 
 	/**
@@ -245,17 +235,10 @@ public class ConsultantTimeTest {
 		// ARRANGE
 		consultantTime = new ConsultantTime(date, account, skillType, hours);
 
-<<<<<<<
 		// ACT & Assert
 		assertThrows(IllegalArgumentException.class, () -> {
 			consultantTime.setHours(0);
 		});
-=======
-		// ASSERT & ACT
-		assertThrows( IllegalArgumentException.class, () -> {
-				consultantTime.setHours(0);
-		});
->>>>>>>
 	}
 
 	/**
