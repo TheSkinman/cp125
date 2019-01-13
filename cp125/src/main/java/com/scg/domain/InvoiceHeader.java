@@ -2,6 +2,8 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.scg.util.Address;
 
 /**
@@ -58,7 +60,30 @@ public class InvoiceHeader {
 	 */
 	@Override
 	public String toString() {
-		return "InvoiceHeader [businessName=" + businessName + ", businessAddress=" + businessAddress + ", client="
-				+ client + ", invoiceDate=" + invoiceDate + ", invoiceForMonth=" + invoiceForMonth + "]";
+		StringBuilder sb = new StringBuilder();
+		// Company Address
+		sb.append(String.format("%s%n", businessName));
+		sb.append(businessAddress.toString() + "\n");
+		
+		// Invoice For
+		sb.append("Invoice for:\n");
+		sb.append(client.toString());
+		sb.append("\n\n");
+		
+		// Invoice Dates
+		sb.append(String.format("Invoice For Month of: %1$tB %1$tY%n", invoiceForMonth));
+		sb.append(String.format("Invoice Date: %1$tB %1$td, %1$tY%n%n", invoiceDate));
+		
+		// Invoice headers
+		sb.append(String.format("%-10s  %-27s  %-18s   %-5s  %-10s%n",
+				"Date", "Consultant", "Skill", "Hours", "Charge"));
+		sb.append(StringUtils.repeat("-", 10) + "  ");
+		sb.append(StringUtils.repeat("-", 27) + "  ");
+		sb.append(StringUtils.repeat("-", 18) + "   ");
+		sb.append(StringUtils.repeat("-", 5) + "  ");
+		sb.append(StringUtils.repeat("-", 10) + "\n");
+		
+		String finalString = sb.toString(); 
+		return finalString;
 	}
 }

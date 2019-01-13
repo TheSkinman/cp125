@@ -55,7 +55,9 @@ public class Address {
 		return streetNumber;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -69,7 +71,9 @@ public class Address {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -101,14 +105,13 @@ public class Address {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Address [city=" + city + ", postalCode=" + postalCode + ", state=" + state + ", streetNumber="
-				+ streetNumber + "]";
+		return String.format("%s%n%s, %s %s %n", getStreetNumber(), getCity(), getState(), getPostalCode());
 	}
-	
-	
 }

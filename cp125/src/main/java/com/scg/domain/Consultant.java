@@ -18,7 +18,7 @@ public class Consultant {
 	 */
 	@Override
 	public String toString() {
-		return "Consultant: " + getName();
+		return getName().toString();
 	}
 
 	/**

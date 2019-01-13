@@ -13,21 +13,28 @@ public class ClientAccount implements Account {
 	private String name;
 	private PersonalName contact;
 	private boolean billable;
-	
+
 	/**
-	 * @param name Name of the Client Account.
-	 * @param contact Contact for the Client Account.
-	 * @param address Address for the Client Account.
+	 * @param name
+	 *            Name of the Client Account.
+	 * @param contact
+	 *            Contact for the Client Account.
+	 * @param address
+	 *            Address for the Client Account.
 	 */
 	public ClientAccount(String name, PersonalName contact, Address address) {
 		this(name, contact, address, true);
 	}
-	
+
 	/**
-	 * @param name Name of the Client Account.
-	 * @param contact Contact for the Client Account.
-	 * @param address Address for the Client Account.
-	 * @param billable Set true if the account is billable.
+	 * @param name
+	 *            Name of the Client Account.
+	 * @param contact
+	 *            Contact for the Client Account.
+	 * @param address
+	 *            Address for the Client Account.
+	 * @param billable
+	 *            Set true if the account is billable.
 	 */
 	public ClientAccount(String name, PersonalName contact, Address address, boolean billable) {
 		super();
@@ -54,7 +61,7 @@ public class ClientAccount implements Account {
 		// TODO Auto-generated method stub
 		return billable;
 	}
-	
+
 	/**
 	 * 
 	 * @return contact for the Client Account.
@@ -64,9 +71,41 @@ public class ClientAccount implements Account {
 	}
 
 	/**
-	 * @param contact sets the contact for the Client Account.
+	 * @param contact
+	 *            sets the contact for the Client Account.
 	 */
 	public void setContact(PersonalName contact) {
 		this.contact = contact;
 	}
+
+	/**
+	 * @return the address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address
+	 *            the address to set
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("%s%n", getName()));
+		sb.append(getAddress().toString());
+		sb.append(getContact().toString());
+
+		return sb.toString();
+	}
+
 }

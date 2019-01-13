@@ -52,6 +52,7 @@ public final class Assignment03 {
             for (final TimeCard currentTimeCard : timeCards) {
                 invoice.extractLineItems(currentTimeCard);
             }
+            System.out.println(invoice.toString());
         }
 
         return invoices;

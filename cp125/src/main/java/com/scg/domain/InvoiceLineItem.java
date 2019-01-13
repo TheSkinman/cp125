@@ -1,12 +1,17 @@
 package com.scg.domain;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
 public class InvoiceLineItem {
+	private static final Logger log = LoggerFactory.getLogger(InvoiceLineItem.class);
 	private int charge;
 	private Consultant consultant;
 	private LocalDate date;
@@ -70,7 +75,8 @@ public class InvoiceLineItem {
 	 */
 	@Override
 	public String toString() {
-		return "InvoiceLineItem [charge=" + charge + ", consultant=" + consultant + ", date=" + date + ", hours="
-				+ hours + ", skill=" + skill + "]";
+		String returnString = String.format("%-10s  %-27s  %-18s   %5s  %,10d%n",
+				getDate(), getConsultant(), getSkill(), getHours(), getCharge());
+		return returnString;
 	}
 }
