@@ -33,7 +33,6 @@ public class ClientAccount implements Account {
 	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
@@ -42,7 +41,6 @@ public class ClientAccount implements Account {
 	 */
 	@Override
 	public boolean isBillable() {
-		// TODO Auto-generated method stub
 		return billable;
 	}
 	

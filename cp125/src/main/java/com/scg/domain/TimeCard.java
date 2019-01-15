@@ -123,7 +123,8 @@ public class TimeCard {
 			fmtr.format(LINE_DOUBLE)
 	
 			// Consultant and Week Starting Date
-			    .format("%1$-40s Week Starting: %2$tb %2$td, %2$tY%n", getConsultant(), getWeekStartingDay())
+			
+			    .format("Consultant: %1$-28s Week Starting: %2$tb %2$td, %2$tY%n", getConsultant(), getWeekStartingDay())
 	
 			// Billable Headers
 			    .format("%nBillable Time:%n")
