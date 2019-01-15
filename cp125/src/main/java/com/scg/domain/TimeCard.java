@@ -2,6 +2,7 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TimeCard {
 
+	private static final String DATE = "Date";
+	private static final String ACCOUNT = "Account";
+	private static final String TOTAL_HOURS = "Total Hours:";
+	private static final String TOTAL_NON_BILLABLE = "Total Non-Billable:";
+	private static final String TOTAL_BILLABLE = "Total Billable:";
 	private Set<String> accountNames;
 	private List<ConsultantTime> consultantHours;
 	private Consultant consultant;
@@ -110,51 +116,53 @@ public class TimeCard {
 	 */
 	public String toReportString() {
 		final String LINE_DOUBLE = StringUtils.repeat("=", 68) + "\n";
-		StringBuilder sb = new StringBuilder();
+		String finalString = null;
+		try (Formatter fmtr = new Formatter();) {
 
-		// Start the block
-		sb.append(LINE_DOUBLE);
-
-		// Consultant and Week Starting Date
-		sb.append(String.format("%1$-40s Week Starting: %2$tb %2$td, %2$tY%n", getConsultant(), getWeekStartingDay()));
-
-		// Billable Headers
-		sb.append(String.format("%nBillable Time:%n"));
-		sb.append(String.format("%-27s  %-10s  Hours  Skill%n", "Account", "Date"));
-		sb.append(StringUtils.repeat("-", 27) + "  ");
-		sb.append(StringUtils.repeat("-", 10) + "  ");
-		sb.append(StringUtils.repeat("-", 5) + "  ");
-		sb.append(StringUtils.repeat("-", 20) + "\n");
-
-		// Print only consultant hours that are billable
-	    getConsultantHours().forEach(p -> {
-	    	if (p.isBillable())
-	    		sb.append(p.toString());
-	    	});
-
-		// Non-Billable Headers
-		sb.append(String.format("%nNon-billable Time:%n"));
-		sb.append(String.format("%-27s  %-10s  Hours  Skill%n", "Account", "Date"));
-		sb.append(StringUtils.repeat("-", 27) + "  ");
-		sb.append(StringUtils.repeat("-", 10) + "  ");
-		sb.append(StringUtils.repeat("-", 5) + "  ");
-		sb.append(StringUtils.repeat("-", 20) + "\n");
-
-		// Print only consultant hours that are NOT billable
-	    getConsultantHours().forEach(p -> {
-	    	if (!p.isBillable())
-	    		sb.append(p.toString());
-	    	});
-		
-		// Summary
-		sb.append(String.format("%nSummary:%n"));
-		sb.append(String.format("%-39s  %5d%n", "Total Billable:", getTotalBillableHours()));
-		sb.append(String.format("%-39s  %5d%n", "Total Non-Billable:", getTotalNonBillableHours()));
-		sb.append(String.format("%-39s  %5d%n", "Total Hours:", getTotalHours()));
-		
-		// End this block
-		sb.append(LINE_DOUBLE);
-		String finalString = sb.toString(); 
+			// Start the block
+			fmtr.format(LINE_DOUBLE)
+	
+			// Consultant and Week Starting Date
+			    .format("%1$-40s Week Starting: %2$tb %2$td, %2$tY%n", getConsultant(), getWeekStartingDay())
+	
+			// Billable Headers
+			    .format("%nBillable Time:%n")
+			    .format("%-27s  %-10s  Hours  Skill%n", ACCOUNT, DATE)
+			    .format(StringUtils.repeat("-", 27) + "  ")
+			    .format(StringUtils.repeat("-", 10) + "  ")
+			    .format(StringUtils.repeat("-", 5) + "  ")
+			    .format(StringUtils.repeat("-", 20) + "\n");
+	
+			// Print only consultant hours that are billable
+		    getConsultantHours().forEach(p -> {
+		    	if (p.isBillable())
+		    		fmtr.format(p.toString());
+		    	});
+	
+			// Non-Billable Headers
+			fmtr.format("%nNon-billable Time:%n")
+			    .format("%-27s  %-10s  Hours  Skill%n", ACCOUNT, DATE)
+			    .format(StringUtils.repeat("-", 27) + "  ")
+			    .format(StringUtils.repeat("-", 10) + "  ")
+			    .format(StringUtils.repeat("-", 5) + "  ")
+			    .format(StringUtils.repeat("-", 20) + "\n");
+	
+			// Print only consultant hours that are NOT billable
+		    getConsultantHours().forEach(p -> {
+		    	if (!p.isBillable())
+		    		fmtr.format(p.toString());
+		    	});
+			
+			// Summary
+			fmtr.format("%nSummary:%n")
+			    .format("%-39s  %5d%n", TOTAL_BILLABLE, getTotalBillableHours())
+			    .format("%-39s  %5d%n", TOTAL_NON_BILLABLE, getTotalNonBillableHours())
+			    .format("%-39s  %5d%n", TOTAL_HOURS, getTotalHours())
+			
+			// End this block
+			    .format(LINE_DOUBLE);
+			finalString = fmtr.toString();
+		}
 		return finalString;
 	}
 
