@@ -77,7 +77,6 @@ public class InvoiceLineItem {
 	public String toString() {
 		String returnString = String.format("%1$tm/%1$td/%1$tY  %2$-27s  %3$-18s   %4$5s  %5$,10.2f%n",
 				getDate(), getConsultant(), getSkill(), getHours(), (double)getCharge());
-		System.out.println();
 		return returnString;
 	}
 }

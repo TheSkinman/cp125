@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -179,30 +181,31 @@ public class Invoice {
 	 * @return The formatted invoice as a string.
 	 */
 	public String toReportString() {
-		StringBuilder sb = new StringBuilder();
+	    StringBuilder sb = new StringBuilder();
 		
 		// Setup the header and footers
 		InvoiceHeader invoiceHeader = new InvoiceHeader(bizName, bizAddress, getClientAccount(), LocalDate.now(), getStartDate());
 		InvoiceFooter invoiceFooter = new InvoiceFooter(bizName);
 		
 		// Cycle through the invoice line items
-		int lineCounter = 0;
-		for (InvoiceLineItem lineItem : lineItems) {
-			if (lineCounter == 5) {
-				sb.append(invoiceFooter.toString());
-				invoiceFooter.incrementPageNumber();
-				lineCounter = 0;
+		try (Formatter fmrt = new Formatter(sb, Locale.US);) {
+			int lineCounter = 0;
+			for (InvoiceLineItem lineItem : lineItems) {
+				if (lineCounter == 5) {
+				    fmrt.format("%n%s", invoiceFooter.toString());
+					invoiceFooter.incrementPageNumber();
+					lineCounter = 0;
+				}
+				if (lineCounter == 0) {
+					fmrt.format(invoiceHeader.toString());
+				}
+				fmrt.format(lineItem.toString());
+				lineCounter++;
 			}
-			if (lineCounter == 0) {
-				sb.append(invoiceHeader.toString());
-			}
-			sb.append(lineItem.toString());
-			lineCounter++;
+			fmrt.format("%nTotal: %60d  %,10.2f%n", getTotalHours(), (float)getTotalCharges());
+			fmrt.format(invoiceFooter.toString());
 		}
-		sb.append(invoiceFooter.toString());
-		
-		String returnString = sb.toString();
-		return returnString;
+		return sb.toString();
 	}
 
 	/*

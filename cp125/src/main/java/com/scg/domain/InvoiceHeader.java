@@ -1,6 +1,8 @@
 package com.scg.domain;
 
 import java.time.LocalDate;
+import java.util.Formatter;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -61,29 +63,28 @@ public class InvoiceHeader {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		// Company Address
-		sb.append(String.format("%s%n", businessName));
-		sb.append(businessAddress.toString() + "\n");
 		
-		// Invoice For
-		sb.append("Invoice for:\n");
-		sb.append(client.toString());
-		sb.append("\n\n");
+		try (Formatter fmrt = new Formatter(sb, Locale.US);) {
+    		// Company Address
+    		fmrt.format("%s%n", businessName)
+		    .format(businessAddress.toString() + "\n")
+    		
+    		// Invoice For
+		    .format("Invoice for:%n")
+		    .format(client.toString())
+		    .format("%n%n")
+    		
+    		// Invoice Dates
+		    .format("Invoice For Month of: %1$tB %1$tY%n", invoiceForMonth)
+		    .format("Invoice Date: %1$tB %1$td, %1$tY%n%n", invoiceDate)
 		
-		// Invoice Dates
-		sb.append(String.format("Invoice For Month of: %1$tB %1$tY%n", invoiceForMonth));
-		sb.append(String.format("Invoice Date: %1$tB %1$td, %1$tY%n%n", invoiceDate));
-		
-		// Invoice headers
-		sb.append(String.format("%-10s  %-27s  %-18s   %-5s  %-10s%n",
-				"Date", "Consultant", "Skill", "Hours", "Charge"));
-		sb.append(StringUtils.repeat("-", 10) + "  ");
-		sb.append(StringUtils.repeat("-", 27) + "  ");
-		sb.append(StringUtils.repeat("-", 18) + "   ");
-		sb.append(StringUtils.repeat("-", 5) + "  ");
-		sb.append(StringUtils.repeat("-", 10) + "\n");
-		
+    		// Invoice headers
+            .format("%-10s  %-27s  %-18s   %-5s  Charge%n", "Date", "Consultant", "Skill", "Hours")
+		    .format("%s  %s  %s   %s  %s%n", StringUtils.repeat("-", 10), StringUtils.repeat("-", 27),
+		        StringUtils.repeat("-", 18), StringUtils.repeat("-", 5), StringUtils.repeat("-", 10));
+		}
 		String finalString = sb.toString(); 
 		return finalString;
 	}
+	
 }

@@ -38,6 +38,6 @@ public class InvoiceFooter {
 	@Override
 	public String toString() {
 		final String LINE_DOUBLE = StringUtils.repeat("=", 79) + "\n";
-		return String.format("%-71s%nPage:%4s%n%s", businessName, pageNumber, LINE_DOUBLE);
+		return String.format("%n%n%-70sPage:%4s%n%s", businessName, pageNumber, LINE_DOUBLE);
 	}
 }
