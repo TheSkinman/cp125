@@ -50,7 +50,7 @@ public class ConsultantTest {
 		String result = consultant.toString();
 		
 		// ASSERT
-		assertEquals("Consultant: Name-Last, Name-First Name-Middle", result);
+		assertEquals("Name-Last, Name-First Name-Middle", result);
 	}
 
 	/**
