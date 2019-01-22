@@ -4,14 +4,9 @@
 package com.scg.util;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.scg.domain.ConsultantTime;
-import com.scg.domain.Skill;
 
 /**
  * @author Norman Skinner (skinman@uw.edu)
