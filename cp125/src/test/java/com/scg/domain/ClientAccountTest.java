@@ -82,22 +82,6 @@ public class ClientAccountTest {
 		assertEquals("test", result);
 	}
 
-    /**
-     * Test method for {@link com.scg.domain.ClientAccount#getName()}.
-     */
-    @Test
-    public void test_SetAddress() {
-        // ARRANGE
-        clientAccount = new ClientAccount(null, null, null);
-        
-        // ACT
-        clientAccount.setAddress(address);
-        Address result = clientAccount.getAddress();
-        
-        // ASSERT
-        assertEquals(address, result);
-    }
-
 	/**
 	 * Test method for {@link com.scg.domain.ClientAccount#isBillable()}.
 	 */

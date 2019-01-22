@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
+import com.sun.xml.internal.ws.policy.spi.AssertionCreationException;
 
 /**
  * @author Norman Skinner (skinman@uw.edu)
@@ -57,6 +58,7 @@ class ListFactoryTest {
         final List<Consultant> consultants = new ArrayList<Consultant>();
         final List<TimeCard> timeCards = new ArrayList<TimeCard>();
         ListFactory.populateLists(accounts, consultants, timeCards);
+        StringBuilder sb = new StringBuilder();
         
         // ACT
         ListFactory.printTimeCards(timeCards, System.out);

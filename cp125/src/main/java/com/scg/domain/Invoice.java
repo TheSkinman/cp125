@@ -3,7 +3,6 @@
  */
 package com.scg.domain;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -62,25 +61,26 @@ public class Invoice {
 		this.invoiceMonth = invoiceMonth;
 		startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
 		lineItems = new ArrayList<>();
-		loadInvoiceProperties(INVOICE_PROPERTIES_FILE);
+		loadInvoiceProperties();
 	}
 
 	/**
 	 * Used to load the invoice properties.
 	 */
-	void loadInvoiceProperties(final String fileName) {
+	private void loadInvoiceProperties() {
 		// Clean up and get ready to load up.
 		invoiceProperties = new Properties();
 
 		// Use a "try with" so we close up the stream when we are done.
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
+		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(INVOICE_PROPERTIES_FILE)) {
 			if (inputStream != null) {
 				invoiceProperties.load(inputStream);
 			} else {
-			    String errorMessage = String.format("property file '%s' not found in the classpath", fileName);
-				throw new FileNotFoundException(errorMessage);
+				log.error("property file '" + INVOICE_PROPERTIES_FILE + "' not found in the classpath");
+				log.error("Exiting application.");
+				System.exit(2);
 			}
-		} catch (IOException err) {
+		} catch (Exception err) {
 			log.error(err.toString());
 			log.error("Exiting application.");
 			System.exit(5);
@@ -92,8 +92,8 @@ public class Invoice {
 				invoiceProperties.getProperty("business.city"),
 				StateCode.valueOf(invoiceProperties.getProperty("business.state")),
 				invoiceProperties.getProperty("business.zip"));
+		System.out.println("done");
 	}
-
 
 	/**
 	 * Get the client for this Invoice.

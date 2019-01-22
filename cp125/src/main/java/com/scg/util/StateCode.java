@@ -59,7 +59,7 @@ public enum StateCode {
 	WA("Washington"),
 	WV("West Virginia"),
 	WI("Wisconsin"),
-	WY("Wyoming");
+	WY ("Wyoming");
 	
 	private String fullName;
 	
