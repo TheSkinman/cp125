@@ -81,19 +81,30 @@ public class Invoice {
 				throw new FileNotFoundException(errorMessage);
 			}
 		} catch (IOException err) {
+		    log.error("Failed to load properties due to the following IOException...");
 			log.error(err.toString());
-			log.error("Exiting application.");
-			System.exit(5);
 		}
-
-		// Initialize bizName and bizAddress with the loaded properties.
-		bizName = invoiceProperties.getProperty("business.name");
-		bizAddress = new Address(invoiceProperties.getProperty("business.street"),
-				invoiceProperties.getProperty("business.city"),
-				StateCode.valueOf(invoiceProperties.getProperty("business.state")),
-				invoiceProperties.getProperty("business.zip"));
+		
+		// Set the loaded values or load with defaults.
+		String    name   = invoiceProperties.getProperty("business.name", "The Default Company");
+		String    street = invoiceProperties.getProperty("business.street", "1234 Default St.");
+		String    city   = invoiceProperties.getProperty("business.city", "Los Default");
+		StateCode state  = StateCode.valueOf(invoiceProperties.getProperty("business.state", "CA"));
+		String    zip    = invoiceProperties.getProperty("business.zip", "12345");
+		
+		bizName = name;
+		bizAddress = new Address(street, city, state, zip);
 	}
 
+    // protected method for testing verification
+	String getBizName() {
+	    return bizName;
+	}
+	
+	// protected method for testing verification
+	Address getBizAddress() {
+	    return bizAddress;
+	}
 
 	/**
 	 * Get the client for this Invoice.

@@ -21,20 +21,6 @@ import com.scg.util.StateCode;
 class InvoiceTest {
     private Invoice invoice;
     
-//    @Rule
-//    public final ExpectedSystemExit exit = ExpectedSystemExit.none();    
-    
-//    @BeforeEach
-//    void setUp() throws Exception {
-////        securityManager = System.getSecurityManager();
-////        System.setSecurityManager(new MySecurityManager());
-//    }
-//
-//    @AfterEach
-//    void tearDown() {
-////        System.setSecurityManager(securityManager);
-//    }
-    
     @Test
     void test_Invoice() {
         // ARRANGE
@@ -49,34 +35,34 @@ class InvoiceTest {
         invoice = new Invoice(client, invoiceMonth, invoiceYear);
         
         // ASSERT
-        assertNotNull(invoice);
+        assertEquals("The Small Consulting Group", invoice.getBizName());
+        assertEquals("Renton", invoice.getBizAddress().getCity());
+        assertEquals("98058", invoice.getBizAddress().getPostalCode());
+        assertEquals(StateCode.WA, invoice.getBizAddress().getState());
+        assertEquals("1616 Index Ct.", invoice.getBizAddress().getStreetNumber());
     }
 
     @Test
     void test_Invoice_LoadNonExistingFileFails() {
         // ARRANGE
-        CodeControl control = new CodeControl();
         String name = "Small Business";
         PersonalName contact = new PersonalName("last", "first", "middle");
         Address address = new Address("123 Street", "City", StateCode.AL, "12345");
         ClientAccount client = new ClientAccount(name, contact, address);
         Month invoiceMonth = Month.OCTOBER;
         int invoiceYear = 1968;
-        
         invoice = new Invoice(client, invoiceMonth, invoiceYear);
         
 
-        // ACT & ASSERT
-        try {
-            control.disableSystemExit();
-            assertThrows(SecurityException.class, () -> {
-                invoice.loadInvoiceProperties("iowjef08ewfowifjhwhfwehfekjnw890wfhy.properties");
-            });
-        }
-        finally
-        {
-            control.enableSystemExit();
-        }
+        // ACT
+        invoice.loadInvoiceProperties("iowjef08ewfowifjhwhfwehfekjnw890wfhy.properties");
+        
+        // ASSERT
+        assertEquals("The Default Company", invoice.getBizName());
+        assertEquals("Los Default", invoice.getBizAddress().getCity());
+        assertEquals("12345", invoice.getBizAddress().getPostalCode());
+        assertEquals(StateCode.CA, invoice.getBizAddress().getState());
+        assertEquals("1234 Default St.", invoice.getBizAddress().getStreetNumber());
     }
 
     @Test
@@ -311,47 +297,6 @@ class InvoiceTest {
         // ASSERT
         assertEquals(expected, result);
     }
-
-   
 }
 
-final class CodeControl
-{
-    public CodeControl()
-    {
-        super();
-    }
 
-    public void disableSystemExit()
-    {
-        SecurityManager securityManager = new StopExitSecurityManager();
-        System.setSecurityManager(securityManager) ;
-    }    public void enableSystemExit()
-    {
-        SecurityManager mgr = System.getSecurityManager();
-        if ((mgr != null) && (mgr instanceof StopExitSecurityManager))
-        {
-            StopExitSecurityManager smgr = (StopExitSecurityManager)mgr;
-            System.setSecurityManager(smgr.getPreviousMgr());
-        }
-        else
-            System.setSecurityManager(null);
-    }
-}
-
-final class StopExitSecurityManager extends SecurityManager
-{
-    private SecurityManager _prevMgr = System.getSecurityManager();
-
-    public void checkPermission(Permission perm)
-    {
-    }
-
-    public void checkExit(int status)
-    {
-        super.checkExit(status);
-        throw new SecurityException(); //This throws an exception if an exit is called.
-    }
-
-    public SecurityManager getPreviousMgr() { return _prevMgr; }
-}
