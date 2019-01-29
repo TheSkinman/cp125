@@ -76,6 +76,7 @@ public class TimeCard {
 	 * @return the consultantHours
 	 */
 	public List<ConsultantTime> getConsultantHours() {
+	    // TODO: make unchangeable
 		return consultantHours;
 	}
 
@@ -171,7 +172,7 @@ public class TimeCard {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public String toString() { // TimeCar for <consultant> day of week
 		return "TimeCard [getConsultantHours()=" + getConsultantHours() + ", getTotalBillableHours()="
 				+ getTotalBillableHours() + ", getTotalHours()=" + getTotalHours() + ", getNonTotalBilableHours()="
 				+ getTotalNonBillableHours() + ", getWeekStartingDay()=" + getWeekStartingDay() + "]";

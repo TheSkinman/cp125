@@ -47,25 +47,6 @@ public class ClientAccountTest {
 	}
 
 	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#ClientAccount(java.lang.String, com.scg.util.PersonalName, boolean)}.
-	 */
-	@Test
-	public void test_ClientAccountConstructor_String_PersonalName_Boolean() {
-		// ARRANGE
-		String name = "Company Test";
-		PersonalName contact = personalName;
-		boolean billable = false;
-		
-		// ACT
-		ClientAccount result = new ClientAccount(name, contact, billable);
-
-		// ASSERT
-		assertEquals(name, result.getName());
-		assertTrue(Objects.equals(personalName, result.getContact()));
-		assertEquals(billable, result.isBillable());
-	}
-
-	/**
 	 * Test method for {@link com.scg.domain.ClientAccount#getName()}.
 	 */
 	@Test
