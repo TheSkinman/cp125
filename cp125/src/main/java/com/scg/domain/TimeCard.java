@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -117,8 +118,8 @@ public class TimeCard {
 	 */
 	public String toReportString() {
 		final String LINE_DOUBLE = StringUtils.repeat("=", 68) + "\n";
-		String finalString = null;
-		try (Formatter fmtr = new Formatter();) {
+		StringBuilder sb = new StringBuilder();
+		try (Formatter fmtr = new Formatter(sb, Locale.US);) {
 
 			// Start the block
 			fmtr.format(LINE_DOUBLE)
@@ -163,9 +164,8 @@ public class TimeCard {
 			
 			// End this block
 			    .format(LINE_DOUBLE);
-			finalString = fmtr.toString();
 		}
-		return finalString;
+		return sb.toString();
 	}
 
 	/* (non-Javadoc)
