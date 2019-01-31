@@ -1,45 +1,27 @@
 package com.scg.domain;
 
 public enum Skill {
-	PROJECT_MANGER(250) {
-		@Override
-		public String toString() {
-			return "Project Manager";
-		}
-	},
-	SYSTEM_ARCHITECT(200) {
-		@Override
-		public String toString() {
-			return "System Architect";
-		}
-	},
-	SOFTWARE_ENGINEER(150) {
-		@Override
-		public String toString() {
-			return "Software Engineer";
-		}
-	},
-	SOFTWARE_TESTER(100) {
-		@Override
-		public String toString() {
-			return "Software Tester";
-		}
-	},
-	UNKNOWN_SKILL(0) {
-		@Override
-		public String toString() {
-			return "Unknown Skill";
-		}
-	};
-	
-	private int rate;
-	
-	private Skill(int rate) {
-		this.rate = rate;
-	}
-	
-	public int getRate() {
-		return rate;
-	}
+    PROJECT_MANGER("Project Manager", 250),
+    SYSTEM_ARCHITECT("System Architect", 200),
+    SOFTWARE_ENGINEER("Software Engineer", 150),
+    SOFTWARE_TESTER("Software Tester", 100),
+    UNKNOWN_SKILL("Unknown Skill", 0);
+
+    private String friendlyName;
+    private int rate;
+
+    private Skill(String name, int rate) {
+        friendlyName = name;
+        this.rate = rate;
+    }
+
+    @Override
+    public String toString() {
+        return friendlyName;
+    }
+
+    public int getRate() {
+        return rate;
+    }
 
 }

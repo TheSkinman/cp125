@@ -22,26 +22,10 @@ public class ClientAccount implements Account {
 	 * @param address
 	 *            Address for the Client Account.
 	 */
-	public ClientAccount(String name, PersonalName contact, Address address) {
-		this(name, contact, address, true);
-	}
-
-	/**
-	 * @param name
-	 *            Name of the Client Account.
-	 * @param contact
-	 *            Contact for the Client Account.
-	 * @param address
-	 *            Address for the Client Account.
-	 * @param billable
-	 *            Set true if the account is billable.
-	 */
-	public ClientAccount(String name, PersonalName contact, Address address, boolean billable) {
+	public ClientAccount(String name, PersonalName contact) {
 		super();
 		this.name = name;
 		this.contact = contact;
-		this.address = address;
-		this.billable = billable;
 	}
 
 	/**
@@ -57,7 +41,7 @@ public class ClientAccount implements Account {
 	 */
 	@Override
 	public boolean isBillable() {
-		return billable;
+		return true;
 	}
 
 	/**

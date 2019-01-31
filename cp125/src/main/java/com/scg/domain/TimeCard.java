@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  */
 public class TimeCard {
+
 	private static final String DATE = "Date";
 	private static final String ACCOUNT = "Account";
 	private static final String TOTAL_HOURS = "Total Hours:";
@@ -75,6 +77,7 @@ public class TimeCard {
 	 * @return the consultantHours
 	 */
 	public List<ConsultantTime> getConsultantHours() {
+	    // TODO: make unchangeable
 		return consultantHours;
 	}
 
@@ -115,8 +118,8 @@ public class TimeCard {
 	 */
 	public String toReportString() {
 		final String LINE_DOUBLE = StringUtils.repeat("=", 68) + "\n";
-		String finalString = null;
-		try (Formatter fmtr = new Formatter();) {
+		StringBuilder sb = new StringBuilder();
+		try (Formatter fmtr = new Formatter(sb, Locale.US);) {
 
 			// Start the block
 			fmtr.format(LINE_DOUBLE)
@@ -161,16 +164,15 @@ public class TimeCard {
 			
 			// End this block
 			    .format(LINE_DOUBLE);
-			finalString = fmtr.toString();
 		}
-		return finalString;
+		return sb.toString();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public String toString() { // TimeCar for <consultant> day of week
 		return "TimeCard [getConsultantHours()=" + getConsultantHours() + ", getTotalBillableHours()="
 				+ getTotalBillableHours() + ", getTotalHours()=" + getTotalHours() + ", getNonTotalBilableHours()="
 				+ getTotalNonBillableHours() + ", getWeekStartingDay()=" + getWeekStartingDay() + "]";

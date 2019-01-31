@@ -8,37 +8,26 @@ package com.scg.domain;
  *
  */
 public enum NonBillableAccount implements Account {
-	SICK_LEAVE("Sick Leave") {
-		@Override
-		public String toString() {
-			return "Sick Leave";
-		}
-	},
-	VACATION("Vacation") {
-		@Override
-		public String toString() {
-			return "Vacation";
-		}
-	},
-	BUSINESS_DEVELOPMENT("Business Development") {
-		@Override
-		public String toString() {
-			return "Business Development";
-		}
-	};
+	SICK_LEAVE("Sick Leave"),
+	VACATION("Vacation"),
+	BUSINESS_DEVELOPMENT("Business Development");
 	
-	private String name;
+	private String friendlyName;
 	
 	private NonBillableAccount(String name) {
-		this.name = name;
+		this.friendlyName = name;
 	}
 	
 	public String getName() {
-		return name;
+		return friendlyName;
 	}
 	
 	public boolean isBillable() {
 		return false;
+	}
+	
+	public String toString() {
+	    return friendlyName;
 	}
 
 }
