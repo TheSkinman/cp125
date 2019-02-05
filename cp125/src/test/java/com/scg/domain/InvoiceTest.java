@@ -1,19 +1,9 @@
 package com.scg.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.security.Permission;
 import java.time.LocalDate;
 import java.time.Month;
-
-
-//import org.junit.Rule;
-//import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
 import com.scg.util.StateCode;
@@ -52,10 +42,9 @@ class InvoiceTest {
         Month invoiceMonth = Month.OCTOBER;
         int invoiceYear = 1968;
         invoice = new Invoice(client, invoiceMonth, invoiceYear);
-        
 
         // ACT
-        invoice.loadInvoiceProperties("iowjef08ewfowifjhwhfwehfekjnw890wfhy.properties");
+        invoice.loadProperties("thisFileNameDoesNotExist.properties");
         
         // ASSERT
         assertEquals("The Default Company", invoice.getBizName());

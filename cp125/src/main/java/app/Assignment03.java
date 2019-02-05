@@ -2,10 +2,14 @@ package app;
 
 import static com.scg.util.ListFactory.TEST_INVOICE_MONTH;
 import static com.scg.util.ListFactory.TEST_INVOICE_YEAR;
+
+import java.io.Console;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,7 @@ public final class Assignment03 {
      */
     private static List<Invoice> createInvoices(final List<ClientAccount> accounts,
                                                 final List<TimeCard> timeCards) {
-        final List<Invoice> invoices = new ArrayList<Invoice>(accounts.size());
+        final List<Invoice> invoices = new ArrayList<>(accounts.size());
         for (final ClientAccount account : accounts) {
             final Invoice invoice = new Invoice(account, TEST_INVOICE_MONTH, TEST_INVOICE_YEAR);
             invoices.add(invoice);
@@ -100,32 +104,35 @@ public final class Assignment03 {
      * The application method.
      *
      * @param args Command line arguments.
+     * 
+     * @throws Exception when there is an issue.
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args)  throws Exception {
         // Create lists to be populated by factory
-        final List<ClientAccount> accounts = new ArrayList<ClientAccount>();
-        final List<Consultant> consultants = new ArrayList<Consultant>();
-        final List<TimeCard> timeCards = new ArrayList<TimeCard>();
+        final List<ClientAccount> accounts = new ArrayList<>();
+        final List<Consultant> consultants = new ArrayList<>();
+        final List<TimeCard> timeCards = new ArrayList<>();
         ListFactory.populateLists(accounts, consultants, timeCards);
         // Print them
-        ListFactory.printTimeCards(timeCards, System.out);
+        ListFactory.printTimeCards(timeCards);
 
         // Create the Invoices
         final List<Invoice> invoices = createInvoices(accounts, timeCards);
  
         // Print them
-        System.out.println();
-        System.out.println("==================================================================================");
-        System.out.println("=============================== I N V O I C E S ==================================");
-        System.out.println("==================================================================================");
-        System.out.println();
-        Invoice invoice = invoices.get(0);
-        confirmTotals(16, 2400, invoice);
-        System.out.println(invoice.toReportString());
-        invoice = invoices.get(1);
-        confirmTotals(108, 19400, invoice);
-        System.out.println(invoice.toReportString());
-
+        Console console = System.console();
+        try (PrintWriter consoleWrtr = (console != null) ? console.writer() 
+        		                                         : new PrintWriter(new OutputStreamWriter(System.out, ENCODING))) {
+            consoleWrtr.printf("%n==================================================================================%n");
+            consoleWrtr.printf("=============================== I N V O I C E S ==================================%n");
+            consoleWrtr.printf("==================================================================================%n%n");
+            Invoice invoice = invoices.get(0);
+            confirmTotals(16, 2400, invoice);
+            consoleWrtr.printf("%s%n", invoice.toReportString());
+            invoice = invoices.get(1);
+            confirmTotals(108, 19400, invoice);
+            consoleWrtr.printf("%s%n", invoice.toReportString());
+        }
         // Now print it to a file
         try (FileOutputStream out = new FileOutputStream("invoices.txt")) {
             printInvoices(invoices, out);

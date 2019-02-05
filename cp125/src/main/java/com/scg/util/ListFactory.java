@@ -1,6 +1,9 @@
 package com.scg.util;
 
-import java.io.PrintStream;
+import java.io.Console;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -21,7 +24,10 @@ import com.scg.domain.TimeCard;
  * for the test data is available in the TEST_YEAR static member.
  */
 public final class ListFactory {
-    /** Number of hours in a standard working day. */
+	/** Character encoding to use. */
+	private static final String ENCODING = "ISO-8859-1";
+
+	/** Number of hours in a standard working day. */
     private static final int STD_WORK_DAY = 8;
 
     /** Some overtime hours. */
@@ -99,7 +105,7 @@ public final class ListFactory {
         currentDay = currentDay.plusDays(1);
         timeCard.addConsultantTime(new ConsultantTime(currentDay, clients.get(SECOND_CLIENT_NDX),
                 Skill.SOFTWARE_ENGINEER, STD_WORK_DAY));
-        logger.trace("Created first TimeCard: ", timeCard.toReportString());
+        logger.trace(String.format("Created first TimeCard: %s", timeCard.toReportString()));
         timeCards.add(timeCard);
 
         // The second one
@@ -119,7 +125,7 @@ public final class ListFactory {
         currentDay = currentDay.plusDays(1);
         timeCard.addConsultantTime(new ConsultantTime(currentDay, NonBillableAccount.VACATION,
                 Skill.SOFTWARE_ENGINEER, STD_WORK_DAY));
-        logger.trace("Created second TimeCard: ", timeCard.toReportString());
+        logger.trace(String.format("Created second TimeCard: %s", timeCard.toReportString()));
         timeCards.add(timeCard);
 
         // The third one
@@ -142,7 +148,7 @@ public final class ListFactory {
         currentDay = currentDay.plusDays(1);
         timeCard.addConsultantTime(new ConsultantTime(currentDay, clients.get(SECOND_CLIENT_NDX),
                 Skill.SYSTEM_ARCHITECT, STD_WORK_DAY));
-        logger.trace("Created third TimeCard: ", timeCard.toReportString());
+        logger.trace(String.format("Created third TimeCard: %s", timeCard.toReportString()));
         timeCards.add(timeCard);
 
         // The forth one
@@ -162,7 +168,7 @@ public final class ListFactory {
         currentDay = currentDay.plusDays(1);
         timeCard.addConsultantTime(new ConsultantTime(currentDay, clients.get(SECOND_CLIENT_NDX),
                 Skill.SYSTEM_ARCHITECT, STD_WORK_DAY));
-        logger.trace("Created forth TimeCard: ", timeCard.toReportString());
+        logger.trace(String.format("Created forth TimeCard: %s", timeCard.toReportString()));
         timeCards.add(timeCard);
     }
 
@@ -172,9 +178,26 @@ public final class ListFactory {
      * @param timeCards the time cards to print
      * @param out The output stream; can be System.out or a text file.
      */
-    public static void printTimeCards(final List<TimeCard> timeCards, final PrintStream out) {
+    public static void printTimeCards(final List<TimeCard> timeCards, final PrintWriter out) {
         for (final TimeCard timeCard : timeCards) {
             out.println(timeCard.toReportString());
         }
+    }
+
+    /**
+     * Print the time card instances to console.
+     *
+     * @param timeCards the time cards to print
+     */
+    public static void printTimeCards(final List<TimeCard> timeCards) {
+        Console console = System.console();
+        try (PrintWriter consoleWrtr = (console != null) ? console.writer() 
+        		                                         : new PrintWriter(new OutputStreamWriter(System.out, ENCODING))) {
+            for (final TimeCard timeCard : timeCards) {
+            	consoleWrtr.printf("%s%n", timeCard.toReportString());
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Printing of timecards failed.", e);
+	    }
     }
 }

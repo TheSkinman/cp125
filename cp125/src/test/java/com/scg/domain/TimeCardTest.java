@@ -27,9 +27,6 @@ public class TimeCardTest {
 	private ConsultantTime consultantTime1;
 	private ConsultantTime consultantTime2;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@BeforeEach
 	public void setUp() throws Exception {
 		account1 = new Account() {
@@ -45,9 +42,6 @@ public class TimeCardTest {
 		weekStartDay = LocalDate.of(1968, 10, 8);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#TimeCard(com.scg.domain.Consultant, java.time.LocalDate)}.
-	 */
 	@Test
 	public void test_TimeCard_Constructor() {
 		// ARRANGE
@@ -62,9 +56,6 @@ public class TimeCardTest {
 		assertEquals("1968-10-08", timeCard.getWeekStartingDay().toString());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#addConsultantTime(com.scg.domain.ConsultantTime)}.
-	 */
 	@Test
 	public void test_AddConsultantTime() {
 		// ARRANGE
@@ -82,9 +73,6 @@ public class TimeCardTest {
 		assertEquals(2, timeCard.getTotalNonBillableHours());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getBillableHoursForClient(java.lang.String)}.
-	 */
 	@Test
 	public void test_GetBillableHoursForClient() {
 		// ARRANGE
@@ -101,9 +89,6 @@ public class TimeCardTest {
 		assertEquals(1, results.size());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getConsultant()}.
-	 */
 	@Test
 	public void test_GetConsultant() {
 		// ARRANGE
@@ -116,9 +101,6 @@ public class TimeCardTest {
 		assertEquals(consultant, result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getConsultantHours()}.
-	 */
 	@Test
 	public void test_GetConsultantHours() {
 		// ARRANGE
@@ -135,9 +117,6 @@ public class TimeCardTest {
 		assertEquals(2, results.size());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getTotalBillableHours()}.
-	 */
 	@Test
 	public void test_GetTotalBillableHours() {
 		// ARRANGE
@@ -155,9 +134,6 @@ public class TimeCardTest {
 		assertEquals(2, timeCard.getTotalNonBillableHours());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getTotalHours()}.
-	 */
 	@Test
 	public void test_GetTotalHours() {
 		// ARRANGE
@@ -175,9 +151,6 @@ public class TimeCardTest {
 		assertEquals(2, timeCard.getTotalNonBillableHours());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getTotalNonBillableHours()}.
-	 */
 	@Test
 	public void test_GetTotalNonBillableHours() {
 		// ARRANGE
@@ -194,9 +167,6 @@ public class TimeCardTest {
 		assertEquals(2, result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#getWeekStartingDay()}.
-	 */
 	@Test
 	public void test_GetWeekStartingDay() {
 		// ARRANGE
@@ -209,9 +179,6 @@ public class TimeCardTest {
 		assertEquals("1968-10-08", result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#toReportString()}.
-	 */
 	@Test
 	public void test_ToReportString() {
 		// ARRANGE
@@ -242,9 +209,6 @@ public class TimeCardTest {
 		assertTrue(result.contains("===================================================================="));
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.TimeCard#toString()}.
-	 */
 	@Test
 	public void test_ToString() {
 		// ARRANGE

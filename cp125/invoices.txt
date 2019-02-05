@@ -9,7 +9,7 @@ Redmond, WA 98055
 Coyote, Wiley
 
 Invoice For Month of: March 2017
-Invoice Date: January 15, 2019
+Invoice Date: February 04, 2019
 
 Date        Consultant                   Skill                Hours  Charge
 ----------  ---------------------------  ------------------   -----  ----------
@@ -33,7 +33,7 @@ Silicone Gulch, CA 94105
 Sam, Yosemite
 
 Invoice For Month of: March 2017
-Invoice Date: January 15, 2019
+Invoice Date: February 04, 2019
 
 Date        Consultant                   Skill                Hours  Charge
 ----------  ---------------------------  ------------------   -----  ----------
@@ -47,6 +47,7 @@ Date        Consultant                   Skill                Hours  Charge
 
 The Small Consulting Group                                            Page:   1
 ===============================================================================
+
 The Small Consulting Group
 1616 Index Ct.
 Renton, WA 98058 
@@ -58,7 +59,7 @@ Silicone Gulch, CA 94105
 Sam, Yosemite
 
 Invoice For Month of: March 2017
-Invoice Date: January 15, 2019
+Invoice Date: February 04, 2019
 
 Date        Consultant                   Skill                Hours  Charge
 ----------  ---------------------------  ------------------   -----  ----------
@@ -72,6 +73,7 @@ Date        Consultant                   Skill                Hours  Charge
 
 The Small Consulting Group                                            Page:   2
 ===============================================================================
+
 The Small Consulting Group
 1616 Index Ct.
 Renton, WA 98058 
@@ -83,7 +85,7 @@ Silicone Gulch, CA 94105
 Sam, Yosemite
 
 Invoice For Month of: March 2017
-Invoice Date: January 15, 2019
+Invoice Date: February 04, 2019
 
 Date        Consultant                   Skill                Hours  Charge
 ----------  ---------------------------  ------------------   -----  ----------

@@ -59,7 +59,7 @@ class ListFactoryTest {
         ListFactory.populateLists(accounts, consultants, timeCards);
         
         // ACT
-        ListFactory.printTimeCards(timeCards, System.out);
+        ListFactory.printTimeCards(timeCards);
         String result = outContent.toString().replaceAll("\n", "").replaceAll("\r", "");
         
         // ASSERT

@@ -63,7 +63,6 @@ public class InvoiceHeader {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		
 		try (Formatter fmrt = new Formatter(sb, Locale.US);) {
     		// Company Address
     		fmrt.format("%s%n", businessName)
@@ -83,8 +82,7 @@ public class InvoiceHeader {
 		    .format("%s  %s  %s   %s  %s%n", StringUtils.repeat("-", 10), StringUtils.repeat("-", 27),
 		        StringUtils.repeat("-", 18), StringUtils.repeat("-", 5), StringUtils.repeat("-", 10));
 		}
-		String finalString = sb.toString(); 
-		return finalString;
+		return sb.toString();
 	}
 	
 }
