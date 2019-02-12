@@ -3,6 +3,7 @@
  */
 package com.scg.util;
 
+import static java.util.Objects.isNull;
 /**
  * A simple mailing address. Does no validity checking for things like valid
  * states or postal codes. Instances of this class are immutable.
@@ -15,6 +16,7 @@ public class Address {
     private String postalCode;
     private StateCode state;
     private String streetNumber;
+    private Integer hashCode;
 
     /**
      * Construct an Address.
@@ -79,13 +81,16 @@ public class Address {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
-        result = prime * result + ((state == null) ? 0 : state.hashCode());
-        result = prime * result + ((streetNumber == null) ? 0 : streetNumber.hashCode());
-        return result;
+        if (isNull(hashCode)) {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((city == null) ? 0 : city.hashCode());
+            result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
+            result = prime * result + ((state == null) ? 0 : state.hashCode());
+            result = prime * result + ((streetNumber == null) ? 0 : streetNumber.hashCode());
+            hashCode = result;
+        }
+        return hashCode;
     }
 
     /**

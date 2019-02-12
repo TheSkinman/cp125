@@ -4,11 +4,8 @@ import static com.scg.util.ListFactory.TEST_INVOICE_MONTH;
 import static com.scg.util.ListFactory.TEST_INVOICE_YEAR;
 
 import java.io.Console;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -62,18 +59,14 @@ public final class Assignment03 {
     }
 
     /**
-     * Print the invoice to a PrintStream.
+     * Print the invoice to a PrintWriter.
      *
      * @param invoices the invoices to print
-     * @param out the print stream; can be System.out or a text file.
-     * @throws UnsupportedEncodingException 
+     * @param writer the print writer; can be System.out or a text file.
      */
-    private static void printInvoices(final List<Invoice> invoices, final OutputStream out)
-    	throws UnsupportedEncodingException {
-    	    try (PrintStream writer = new PrintStream(out, true, ENCODING)) {
-            for (final Invoice invoice : invoices) {
-                writer.println(invoice.toReportString());
-            }
+    private static void printInvoices(final List<Invoice> invoices, final PrintWriter writer) {
+        for (final Invoice invoice : invoices) {
+            writer.println(invoice.toReportString());
         }
     }
 
@@ -104,8 +97,6 @@ public final class Assignment03 {
      * The application method.
      *
      * @param args Command line arguments.
-     * 
-     * @throws Exception when there is an issue.
      */
     public static void main(final String[] args)  throws Exception {
         // Create lists to be populated by factory
@@ -121,8 +112,10 @@ public final class Assignment03 {
  
         // Print them
         Console console = System.console();
-        try (PrintWriter consoleWrtr = (console != null) ? console.writer() 
-        		                                         : new PrintWriter(new OutputStreamWriter(System.out, ENCODING))) {
+        try {
+        	    @SuppressWarnings("resource")  // don't want to close console or System.out
+			PrintWriter consoleWrtr = (console != null) ? console.writer() 
+                                                         : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
             consoleWrtr.printf("%n==================================================================================%n");
             consoleWrtr.printf("=============================== I N V O I C E S ==================================%n");
             consoleWrtr.printf("==================================================================================%n%n");
@@ -132,12 +125,14 @@ public final class Assignment03 {
             invoice = invoices.get(1);
             confirmTotals(108, 19400, invoice);
             consoleWrtr.printf("%s%n", invoice.toReportString());
+        } catch (UnsupportedEncodingException e) {
+            log.error("Printing of invoices failed.", e);
         }
         // Now print it to a file
-        try (FileOutputStream out = new FileOutputStream("invoices.txt")) {
+        try (PrintWriter out = new PrintWriter("invoices.txt", ENCODING)) {
             printInvoices(invoices, out);
         } catch (final IOException ex) {
-            log.error("Unable to print invoice.", ex);
+            log.error("Unable to print invoice to file.", ex);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 
+import javax.naming.directory.InvalidAttributeValueException;
+
 /**
  * Encapsulates a single billable item to be included in an invoice. The
  * InvoiceLineItem includes:
@@ -32,7 +34,7 @@ public class InvoiceLineItem {
      * @param skill
      *            Skill for this line item.
      * @param hours
-     *            Hours for this line item.
+     *            Hours for this line item. 
      */
     public InvoiceLineItem(LocalDate date, Consultant consultant, Skill skill, int hours) {
         super();
@@ -95,7 +97,7 @@ public class InvoiceLineItem {
      */
     @Override
     public String toString() {
-        String returnString = String.format("%1$tm/%1$td/%1$tY  %2$-27s  %3$-18s   %4$5s  %5$,10.2f%n", getDate(),
+        String returnString = String.format("%1$tm/%1$td/%1$tY  %2$-27s  %3$-19s  %4$5d  %5$,10.2f%n", getDate(),
                 getConsultant(), getSkill(), getHours(), (double) getCharge());
         return returnString;
     }

@@ -36,16 +36,43 @@ import com.scg.util.StateCode;
  */
 public class Invoice {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
-    private static final String INVOICE_PROPERTIES_FILE = "invoice.properties";
-    private static Properties invoiceProperties;
+    private static final String INVOICE_PROPERTIES_FILE = "/invoice.properties";
+    private static final Properties INVOICE_PROPERTIES;
+    private static final String bizName;
+    private static final Address bizAddress;
+    
+    static {
+        INVOICE_PROPERTIES = new Properties();
+        try (InputStream inputStream = Invoice.class.getResourceAsStream(INVOICE_PROPERTIES_FILE)) {
+            if (inputStream != null) {
+                INVOICE_PROPERTIES.load(inputStream);
+            } else {
+                String errorMessage = String.format("property file '%s' not found in the classpath", INVOICE_PROPERTIES_FILE);
+                throw new FileNotFoundException(errorMessage);
+            }
+        } catch (IOException err) {
+            log.error("Failed to load properties due to the following IOException...");
+            log.error(err.toString());
+        }
+        
+        // Set the loaded values or load with defaults.
+        String name = INVOICE_PROPERTIES.getProperty("business.name", "The Default Company");
+        String street = INVOICE_PROPERTIES.getProperty("business.street", "1234 Default St.");
+        String city = INVOICE_PROPERTIES.getProperty("business.city", "Los Default");
+        String state = INVOICE_PROPERTIES.getProperty("business.state", "CA");
+        String zip = INVOICE_PROPERTIES.getProperty("business.zip", "12345");
+        
+        bizName = name;
+        bizAddress = new Address(street, city, StateCode.valueOf(state), zip);
+    }
+
     private ClientAccount client;
     private Month invoiceMonth;
+    private LocalDate invoiceDate;
     private LocalDate startDate;
     private int totalCharges;
     private int totalHours;
     private List<InvoiceLineItem> lineItems;
-    private String bizName;
-    private Address bizAddress;
 
     /**
      * Construct an Invoice for a client. The time period is set from the beginning
@@ -64,34 +91,7 @@ public class Invoice {
         this.invoiceMonth = invoiceMonth;
         startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
         lineItems = new ArrayList<>();
-
-        loadProperties(INVOICE_PROPERTIES_FILE);
-    }
-
-    // protected method to Load the properties from the resources folder. 
-    protected void loadProperties(String fileName) {
-        invoiceProperties = new Properties();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
-            if (inputStream != null) {
-                invoiceProperties.load(inputStream);
-            } else {
-                String errorMessage = String.format("property file '%s' not found in the classpath", fileName);
-                throw new FileNotFoundException(errorMessage);
-            }
-        } catch (IOException err) {
-            log.error("Failed to load properties due to the following IOException...");
-            log.error(err.toString());
-        }
-
-        // Set the loaded values or load with defaults.
-        String name = invoiceProperties.getProperty("business.name", "The Default Company");
-        String street = invoiceProperties.getProperty("business.street", "1234 Default St.");
-        String city = invoiceProperties.getProperty("business.city", "Los Default");
-        StateCode state = StateCode.valueOf(invoiceProperties.getProperty("business.state", "CA"));
-        String zip = invoiceProperties.getProperty("business.zip", "12345");
-        
-        bizName = name;
-        bizAddress = new Address(street, city, state, zip);
+        invoiceDate = LocalDate.now();
     }
     
     // protected method for testing verification
@@ -174,11 +174,16 @@ public class Invoice {
      *            client.
      */
     public void extractLineItems(TimeCard timeCard) {
-        Consultant consultant = timeCard.getConsultant();
-        for (ConsultantTime ct : timeCard.getBillableHoursForClient(getClientAccount().getName())) {
-            if (getStartDate().getMonth().equals(ct.getDate().getMonth())
-                    && getStartDate().getYear() == ct.getDate().getYear()) {
-                addLineItem(new InvoiceLineItem(ct.getDate(), consultant, ct.getSkill(), ct.getHours()));
+        for (final ConsultantTime consultantTime : timeCard.getBillableHoursForClient(getClientAccount().getName())) {
+            LocalDate timeCardDate = consultantTime.getDate();
+            if (getStartDate().getMonth() == timeCardDate.getMonth() && 
+                getStartDate().getYear()  == timeCardDate.getYear()) {
+                final InvoiceLineItem invoiceLineItem = new InvoiceLineItem(
+                        timeCardDate,
+                        timeCard.getConsultant(),
+                        consultantTime.getSkill(),
+                        consultantTime.getHours());
+                addLineItem(invoiceLineItem);
             }
         }
     }

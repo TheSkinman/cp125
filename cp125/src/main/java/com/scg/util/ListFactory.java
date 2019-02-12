@@ -191,10 +191,12 @@ public final class ListFactory {
      */
     public static void printTimeCards(final List<TimeCard> timeCards) {
         Console console = System.console();
-        try (PrintWriter consoleWrtr = (console != null) ? console.writer() 
-        		                                         : new PrintWriter(new OutputStreamWriter(System.out, ENCODING))) {
+        try {
+    	        @SuppressWarnings("resource")  // don't want to close console or System.out
+            PrintWriter consoleWrtr = (console != null) ? console.writer() 
+                                                        : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
             for (final TimeCard timeCard : timeCards) {
-            	consoleWrtr.printf("%s%n", timeCard.toReportString());
+                consoleWrtr.printf("%s%n", timeCard.toReportString());
             }
         } catch (UnsupportedEncodingException e) {
             logger.error("Printing of timecards failed.", e);
