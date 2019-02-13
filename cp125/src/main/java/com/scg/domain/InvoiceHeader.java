@@ -25,6 +25,12 @@ import com.scg.util.Address;
  *
  */
 public class InvoiceHeader {
+    private static final String INVOICE_HEADER = 
+            "%s%n%s%nInvoice for:%n%s%n%nInvoice For Month of: %4$tB %4$tY%nInvoice Date: %5$tB %5$td, %5$tY%n%n";
+    private static final String LINE_HEADER =
+            "Date        Consultant                   Skill                Hours  Charge%n" + 
+            "----------  ---------------------------  -------------------  -----  ----------%n";
+
 	private String businessName;
 	private Address businessAddress;
 	private ClientAccount client;
@@ -63,28 +69,17 @@ public class InvoiceHeader {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		
 		try (Formatter fmrt = new Formatter(sb, Locale.US);) {
     		// Company Address
-    		fmrt.format("%s%n", businessName)
-		    .format(businessAddress.toString() + "\n")
-    		
-    		// Invoice For
-		    .format("Invoice for:%n")
-		    .format(client.toString())
-		    .format("%n%n")
-    		
-    		// Invoice Dates
-		    .format("Invoice For Month of: %1$tB %1$tY%n", invoiceForMonth)
-		    .format("Invoice Date: %1$tB %1$td, %1$tY%n%n", invoiceDate)
-		
-    		// Invoice headers
-            .format("%-10s  %-27s  %-18s   %-5s  Charge%n", "Date", "Consultant", "Skill", "Hours")
-		    .format("%s  %s  %s   %s  %s%n", StringUtils.repeat("-", 10), StringUtils.repeat("-", 27),
-		        StringUtils.repeat("-", 18), StringUtils.repeat("-", 5), StringUtils.repeat("-", 10));
+    		fmrt.format(INVOICE_HEADER,
+    		        businessName,
+    		        businessAddress.toString(),
+    		        client.toString(), 
+    		        invoiceForMonth, 
+    		        invoiceDate)
+            .format(LINE_HEADER);
 		}
-		String finalString = sb.toString(); 
-		return finalString;
+		return sb.toString();
 	}
 	
 }

@@ -70,26 +70,4 @@ public class ConsultantTest {
 		// ASSERT
 		assertTrue(Objects.equals(personalName, result));
 	}
-
-	/**
-	 * Test method for {@link com.scg.domain.Consultant#setName(com.scg.util.PersonalName)}.
-	 */
-	@Test
-	public void test_SetName() {
-		// ARRANGE
-		personalName = new PersonalName("Name-Last", "Name-First", "Name-Middle");
-		consultant = new Consultant(personalName);
-		personalName.setFirstName("TestFirst");
-		personalName.setMiddleName("TestMiddle");
-		personalName.setLastName("TestLat");
-		
-		// ACT
-		consultant.setName(personalName);
-		
-		// ASSERT
-		assertNotNull(consultant.getName());
-		assertEquals("TestLat",consultant.getName().getLastName());
-		assertEquals("TestFirst",consultant.getName().getFirstName());
-		assertEquals("TestMiddle",consultant.getName().getMiddleName());
-	}
 }

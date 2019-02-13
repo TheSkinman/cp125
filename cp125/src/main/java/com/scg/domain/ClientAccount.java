@@ -4,106 +4,104 @@ import com.scg.util.Address;
 import com.scg.util.PersonalName;
 
 /**
+ * A billable Account that additionally has client contact information and an address.
  * 
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
 public class ClientAccount implements Account {
-	private Address address;
-	private String name;
-	private PersonalName contact;
-	private boolean billable;
+    private Address address;
+    private String name;
+    private PersonalName contact;
 
-	/**
-	 * @param name
-	 *            Name of the Client Account.
-	 * @param contact
-	 *            Contact for the Client Account.
-	 * @param address
-	 *            Address for the Client Account.
-	 */
-	public ClientAccount(String name, PersonalName contact, Address address) {
-		this(name, contact, address, true);
-	}
+    /**
+     * Creates a new instance of ClientAccount.
+     * 
+     * @param name
+     *            Name of the Client Account.
+     * @param contact
+     *            Contact for the Client Account.
+     * @param address
+     *            Address for the Client Account.
+     */
+    public ClientAccount(String name, PersonalName contact, Address address) {
+        super();
+        this.name = name;
+        this.contact = contact;
+        this.address = address;
+    }
 
-	/**
-	 * @param name
-	 *            Name of the Client Account.
-	 * @param contact
-	 *            Contact for the Client Account.
-	 * @param address
-	 *            Address for the Client Account.
-	 * @param billable
-	 *            Set true if the account is billable.
-	 */
-	public ClientAccount(String name, PersonalName contact, Address address, boolean billable) {
-		super();
-		this.name = name;
-		this.contact = contact;
-		this.address = address;
-		this.billable = billable;
-	}
+    /**
+     * Gets the account name.
+     * 
+     * @return returns value of name property.
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @return returns the name of the Client Account.
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
+    /**
+     * Determines if this account is billable.
+     * 
+     * @return boolean always true
+     */
+    @Override
+    public boolean isBillable() {
+        return true;
+    }
 
-	/**
-	 * @return boolean returns TRUE is Client Account is billable.
-	 */
-	@Override
-	public boolean isBillable() {
-		return billable;
-	}
+    /**
+     * Gets the contact for this account.
+     * 
+     * @return contact value of contact property
+     */
+    public PersonalName getContact() {
+        return contact;
+    }
 
-	/**
-	 * 
-	 * @return contact for the Client Account.
-	 */
-	public PersonalName getContact() {
-		return contact;
-	}
+    /**
+     * Setter for contact property.
+     * 
+     * @param contact
+     *            new value for contact property
+     */
+    public void setContact(PersonalName contact) {
+        this.contact = contact;
+    }
 
-	/**
-	 * @param contact
-	 *            sets the contact for the Client Account.
-	 */
-	public void setContact(PersonalName contact) {
-		this.contact = contact;
-	}
+    /**
+     * Gets the address for this account.
+     * 
+     * @return value of address property.
+     */
+    public Address getAddress() {
+        return address;
+    }
 
-	/**
-	 * @return the address
-	 */
-	public Address getAddress() {
-		return address;
-	}
+    /**
+     * Setter for address property.
+     * 
+     * @param address
+     *            new value for address property
+     */
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	/**
-	 * @param address
-	 *            the address to set
-	 */
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    /**
+     * String representation for this Client.
+     * 
+     * @return Formatted string of the form
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%s%n", getName()));
+        sb.append(getAddress().toString());
+        sb.append(getContact().toString());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%s%n", getName()));
-		sb.append(getAddress().toString());
-		sb.append(getContact().toString());
-
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

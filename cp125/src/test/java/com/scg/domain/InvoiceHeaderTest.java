@@ -43,7 +43,7 @@ class InvoiceHeaderTest {
                 "City, AK 11111 last, first middleInvoice For Month of: March 2008" + 
                 "Invoice Date: October 08, 1968" + 
                 "Date        Consultant                   Skill                Hours  Charge" + 
-                "----------  ---------------------------  ------------------   -----  ----------";
+                "----------  ---------------------------  -------------------  -----  ----------";
         
         // ACT
         String result = invoiceHeader.toString().replaceAll("\r", "").replaceAll("\n", "");

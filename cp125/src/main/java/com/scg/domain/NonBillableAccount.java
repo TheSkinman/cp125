@@ -1,44 +1,43 @@
-/**
- * 
- */
 package com.scg.domain;
 
 /**
+ * Accounts which can not be billed - non-billable accounts, such as sick leave, vacation, or business development.
  * @author Norman Skinner
  *
  */
 public enum NonBillableAccount implements Account {
-	SICK_LEAVE("Sick Leave") {
-		@Override
-		public String toString() {
-			return "Sick Leave";
-		}
-	},
-	VACATION("Vacation") {
-		@Override
-		public String toString() {
-			return "Vacation";
-		}
-	},
-	BUSINESS_DEVELOPMENT("Business Development") {
-		@Override
-		public String toString() {
-			return "Business Development";
-		}
-	};
+    /** Business Development. */
+    BUSINESS_DEVELOPMENT("Business Development"),
+    /** Sick Leave. */
+	SICK_LEAVE("Sick Leave"),
+    /** Vacation. */
+	VACATION("Vacation");
 	
-	private String name;
+	private String friendlyName;
 	
 	private NonBillableAccount(String name) {
-		this.name = name;
+		this.friendlyName = name;
 	}
 	
+	/**
+	 * Getter for the name of this account.
+	 */
 	public String getName() {
-		return name;
+		return friendlyName;
 	}
 	
+	/**
+	 * Determines if this account is billable.
+	 */
 	public boolean isBillable() {
 		return false;
+	}
+	
+	/**
+	 * Returns the friendly name for this enumerated value.
+	 */
+	public String toString() {
+	    return friendlyName;
 	}
 
 }

@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Unit tests, now with more units! 
+ * 
  * @author Norman Skinner
  *
  */
@@ -26,10 +28,6 @@ public class ConsultantTimeTest {
 	private Skill skillType;
 	private int hours;
 	
-
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@BeforeEach
 	public void setUp() throws Exception {
 		account = new Account() {
@@ -63,9 +61,6 @@ public class ConsultantTimeTest {
 		};
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ConsultantTime#hashCode()}.
-	 */
 	@Test
 	public void test_HashCode_WithNulls() {
 		// ARRANGE
@@ -78,9 +73,6 @@ public class ConsultantTimeTest {
 		assertEquals(923552, result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ConsultantTime#hashCode()}.
-	 */
 	@Test
 	public void test_HashCode_WithValues() { 
 		// ARRANGE
@@ -95,10 +87,6 @@ public class ConsultantTimeTest {
 		assertEquals(result1, result2);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.domain.ConsultantTime#ConsultantTime(java.time.LocalDate, com.scg.domain.Account, com.scg.domain.Skill, int)}.
-	 */
 	@Test
 	public void test_ConsultantTimeConstructor() {
 		// ARRANGE
@@ -115,14 +103,10 @@ public class ConsultantTimeTest {
 		assertEquals(date, consultantTime.getDate());
 		assertEquals(skillType, consultantTime.getSkill());
 		assertEquals(hours, consultantTime.getHours());
-		assertEquals(account.getName(), consultantTime.getName());
+		assertEquals(account.getName(), consultantTime.getAccount().getName());
 		assertEquals(false, consultantTime.isBillable());
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.domain.ConsultantTime#ConsultantTime(java.time.LocalDate, com.scg.domain.Account, com.scg.domain.Skill, int)}.
-	 */
 	@Test
 	public void test_ConsultantTimeConstructor_BadHour() {
 		// ARRANGE
@@ -134,10 +118,6 @@ public class ConsultantTimeTest {
 		});
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.domain.ConsultantTime#equals(java.lang.Object)}.
-	 */
 	@Test
 	public void test_EqualsObject() {
 		// ARRANGE
@@ -179,10 +159,6 @@ public class ConsultantTimeTest {
 		assertFalse(result11);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.domain.ConsultantTime#setAccount(com.scg.domain.Account)}.
-	 */
 	@Test
 	public void test_SetAccount() {
 		// ARRANGE
@@ -195,10 +171,6 @@ public class ConsultantTimeTest {
 		assertTrue(Objects.equals(account, consultantTime.getAccount()));
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.domain.ConsultantTime#setDate(java.time.LocalDate)}.
-	 */
 	@Test
 	public void test_SetDate() {
 		// ARRANGE
@@ -212,9 +184,6 @@ public class ConsultantTimeTest {
 		assertEquals(testDate, consultantTime.getDate());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ConsultantTime#setHours(int)}.
-	 */
 	@Test
 	public void test_SetHours() {
 		// ARRANGE
@@ -227,9 +196,6 @@ public class ConsultantTimeTest {
 		assertEquals(123, consultantTime.getHours());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ConsultantTime#setHours(int)}.
-	 */
 	@Test
 	public void test_SetHours_BadHours() {
 		// ARRANGE
@@ -241,9 +207,6 @@ public class ConsultantTimeTest {
 		});
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ConsultantTime#toString()}.
-	 */
 	@Test
 	public void test_ToString() {
 		// ARRANGE

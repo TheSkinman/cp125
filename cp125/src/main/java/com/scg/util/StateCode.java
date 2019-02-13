@@ -1,73 +1,138 @@
 package com.scg.util;
 
+/**
+ * U. S. Postal state codes.
+ * 
+ * @author Norman Skinner (skinman@uw.edu)
+ *
+ */
 public enum StateCode {
-	AL("Alabama"),
-	AK("Alaska"),
-	AS("American Samoa"),
-	AZ("Arizona"),
-	AR("Arkansas"),
-	CA("California"),
-	CO("Colorado"),
-	CT("Connecticut"),
-	DE("Delaware"),
-	DC("District of Columbia"),
-	FM("Federated States of Micronesia"),
-	FL("Florida"),
-	GA("Georgia"),
-	GU("Guam"),
-	HI("Hawaii"),
-	ID("Idaho"),
-	IL("Illinois"),
-	IN("Indiana"),
-	IA("Iowa"),
-	KS("Kansas"),
-	KY("Kentucky"),
-	LA("Louisiana"),
-	ME("Maine"),
-	MH("Marshall Islands"),
-	MD("Maryland"),
-	MA("Massachusetts"),
-	MI("Michigan"),
-	MN("Minnesota"),
-	MS("Mississippi"),
-	MO("Missouri"),
-	MT("Montana"),
-	NE("Nebraska"),
-	NV("Nevada"),
-	NH("New Hampshire"),
-	NJ("New Jersey"),
-	NM("New Mexico"),
-	NY("New York"),
-	NC("North Carolina"),
-	ND("North Dakota"),
-	MP("Northern Mariana Islands"),
-	OH("Ohio"),
-	OK("Oklahoma"),
-	OR("Oregon"),
-	PW("Palau"),
-	PA("Pennsylvania"),
-	PR("Puerto Rico"),
-	RI("Rhode Island"),
-	SC("South Carolina"),
-	SD("South Dakota"),
-	TN("Tennessee"),
-	TX("Texas"),
-	UT("Utah"),
-	VT("Vermont"),
-	VI("Virgin Islands"),
-	VA("Virginia"),
-	WA("Washington"),
-	WV("West Virginia"),
-	WI("Wisconsin"),
-	WY("Wyoming");
-	
-	private String fullName;
-	
-	private StateCode(String fullName) {
-		this.fullName = fullName;
-	}
-	
-	public String getFullName() {
-		return fullName;
-	}
+    /** ALABAMA */
+    AL("Alabama"),
+    /** ALASKA */
+    AK("Alaska"),
+    /** AMERICAN SAMOA */
+    AS("American Samoa"),
+    /** ARIZONA */
+    AZ("Arizona"),
+    /** ARKANSAS */
+    AR("Arkansas"),
+    /** CALIFORNIA */
+    CA("California"),
+    /** COLORADO */
+    CO("Colorado"),
+    /** CONNECTICUT */
+    CT("Connecticut"),
+    /** DELAWARE */
+    DE("Delaware"),
+    /** DISTRICT OF COLUMBIA */
+    DC("District of Columbia"),
+    /** FEDERATED STATES OF MICRONESIA */
+    FM("Federated States of Micronesia"),
+    /** FLORIDA */
+    FL("Florida"),
+    /** GEORGIA */
+    GA("Georgia"),
+    /** GUAM */
+    GU("Guam"),
+    /** HAWAII */
+    HI("Hawaii"),
+    /** IDAHO */
+    ID("Idaho"),
+    /** ILLINOIS */
+    IL("Illinois"),
+    /** INDIANA */
+    IN("Indiana"),
+    /** IOWA */
+    IA("Iowa"),
+    /** KANSAS */
+    KS("Kansas"),
+    /** KENTUCKY */
+    KY("Kentucky"),
+    /** LOUISIANA */
+    LA("Louisiana"),
+    /** MAINE */
+    ME("Maine"),
+    /** MARSHALL ISLANDS */
+    MH("Marshall Islands"),
+    /** MARYLAND */
+    MD("Maryland"),
+    /** MASSACHUSETTS */
+    MA("Massachusetts"),
+    /** MICHIGAN */
+    MI("Michigan"),
+    /** MINNESOTA */
+    MN("Minnesota"),
+    /** MISSISSIPPI */
+    MS("Mississippi"),
+    /** MISSOURI */
+    MO("Missouri"),
+    /** MONTANA */
+    MT("Montana"),
+    /** NEBRASKA */
+    NE("Nebraska"),
+    /** NEVADA */
+    NV("Nevada"),
+    /** NEW HAMPSHIRE */
+    NH("New Hampshire"),
+    /** NEW JERSEY */
+    NJ("New Jersey"),
+    /** NEW MEXICO */
+    NM("New Mexico"),
+    /** NEW YORK */
+    NY("New York"),
+    /** NORTH CAROLINA */
+    NC("North Carolina"),
+    /** NORTH DAKOTA */
+    ND("North Dakota"),
+    /** NORTHERN MARIANA ISLANDS */
+    MP("Northern Mariana Islands"),
+    /** OHIO */
+    OH("Ohio"),
+    /** OKLAHOMA */
+    OK("Oklahoma"),
+    /** OREGON */
+    OR("Oregon"),
+    /** PALAU */
+    PW("Palau"),
+    /** PENNSYLVANIA */
+    PA("Pennsylvania"),
+    /** PUERTO RICO */
+    PR("Puerto Rico"),
+    /** RHODE ISLAND */
+    RI("Rhode Island"),
+    /** SOUTH CAROLINA */
+    SC("South Carolina"),
+    /** SOUTH DAKOTA */
+    SD("South Dakota"),
+    /** TENNESSEE */
+    TN("Tennessee"),
+    /** TEXAS */
+    TX("Texas"),
+    /** UTAH */
+    UT("Utah"),
+    /** VERMONT */
+    VT("Vermont"),
+    /** VIRGIN ISLANDS */
+    VI("Virgin Islands"),
+    /** VIRGINIA */
+    VA("Virginia"),
+    /** WASHINGTON */
+    WA("Washington"),
+    /** WEST VIRGINIA */
+    WV("West Virginia"),
+    /** WISCONSIN */
+    WI("Wisconsin"),
+    /** WYOMING */
+    WY("Wyoming");
+
+    private String fullName;
+
+    private StateCode(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
 }

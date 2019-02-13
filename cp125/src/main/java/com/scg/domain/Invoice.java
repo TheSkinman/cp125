@@ -35,214 +35,217 @@ import com.scg.util.StateCode;
  *
  */
 public class Invoice {
-	private static final Logger log = LoggerFactory.getLogger(Invoice.class);
-	private static final String INVOICE_PROPERTIES_FILE = "invoice.properties";
-	private ClientAccount client;
-	private Month invoiceMonth;
-	private LocalDate startDate;
-	private int totalCharges;
-	private int totalHours;
-	private List<InvoiceLineItem> lineItems;
-	private String bizName;
-	private Address bizAddress;
-	private static Properties invoiceProperties;
+    private static final Logger log = LoggerFactory.getLogger(Invoice.class);
+    private static final String INVOICE_PROPERTIES_FILE = "/invoice.properties";
+    private static final Properties INVOICE_PROPERTIES;
+    private static final String bizName;
+    private static final Address bizAddress;
+    
+    static {
+        INVOICE_PROPERTIES = new Properties();
+        try (InputStream inputStream = Invoice.class.getResourceAsStream(INVOICE_PROPERTIES_FILE)) {
+            if (inputStream != null) {
+                INVOICE_PROPERTIES.load(inputStream);
+            } else {
+                String errorMessage = String.format("property file '%s' not found in the classpath", INVOICE_PROPERTIES_FILE);
+                throw new FileNotFoundException(errorMessage);
+            }
+        } catch (IOException err) {
+            log.error("Failed to load properties due to the following IOException...");
+            log.error(err.toString());
+        }
+        
+        // Set the loaded values or load with defaults.
+        String name = INVOICE_PROPERTIES.getProperty("business.name", "The Default Company");
+        String street = INVOICE_PROPERTIES.getProperty("business.street", "1234 Default St.");
+        String city = INVOICE_PROPERTIES.getProperty("business.city", "Los Default");
+        String state = INVOICE_PROPERTIES.getProperty("business.state", "CA");
+        String zip = INVOICE_PROPERTIES.getProperty("business.zip", "12345");
+        
+        bizName = name;
+        bizAddress = new Address(street, city, StateCode.valueOf(state), zip);
+    }
 
-	/**
-	 * Construct an Invoice for a client. The time period is set from the beginning
-	 * to the end of the month specified.
-	 * 
-	 * @param client
-	 * @param invoiceMonth
-	 * @param invoiceYear
-	 * @throws IOException
-	 */
-	public Invoice(ClientAccount client, Month invoiceMonth, int invoiceYear) {
-		super();
-		this.client = client;
-		this.invoiceMonth = invoiceMonth;
-		startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
-		lineItems = new ArrayList<>();
-		loadInvoiceProperties(INVOICE_PROPERTIES_FILE);
-	}
+    private ClientAccount client;
+    private Month invoiceMonth;
+    private LocalDate invoiceDate;
+    private LocalDate startDate;
+    private int totalCharges;
+    private int totalHours;
+    private List<InvoiceLineItem> lineItems;
 
-	/**
-	 * Used to load the invoice properties.
-	 */
-	void loadInvoiceProperties(final String fileName) {
-		// Clean up and get ready to load up.
-		invoiceProperties = new Properties();
-
-		// Use a "try with" so we close up the stream when we are done.
-		try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
-			if (inputStream != null) {
-				invoiceProperties.load(inputStream);
-			} else {
-			    String errorMessage = String.format("property file '%s' not found in the classpath", fileName);
-				throw new FileNotFoundException(errorMessage);
-			}
-		} catch (IOException err) {
-		    log.error("Failed to load properties due to the following IOException...");
-			log.error(err.toString());
-		}
-		
-		// Set the loaded values or load with defaults.
-		String    name   = invoiceProperties.getProperty("business.name", "The Default Company");
-		String    street = invoiceProperties.getProperty("business.street", "1234 Default St.");
-		String    city   = invoiceProperties.getProperty("business.city", "Los Default");
-		StateCode state  = StateCode.valueOf(invoiceProperties.getProperty("business.state", "CA"));
-		String    zip    = invoiceProperties.getProperty("business.zip", "12345");
-		
-		bizName = name;
-		bizAddress = new Address(street, city, state, zip);
-	}
+    /**
+     * Construct an Invoice for a client. The time period is set from the beginning
+     * to the end of the month specified.
+     * 
+     * @param client
+     *            Client for this Invoice.
+     * @param invoiceMonth
+     *            Month for which this Invoice is being created.
+     * @param invoiceYear
+     *            Year for which this Invoice is being created.
+     */
+    public Invoice(ClientAccount client, Month invoiceMonth, int invoiceYear) {
+        super();
+        this.client = client;
+        this.invoiceMonth = invoiceMonth;
+        startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
+        lineItems = new ArrayList<>();
+        invoiceDate = LocalDate.now();
+    }
+    
+    // protected method for testing verification
+    String getBizName() {
+        return bizName;
+    }
 
     // protected method for testing verification
-	String getBizName() {
-	    return bizName;
-	}
-	
-	// protected method for testing verification
-	Address getBizAddress() {
-	    return bizAddress;
-	}
+    Address getBizAddress() {
+        return bizAddress;
+    }
 
-	/**
-	 * Get the client for this Invoice.
-	 * 
-	 * @return the client
-	 */
-	public ClientAccount getClientAccount() {
-		return client;
-	}
+    /**
+     * Get the start date for this Invoice, this is the earliest date a
+     * ConsultantTime instance may have and still be billed on this invoice.
+     * 
+     * @return Start date.
+     */
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+    
+    /**
+     * Get the invoice month.
+     * 
+     * @return the invoiceMonth
+     */
+    public Month getInvoiceMonth() {
+        return invoiceMonth;
+    }
+    
+    /**
+     * Get the client for this Invoice.
+     * 
+     * @return the client
+     */
+    public ClientAccount getClientAccount() {
+        return client;
+    }
 
-	/**
-	 * Get the invoice month.
-	 * 
-	 * @return the invoiceMonth
-	 */
-	public Month getInvoiceMonth() {
-		return invoiceMonth;
-	}
+    /**
+     * Get the total hours for this Invoice.
+     * 
+     * @return the totalHours
+     */
+    public int getTotalHours() {
+        return totalHours;
+    }
+    
+    /**
+     * Get the total charges for this Invoice.
+     * 
+     * @return the totalCharges
+     */
+    public int getTotalCharges() {
+        return totalCharges;
+    }
 
-	/**
-	 * Get the start date for this Invoice, this is the earliest date a
-	 * ConsultantTime instance may have and still be billed on this invoice.
-	 * 
-	 * @return the startDate
-	 */
-	public LocalDate getStartDate() {
-		return startDate;
-	}
+    /**
+     * Add an invoice line item to this Invoice.
+     * 
+     * @param lineItem
+     *            InvoiceLineItem to add.
+     */
+    public void addLineItem(InvoiceLineItem lineItem) {
+        lineItems.add(lineItem);
+        // Increase total hours
+        totalHours += lineItem.getHours();
+        // Increase total charges based on skill rate
+        totalCharges += lineItem.getSkill().getRate() * lineItem.getHours();
+    }
 
-	/**
-	 * Get the total charges for this Invoice.
-	 * 
-	 * @return the totalCharges
-	 */
-	public int getTotalCharges() {
-		return totalCharges;
-	}
+    /**
+     * Extract the billable hours for this Invoice's client from the input TimeCard
+     * and add them to the collection of line items. Only those hours for the client
+     * and month unique to this invoice will be added.
+     * 
+     * @param timeCard
+     *            the TimeCard potentially containing line items for this Invoices
+     *            client.
+     */
+    public void extractLineItems(TimeCard timeCard) {
+        for (final ConsultantTime consultantTime : timeCard.getBillableHoursForClient(getClientAccount().getName())) {
+            LocalDate timeCardDate = consultantTime.getDate();
+            if (getStartDate().getMonth() == timeCardDate.getMonth() && 
+                getStartDate().getYear()  == timeCardDate.getYear()) {
+                final InvoiceLineItem invoiceLineItem = new InvoiceLineItem(
+                        timeCardDate,
+                        timeCard.getConsultant(),
+                        consultantTime.getSkill(),
+                        consultantTime.getHours());
+                addLineItem(invoiceLineItem);
+            }
+        }
+    }
+    
+    /*@
+     * Create a string representation of this object, suitable for printing.
+     * 
+     * @return string containing this invoices client name and billing start date
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        try (Formatter fmrt = new Formatter(sb, Locale.US);) {
+            // Invoice headers
+            fmrt.format("%-10s  %-27s  %-18s   %5s  %10s%n", "Date", "Consultant", "Skill", "Hours", "Charge")
+                .format(StringUtils.repeat("-", 10) + "  ")
+                .format(StringUtils.repeat("-", 27) + "  ")
+                .format(StringUtils.repeat("-", 18) + "   ")
+                .format(StringUtils.repeat("-", 5) + "  ")
+                .format(StringUtils.repeat("-", 10) + "\n");
+            
+            for (InvoiceLineItem ln : lineItems) {
+                fmrt.format(ln.toString());
+            }
+        }
+        return sb.toString();
+    }
 
-	/**
-	 * Get the total hours for this Invoice.
-	 * 
-	 * @return the totalHours
-	 */
-	public int getTotalHours() {
-		return totalHours;
-	}
+    /**
+     * Create a formatted string containing the printable invoice. Includes a header
+     * and footer on each page.
+     * 
+     * @return The formatted invoice as a string.
+     */
+    public String toReportString() {
+        StringBuilder sb = new StringBuilder();
 
-	/**
-	 * Add an invoice line item to this Invoice.
-	 * 
-	 * @param lineItem
-	 *            InvoiceLineItem to add.
-	 */
-	public void addLineItem(InvoiceLineItem lineItem) {
-		lineItems.add(lineItem);
-		// Increase total hours
-		totalHours += lineItem.getHours();
-		// Increase total charges based on skill rate
-		totalCharges += lineItem.getSkill().getRate() * lineItem.getHours();
-	}
+        // Setup the header and footers
+        InvoiceHeader invoiceHeader = new InvoiceHeader(bizName, bizAddress, getClientAccount(), LocalDate.now(),
+                getStartDate());
+        InvoiceFooter invoiceFooter = new InvoiceFooter(bizName);
 
-	/**
-	 * Extract the billable hours for this Invoice's client from the input TimeCard
-	 * and add them to the collection of line items. Only those hours for the client
-	 * and month unique to this invoice will be added.
-	 * 
-	 * @param timeCard
-	 *            the TimeCard potentially containing line items for this Invoices
-	 *            client.
-	 */
-	public void extractLineItems(TimeCard timeCard) {
-		Consultant consultant = timeCard.getConsultant();
-		for (ConsultantTime ct : timeCard.getBillableHoursForClient(getClientAccount().getName())) {
-			if (getStartDate().getMonth().equals(ct.getDate().getMonth())
-					&& getStartDate().getYear() == ct.getDate().getYear()) {
-				addLineItem(new InvoiceLineItem(ct.getDate(), consultant, ct.getSkill(), ct.getHours()));
-			}
-		}
-	}
-
-	/**
-	 * Create a formatted string containing the printable invoice. Includes a header
-	 * and footer on each page.
-	 * 
-	 * @return The formatted invoice as a string.
-	 */
-	public String toReportString() {
-	    StringBuilder sb = new StringBuilder();
-		
-		// Setup the header and footers
-		InvoiceHeader invoiceHeader = new InvoiceHeader(bizName, bizAddress, getClientAccount(), LocalDate.now(), getStartDate());
-		InvoiceFooter invoiceFooter = new InvoiceFooter(bizName);
-		
-		// Cycle through the invoice line items
-		try (Formatter fmrt = new Formatter(sb, Locale.US);) {
-			int lineCounter = 0;
-			for (InvoiceLineItem lineItem : lineItems) {
-				if (lineCounter == 5) {
-				    fmrt.format("%n%s", invoiceFooter.toString());
-					invoiceFooter.incrementPageNumber();
-					lineCounter = 0;
-				}
-				if (lineCounter == 0) {
-					fmrt.format(invoiceHeader.toString());
-				}
-				fmrt.format(lineItem.toString());
-				lineCounter++;
-			}
-			fmrt.format("%nTotal: %60d  %,10.2f%n", getTotalHours(), (float)getTotalCharges());
-			fmrt.format(invoiceFooter.toString());
-		}
-		return sb.toString();
-	}
-
-	/*
-	 * Create a string representation of this object, suitable for printing.
-	 * 
-	 * @see java.lang.Object#toString()
-	 * 
-	 * @return string containing this invoices client name and billing start date
-	 */
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		// Invoice headers
-		sb.append(String.format("%-10s  %-27s  %-18s   %5s  %10s%n", "Date", "Consultant", "Skill", "Hours", "Charge"));
-		sb.append(StringUtils.repeat("-", 10) + "  ");
-		sb.append(StringUtils.repeat("-", 27) + "  ");
-		sb.append(StringUtils.repeat("-", 18) + "   ");
-		sb.append(StringUtils.repeat("-", 5) + "  ");
-		sb.append(StringUtils.repeat("-", 10) + "\n");
-
-		for (InvoiceLineItem ln : lineItems) {
-			sb.append(ln.toString());
-		}
-
-		String finalString = sb.toString();
-		return finalString;
-	}
+        // Cycle through the invoice line items
+        try (Formatter fmrt = new Formatter(sb, Locale.US);) {
+            int lineCounter = 0;
+            for (InvoiceLineItem lineItem : lineItems) {
+                if (lineCounter == 5) {
+                    fmrt.format("%n%s%n", invoiceFooter.toString());
+                    invoiceFooter.incrementPageNumber();
+                    lineCounter = 0;
+                }
+                if (lineCounter == 0) {
+                    fmrt.format(invoiceHeader.toString());
+                }
+                fmrt.format(lineItem.toString());
+                lineCounter++;
+            }
+            fmrt.format("%nTotal: %60d  %,10.2f%n", getTotalHours(), (float) getTotalCharges());
+            fmrt.format(invoiceFooter.toString());
+        }
+        return sb.toString();
+    }
 
 }

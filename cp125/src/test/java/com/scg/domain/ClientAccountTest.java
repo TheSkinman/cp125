@@ -21,18 +21,12 @@ public class ClientAccountTest {
 	private PersonalName personalName;
 	private Address address;
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@BeforeEach
 	public void setUp() throws Exception {
 		personalName = new PersonalName("last", "first", "middle");
 		address = new Address("1325 4th Ave #400", "Seattle", StateCode.WA, "98101");
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#ClientAccount(java.lang.String, com.scg.util.PersonalName)}.
-	 */
 	@Test
 	public void test_ClientAccountConstructor_String_PersonalName() {
 		// ARRANGE
@@ -48,28 +42,6 @@ public class ClientAccountTest {
 		assertEquals(true, result.isBillable());
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#ClientAccount(java.lang.String, com.scg.util.PersonalName, boolean)}.
-	 */
-	@Test
-	public void test_ClientAccountConstructor_String_PersonalName_Boolean() {
-		// ARRANGE
-		String name = "Company Test";
-		PersonalName contact = personalName;
-		boolean billable = false;
-		
-		// ACT
-		ClientAccount result = new ClientAccount(name, contact, address, billable);
-
-		// ASSERT
-		assertEquals(name, result.getName());
-		assertTrue(Objects.equals(personalName, result.getContact()));
-		assertEquals(billable, result.isBillable());
-	}
-
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#getName()}.
-	 */
 	@Test
 	public void test_GetName() {
 		// ARRANGE
@@ -82,9 +54,6 @@ public class ClientAccountTest {
 		assertEquals("test", result);
 	}
 
-    /**
-     * Test method for {@link com.scg.domain.ClientAccount#getName()}.
-     */
     @Test
     public void test_SetAddress() {
         // ARRANGE
@@ -98,9 +67,6 @@ public class ClientAccountTest {
         assertEquals(address, result);
     }
 
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#isBillable()}.
-	 */
 	@Test
 	public void test_IsBillable() {
 		// ARRANGE
@@ -113,9 +79,6 @@ public class ClientAccountTest {
 		assertTrue(result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#getContact()}.
-	 */
 	@Test
 	public void test_GetContact() {
 		// ARRANGE
@@ -128,9 +91,6 @@ public class ClientAccountTest {
 		assertTrue(Objects.equals(personalName, result));
 	}
 
-	/**
-	 * Test method for {@link com.scg.domain.ClientAccount#setContact(com.scg.util.PersonalName)}.
-	 */
 	@Test
 	public void test_SetContact() {
 		// ARRANGE

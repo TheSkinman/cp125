@@ -13,15 +13,14 @@ import org.junit.jupiter.api.Test;
 
 
 /**
+ * So much testing goodness!
+ * 
  * @author Norman Skinner
  *
  */
 public class PersonalNameTest {
 	private PersonalName personalName;
 
-	/**
-	 * Test method for {@link com.scg.util.PersonalName#hashCode()}.
-	 */
 	@Test
 	public void test_HashCode_Nulls() {
 		// ARRANGE
@@ -34,9 +33,6 @@ public class PersonalNameTest {
 		assertEquals(29791, result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.util.PersonalName#hashCode()}.
-	 */
 	@Test
 	public void test_HashCode_Values() {
 		// ARRANGE
@@ -51,26 +47,18 @@ public class PersonalNameTest {
 		assertEquals(result1, result2);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.util.PersonalName#PersonalName(java.lang.String)}.
-	 */
 	@Test
 	public void test_PersonalNameString() {
 		// ARRANGE
-		personalName = new PersonalName("lastName");
+		personalName = new PersonalName();
 
 		// ACT
 		String result = personalName.toString();
 
 		// ASSERT
-		assertEquals("lastName,", result);
+		assertEquals(",", result);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.util.PersonalName#PersonalName(java.lang.String, java.lang.String)}.
-	 */
 	@Test
 	public void test_PersonalNameStringString() {
 		// ARRANGE
@@ -83,10 +71,6 @@ public class PersonalNameTest {
 		assertEquals("lastName, firstName", result);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.scg.util.PersonalName#PersonalName(java.lang.String, java.lang.String, java.lang.String)}.
-	 */
 	@Test
 	public void test_PersonalNameStringStringString() {
 		// ARRANGE
@@ -98,61 +82,46 @@ public class PersonalNameTest {
 		// ASSERT
 		assertEquals("lastName, firstName middleName", result);
 	}
+	
+	 @Test
+	 public void test_SetFirstName() {
+	        // ARRANGE
+	        personalName = new PersonalName();
 
-	// /**
-	// * Test method for {@link com.scg.util.PersonalName#getFirstName()}.
-	// */
-	// @Test
-	// public void test_GetFirstName() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// /**
-	// * Test method for {@link
-	// com.scg.util.PersonalName#setFirstName(java.lang.String)}.
-	// */
-	// @Test
-	// public void test_SetFirstName() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// /**
-	// * Test method for {@link com.scg.util.PersonalName#getLastName()}.
-	// */
-	// @Test
-	// public void test_GetLastName() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// /**
-	// * Test method for {@link
-	// com.scg.util.PersonalName#setLastName(java.lang.String)}.
-	// */
-	// @Test
-	// public void test_SetLastName() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// /**
-	// * Test method for {@link com.scg.util.PersonalName#getMiddleName()}.
-	// */
-	// @Test
-	// public void test_GetMiddleName() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// /**
-	// * Test method for {@link
-	// com.scg.util.PersonalName#setMiddleName(java.lang.String)}.
-	// */
-	// @Test
-	// public void test_SetMiddleName() {
-	// fail("Not yet implemented");
-	// }
+	        // ACT
+	        personalName.setFirstName("TEST");
 
-	/**
-	 * Test method for {@link com.scg.util.PersonalName#toString()}.
-	 */
+	        // ASSERT
+	        String result = personalName.toString();
+	        assertEquals(", TEST", result);
+	 }
+	
+	 @Test
+	 public void test_SetLastName() {
+         // ARRANGE
+         personalName = new PersonalName();
+
+         // ACT
+         personalName.setLastName("TEST");
+
+         // ASSERT
+         String result = personalName.toString();
+         assertEquals("TEST,", result);
+	 }
+
+	 @Test
+	 public void test_SetMiddleName() {
+         // ARRANGE
+         personalName = new PersonalName();
+
+         // ACT
+         personalName.setMiddleName("TEST");
+
+         // ASSERT
+         String result = personalName.toString();
+         assertEquals(",  TEST", result);
+	 }
+
 	@Test
 	public void test_ToString() {
 		// ARRANGE
@@ -165,9 +134,6 @@ public class PersonalNameTest {
 		assertEquals("lastName, firstName middleName", result);
 	}
 
-	/**
-	 * Test method for {@link com.scg.util.PersonalName#equals(java.lang.Object)}.
-	 */
 	@Test
 	public void test_EqualsObject() {
 		// ARRANGE

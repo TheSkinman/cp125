@@ -1,19 +1,9 @@
 package com.scg.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.security.Permission;
 import java.time.LocalDate;
 import java.time.Month;
-
-
-//import org.junit.Rule;
-//import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
 import com.scg.util.StateCode;
@@ -42,28 +32,27 @@ class InvoiceTest {
         assertEquals("1616 Index Ct.", invoice.getBizAddress().getStreetNumber());
     }
 
-    @Test
-    void test_Invoice_LoadNonExistingFileFails() {
-        // ARRANGE
-        String name = "Small Business";
-        PersonalName contact = new PersonalName("last", "first", "middle");
-        Address address = new Address("123 Street", "City", StateCode.AL, "12345");
-        ClientAccount client = new ClientAccount(name, contact, address);
-        Month invoiceMonth = Month.OCTOBER;
-        int invoiceYear = 1968;
-        invoice = new Invoice(client, invoiceMonth, invoiceYear);
-        
-
-        // ACT
-        invoice.loadInvoiceProperties("iowjef08ewfowifjhwhfwehfekjnw890wfhy.properties");
-        
-        // ASSERT
-        assertEquals("The Default Company", invoice.getBizName());
-        assertEquals("Los Default", invoice.getBizAddress().getCity());
-        assertEquals("12345", invoice.getBizAddress().getPostalCode());
-        assertEquals(StateCode.CA, invoice.getBizAddress().getState());
-        assertEquals("1234 Default St.", invoice.getBizAddress().getStreetNumber());
-    }
+//    @Test
+//    void test_Invoice_LoadNonExistingFileFails() {
+//        // ARRANGE
+//        String name = "Small Business";
+//        PersonalName contact = new PersonalName("last", "first", "middle");
+//        Address address = new Address("123 Street", "City", StateCode.AL, "12345");
+//        ClientAccount client = new ClientAccount(name, contact, address);
+//        Month invoiceMonth = Month.OCTOBER;
+//        int invoiceYear = 1968;
+//        invoice = new Invoice(client, invoiceMonth, invoiceYear);
+//
+//        // ACT
+//        invoice.loadProperties("thisFileNameDoesNotExist.properties");
+//        
+//        // ASSERT
+//        assertEquals("The Default Company", invoice.getBizName());
+//        assertEquals("Los Default", invoice.getBizAddress().getCity());
+//        assertEquals("12345", invoice.getBizAddress().getPostalCode());
+//        assertEquals(StateCode.CA, invoice.getBizAddress().getState());
+//        assertEquals("1234 Default St.", invoice.getBizAddress().getStreetNumber());
+//    }
 
     @Test
     void test_AddLineItem() {
@@ -80,7 +69,7 @@ class InvoiceTest {
         String expected = String.format("The Small Consulting Group1616 Index Ct.Renton, WA 98058 Invoice for:"
                 + "Small Business123 StreetCity, AL 12345 last, first middleInvoice For Month of: October 1968"
                 + "Invoice Date: %1$tB %1$td, %1$tYDate        Consultant                   Skill                Hours  Charge"
-                + "----------  ---------------------------  ------------------   -----  ----------"
+                + "----------  ---------------------------  -------------------  -----  ----------"
                 + "10/08/1968  last, first middle           Software Engineer        2      300.00"
                 + "Total:                                                            2      300.00"
                 + "The Small Consulting Group                                            Page:   1"
@@ -109,7 +98,7 @@ class InvoiceTest {
         String expected = String.format("The Small Consulting Group1616 Index Ct.Renton, WA 98058 Invoice for:Small Business123 StreetCity, "
                 + "AL 12345 last, first middleInvoice For Month of: October 1968Invoice Date: %1$tB %1$td, %1$tY"
                 + "Date        Consultant                   Skill                Hours  Charge"
-                + "----------  ---------------------------  ------------------   -----  ----------"
+                + "----------  ---------------------------  -------------------  -----  ----------"
                 + "10/08/1968  last, first middle           Software Engineer        2      300.00"
                 + "10/08/1968  last, first middle           Software Engineer        2      300.00"
                 + "10/08/1968  last, first middle           Software Engineer        2      300.00"
@@ -120,7 +109,7 @@ class InvoiceTest {
                 + "The Small Consulting Group1616 Index Ct.Renton, WA 98058 Invoice for:Small Business"
                 + "123 StreetCity, AL 12345 last, first middleInvoice For Month of: October 1968"
                 + "Invoice Date: %1$tB %1$td, %1$tYDate        Consultant                   Skill                Hours  Charge"
-                + "----------  ---------------------------  ------------------   -----  ----------"
+                + "----------  ---------------------------  -------------------  -----  ----------"
                 + "10/08/1968  last, first middle           Software Engineer        2      300.00"
                 + "Total:                                                           12    1,800.00"
                 + "The Small Consulting Group                                            Page:   2"
