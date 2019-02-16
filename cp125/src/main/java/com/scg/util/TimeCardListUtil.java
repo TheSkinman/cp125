@@ -1,13 +1,9 @@
 package com.scg.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
 
@@ -30,7 +26,6 @@ public class TimeCardListUtil {
     public static List<TimeCard> getTimeCardsForConsultant(List<TimeCard> timeCards, Consultant consultant) {
         List<TimeCard> returnList = timeCards.stream().filter(i -> i.getConsultant().equals(consultant))
                 .collect(Collectors.toList());
-
         return returnList;
     }
 
@@ -54,7 +49,6 @@ public class TimeCardListUtil {
 
         List<TimeCard> returnList = timeCards.stream().filter(i -> dateRange.isInRange(i.getWeekStartingDay()))
                 .collect(Collectors.toList());
-
         return returnList;
     }
 
@@ -69,9 +63,12 @@ public class TimeCardListUtil {
             public int compare(TimeCard t1, TimeCard t2) {
                 int diff = 0;
                 if (t1 != t2) {
-                    if ((diff = t1.getConsultant().getName().getLastName().compareTo(t2.getConsultant().getName().getLastName())) == 0)
-                    if ((diff = t1.getConsultant().getName().getFirstName().compareTo(t2.getConsultant().getName().getFirstName())) == 0)
-                        diff = t1.getConsultant().getName().getMiddleName().compareTo(t2.getConsultant().getName().getMiddleName());
+                    if ((diff = t1.getConsultant().getName().getLastName()
+                            .compareTo(t2.getConsultant().getName().getLastName())) == 0)
+                        if ((diff = t1.getConsultant().getName().getFirstName()
+                                .compareTo(t2.getConsultant().getName().getFirstName())) == 0)
+                            diff = t1.getConsultant().getName().getMiddleName()
+                                    .compareTo(t2.getConsultant().getName().getMiddleName());
                 }
                 return diff;
             }

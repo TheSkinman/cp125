@@ -40,28 +40,29 @@ public class Invoice {
     private static final Properties INVOICE_PROPERTIES;
     private static final String bizName;
     private static final Address bizAddress;
-    
+
     static {
         INVOICE_PROPERTIES = new Properties();
         try (InputStream inputStream = Invoice.class.getResourceAsStream(INVOICE_PROPERTIES_FILE)) {
             if (inputStream != null) {
                 INVOICE_PROPERTIES.load(inputStream);
             } else {
-                String errorMessage = String.format("property file '%s' not found in the classpath", INVOICE_PROPERTIES_FILE);
+                String errorMessage = String.format("property file '%s' not found in the classpath",
+                        INVOICE_PROPERTIES_FILE);
                 throw new FileNotFoundException(errorMessage);
             }
         } catch (IOException err) {
             log.error("Failed to load properties due to the following IOException...");
             log.error(err.toString());
         }
-        
+
         // Set the loaded values or load with defaults.
         String name = INVOICE_PROPERTIES.getProperty("business.name", "The Default Company");
         String street = INVOICE_PROPERTIES.getProperty("business.street", "1234 Default St.");
         String city = INVOICE_PROPERTIES.getProperty("business.city", "Los Default");
         String state = INVOICE_PROPERTIES.getProperty("business.state", "CA");
         String zip = INVOICE_PROPERTIES.getProperty("business.zip", "12345");
-        
+
         bizName = name;
         bizAddress = new Address(street, city, StateCode.valueOf(state), zip);
     }
@@ -93,7 +94,7 @@ public class Invoice {
         lineItems = new ArrayList<>();
         invoiceDate = LocalDate.now();
     }
-    
+
     // protected method for testing verification
     String getBizName() {
         return bizName;
@@ -113,7 +114,7 @@ public class Invoice {
     public LocalDate getStartDate() {
         return startDate;
     }
-    
+
     /**
      * Get the invoice month.
      * 
@@ -122,7 +123,7 @@ public class Invoice {
     public Month getInvoiceMonth() {
         return invoiceMonth;
     }
-    
+
     /**
      * Get the client for this Invoice.
      * 
@@ -140,7 +141,7 @@ public class Invoice {
     public int getTotalHours() {
         return totalHours;
     }
-    
+
     /**
      * Get the total charges for this Invoice.
      * 
@@ -174,38 +175,33 @@ public class Invoice {
      *            client.
      */
     public void extractLineItems(TimeCard timeCard) {
-        for (final ConsultantTime consultantTime : timeCard.getBillableHoursForClient(getClientAccount().getName())) {
-            LocalDate timeCardDate = consultantTime.getDate();
-            if (getStartDate().getMonth() == timeCardDate.getMonth() && 
-                getStartDate().getYear()  == timeCardDate.getYear()) {
-                final InvoiceLineItem invoiceLineItem = new InvoiceLineItem(
-                        timeCardDate,
-                        timeCard.getConsultant(),
-                        consultantTime.getSkill(),
-                        consultantTime.getHours());
-                addLineItem(invoiceLineItem);
-            }
-        }
+        timeCard.getBillableHoursForClient(getClientAccount().getName()).stream()
+                .filter(r -> r.getDate().getMonth().equals(getStartDate().getMonth())
+                        && r.getDate().getYear() == getStartDate().getYear())
+                .forEach(s -> {
+                    final InvoiceLineItem invoiceLineItem = new InvoiceLineItem(
+                            // timeCardDate,
+                            s.getDate(), timeCard.getConsultant(), s.getSkill(), s.getHours());
+                    addLineItem(invoiceLineItem);
+                });
     }
-    
-    /*@
-     * Create a string representation of this object, suitable for printing.
+
+    /*
+     * @ Create a string representation of this object, suitable for printing.
      * 
      * @return string containing this invoices client name and billing start date
      */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
+
         try (Formatter fmrt = new Formatter(sb, Locale.US);) {
             // Invoice headers
             fmrt.format("%-10s  %-27s  %-18s   %5s  %10s%n", "Date", "Consultant", "Skill", "Hours", "Charge")
-                .format(StringUtils.repeat("-", 10) + "  ")
-                .format(StringUtils.repeat("-", 27) + "  ")
-                .format(StringUtils.repeat("-", 18) + "   ")
-                .format(StringUtils.repeat("-", 5) + "  ")
-                .format(StringUtils.repeat("-", 10) + "\n");
-            
+                    .format(StringUtils.repeat("-", 10) + "  ").format(StringUtils.repeat("-", 27) + "  ")
+                    .format(StringUtils.repeat("-", 18) + "   ").format(StringUtils.repeat("-", 5) + "  ")
+                    .format(StringUtils.repeat("-", 10) + "\n");
+
             for (InvoiceLineItem ln : lineItems) {
                 fmrt.format(ln.toString());
             }

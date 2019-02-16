@@ -134,8 +134,7 @@ public class TimeCard {
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
         List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
-                .filter(p -> p.isBillable() && p.getAccount().getName() == clientName).collect(Collectors.toList());
-
+                .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName)).collect(Collectors.toList());
         return theReturn;
     }
 
