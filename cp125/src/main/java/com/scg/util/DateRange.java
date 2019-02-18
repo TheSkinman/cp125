@@ -77,7 +77,7 @@ public class DateRange {
     }
 
     /**
-     * Returns true if the specified date is within the range start date <= date <=
+     * Returns true if the specified date is within the range start date &lt;= date &lt;=
      * end date.
      * 
      * @param date
