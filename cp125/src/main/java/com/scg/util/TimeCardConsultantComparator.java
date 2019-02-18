@@ -27,18 +27,18 @@ public class TimeCardConsultantComparator implements Comparator<TimeCard> {
      *         is less than, equal to, or greater than the second.
      */
     @Override
-    public int compare(TimeCard o1, TimeCard o2) {
+    public int compare(TimeCard firstTimeCard, TimeCard secondTimeCard) {
         int diff = 0;
-        if (o1 != o2) {
-            if ((diff = o1.getConsultant().getName().getLastName()
-                    .compareTo(o2.getConsultant().getName().getLastName())) == 0)
-                if ((diff = o1.getConsultant().getName().getFirstName()
-                        .compareTo(o2.getConsultant().getName().getFirstName())) == 0)
-                    if ((diff = o1.getConsultant().getName().getMiddleName()
-                            .compareTo(o2.getConsultant().getName().getMiddleName())) == 0)
-                        if ((diff = o1.getWeekStartingDay().compareTo(o2.getWeekStartingDay())) == 0)
-                            if ((diff = Integer.compare(o1.getTotalBillableHours(), o2.getTotalBillableHours())) == 0)
-                                diff = Integer.compare(o1.getTotalNonBillableHours(), o2.getTotalNonBillableHours());
+        if (firstTimeCard != secondTimeCard) {
+            if ((diff = firstTimeCard.getConsultant().getName().getLastName()
+                    .compareTo(secondTimeCard.getConsultant().getName().getLastName())) == 0)
+                if ((diff = firstTimeCard.getConsultant().getName().getFirstName()
+                        .compareTo(secondTimeCard.getConsultant().getName().getFirstName())) == 0)
+                    if ((diff = firstTimeCard.getConsultant().getName().getMiddleName()
+                            .compareTo(secondTimeCard.getConsultant().getName().getMiddleName())) == 0)
+                        if ((diff = firstTimeCard.getWeekStartingDay().compareTo(secondTimeCard.getWeekStartingDay())) == 0)
+                            if ((diff = Integer.compare(firstTimeCard.getTotalBillableHours(), secondTimeCard.getTotalBillableHours())) == 0)
+                                diff = Integer.compare(firstTimeCard.getTotalNonBillableHours(), secondTimeCard.getTotalNonBillableHours());
         }
         return diff;
     }
