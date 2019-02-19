@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 public class PersonalName implements Serializable {
     private static final long serialVersionUID = 7515511859542202652L;
+public class PersonalName implements Comparable<PersonalName> {
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -165,5 +167,16 @@ public class PersonalName implements Serializable {
     @Override
     public String toString() {
         return String.format("%s, %s %s", lastName, firstName, middleName).trim();
+    }
+
+    @Override
+    public int compareTo(PersonalName other) {
+        int diff = 0;
+        if (this != other) {
+            if ((diff = lastName.compareTo(other.lastName)) == 0)
+                if ((diff = firstName.compareTo(other.firstName)) == 0)
+                    diff = middleName.compareTo(other.middleName);
+        }
+        return diff;
     }
 }

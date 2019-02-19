@@ -6,7 +6,8 @@ import com.scg.util.Address;
 import com.scg.util.PersonalName;
 
 /**
- * A billable Account that additionally has client contact information and an address.
+ * A billable Account that additionally has client contact information and an
+ * address.
  * 
  * @author Norman Skinner (skinman@uw.edu)
  *
@@ -107,4 +108,26 @@ public class ClientAccount implements Account, Serializable {
         return sb.toString();
     }
 
+    /**
+     * Compares this Client Account with the specified Client Account for order, ordering by name,
+     * contact, and finally address. Returns a negative integer, zero, or a positive
+     * integer as this Client Account is less than, equal to, or greater than the specified
+     * Client Account.
+     * 
+     * @param other
+     *            the Client Account to be compared.
+     * @return a negative integer, zero, or a positive integer as this Client
+     *         Account is less than, equal to, or greater than the specified Client
+     *         Account.
+     */
+    @Override
+    public int compareTo(ClientAccount other) {
+        int diff = 0;
+        if (this != other) {
+            if ((diff = name.compareTo(other.name)) == 0)
+                if ((diff = contact.compareTo(other.contact)) == 0)
+                    diff = address.compareTo(other.address);
+        }
+        return diff;
+    }
 }

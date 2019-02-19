@@ -1,12 +1,14 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * U. S. Postal state codes.
  * 
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public enum StateCode {
+public enum StateCode implements Comparable<StateCode> {
     /** ALABAMA */
     AL("Alabama"),
     /** ALASKA */

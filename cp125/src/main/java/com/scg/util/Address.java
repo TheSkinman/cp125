@@ -15,6 +15,7 @@ import java.io.Serializable;
  */
 public class Address implements Serializable {
     private static final long serialVersionUID = -9158943095481217014L;
+public class Address implements Comparable<Address> {
     private String city;
     private String postalCode;
     private StateCode state;
@@ -135,7 +136,7 @@ public class Address implements Serializable {
     /**
      * Prints this address in the form: <br>
      * <br>
-     * street number<br> 
+     * street number<br>
      * city, state postal code<br>
      * 
      * @return the formatted address.
@@ -143,5 +144,25 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         return String.format("%s%n%s, %s %s %n", getStreetNumber(), getCity(), getState(), getPostalCode());
+    }
+
+    /**
+     * Orders by state, postalCode, city and streetNumber.
+     * 
+     * @param other
+     *            the Address to be compared.
+     * @return a negative integer, zero, or a positive integer as this Address is
+     *         less than, equal to, or greater than the specified Address.
+     */
+    @Override
+    public int compareTo(Address other) {
+        int diff = 0;
+        if (this != other) {
+            if ((diff = state.compareTo(other.state)) == 0)
+                if ((diff = postalCode.compareTo(other.postalCode)) == 0)
+                    if ((diff = city.compareTo(other.city)) == 0)
+                        diff = streetNumber.compareTo(other.streetNumber);
+        }
+        return diff;
     }
 }
