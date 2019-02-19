@@ -3,6 +3,7 @@
  */
 package com.scg.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -12,8 +13,8 @@ import java.time.LocalDate;
  * @author Norman Skinner
  *
  */
-public class ConsultantTime extends Object {
-
+public class ConsultantTime extends Object implements Serializable {
+    private static final long serialVersionUID = 4830754727897784816L;
     private Account account;
     private LocalDate date;
     private int hours;

@@ -1,7 +1,9 @@
 package com.scg.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +22,12 @@ import org.apache.commons.lang3.StringUtils;
  * @author Norman Skinner
  *
  */
-public class TimeCard {
+public class TimeCard implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2409076039208699022L;
     private static final String DATE = "Date";
     private static final String ACCOUNT = "Account";
     private static final String TOTAL_HOURS = "Total Hours:";
@@ -84,8 +90,7 @@ public class TimeCard {
      * @return Value of consultingHours property
      */
     public List<ConsultantTime> getConsultantHours() {
-        // TODO: make unchangeable
-        return consultantHours;
+        return Collections.unmodifiableList(consultantHours);
     }
 
     /**
@@ -135,7 +140,8 @@ public class TimeCard {
 
         List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
                 .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName)).collect(Collectors.toList());
-        return theReturn;
+        
+        return Collections.unmodifiableList(theReturn);
     }
 
     /**

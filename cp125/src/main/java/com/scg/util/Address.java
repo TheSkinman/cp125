@@ -4,6 +4,8 @@
 package com.scg.util;
 
 import static java.util.Objects.isNull;
+
+import java.io.Serializable;
 /**
  * A simple mailing address. Does no validity checking for things like valid
  * states or postal codes. Instances of this class are immutable.
@@ -11,7 +13,8 @@ import static java.util.Objects.isNull;
  * @author Norman Skinner
  *
  */
-public class Address {
+public class Address implements Serializable {
+    private static final long serialVersionUID = -9158943095481217014L;
     private String city;
     private String postalCode;
     private StateCode state;

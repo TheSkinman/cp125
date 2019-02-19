@@ -1,13 +1,15 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates the first, middle and last name of a person.
  * 
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class PersonalName {
-
+public class PersonalName implements Serializable {
+    private static final long serialVersionUID = 7515511859542202652L;
     private String firstName;
     private String lastName;
     private String middleName;

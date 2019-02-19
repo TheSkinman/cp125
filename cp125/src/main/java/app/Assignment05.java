@@ -1,10 +1,14 @@
-package app;
+ package app;
 
 import static com.scg.util.ListFactory.TEST_INVOICE_MONTH;
 import static com.scg.util.ListFactory.TEST_INVOICE_YEAR;
 
 import java.io.Console;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -23,19 +27,19 @@ import com.scg.util.ListFactory;
 import com.scg.util.TimeCardListUtil;
 
 /**
- * Assignment 04 application.
+ * Assignment 05 application.
  */
-public final class Assignment04 {
+public final class Assignment05 {
 	/** Character encoding to use. */
 	private static final String ENCODING = "ISO-8859-1";
 
 	/** This class' logger. */
-    private static final Logger log = LoggerFactory.getLogger(Assignment04.class);
+    private static final Logger log = LoggerFactory.getLogger(Assignment05.class);
 
     /**
      * Prevent instantiation.
      */
-    private Assignment04() {
+    private Assignment05() {
     }
 
     /**
@@ -82,10 +86,15 @@ public final class Assignment04 {
      */
     public static void main(final String[] args) throws Exception {
         // Create lists to be populated by factory
-        final List<ClientAccount> accounts = new ArrayList<>();
+        final List<ClientAccount> accounts = loadList("ClientList.ser");
+        final List<TimeCard> timeCards = loadList("TimeCardList.ser");
         final List<Consultant> consultants = new ArrayList<>();
-        final List<TimeCard> timeCards = new ArrayList<>();
-        ListFactory.populateLists(accounts, consultants, timeCards);
+        timeCards.forEach(c -> {
+            if (!consultants.contains(c.getConsultant())) {
+                consultants.add(c.getConsultant());
+            }
+        });
+        
         // Print them
         ListFactory.printTimeCards(timeCards);
         
@@ -142,4 +151,20 @@ public final class Assignment04 {
             log.error("Printing of invoices failed.", e);
         }
     }
+    
+    public static <T> List<T> loadList(String fileName) {
+        List<T> returnList = null;
+        try (ObjectInputStream objectInputStram = new ObjectInputStream(new FileInputStream(fileName));) {
+            returnList = (List<T>)objectInputStram.readObject();
+        } catch(ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        return returnList;
+    }
+
+    
+    
 }

@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 import com.scg.util.PersonalName;
 
 /**
@@ -8,8 +10,8 @@ import com.scg.util.PersonalName;
  * @author Norman Skinner
  *
  */
-public class Consultant {
-
+public class Consultant implements Serializable {
+    private static final long serialVersionUID = -5135884238966407718L;
     private PersonalName name;
 
     /**

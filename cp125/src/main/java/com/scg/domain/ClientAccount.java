@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
 
@@ -9,7 +11,8 @@ import com.scg.util.PersonalName;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class ClientAccount implements Account {
+public class ClientAccount implements Account, Serializable {
+    private static final long serialVersionUID = -5127341550616865045L;
     private Address address;
     private String name;
     private PersonalName contact;
