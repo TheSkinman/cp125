@@ -22,12 +22,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Norman Skinner
  *
  */
-public class TimeCard implements Serializable {
-public class TimeCard implements Comparable<TimeCard> {
-
-    /**
-     * 
-     */
+public class TimeCard implements Serializable, Comparable<TimeCard> {
     private static final long serialVersionUID = 2409076039208699022L;
     private static final String DATE = "Date";
     private static final String ACCOUNT = "Account";

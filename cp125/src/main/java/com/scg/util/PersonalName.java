@@ -8,10 +8,8 @@ import java.io.Serializable;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class PersonalName implements Serializable {
+public class PersonalName implements Serializable, Comparable<PersonalName> {
     private static final long serialVersionUID = 7515511859542202652L;
-public class PersonalName implements Comparable<PersonalName> {
-
     private String firstName;
     private String lastName;
     private String middleName;
