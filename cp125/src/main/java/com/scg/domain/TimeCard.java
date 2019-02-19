@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Norman Skinner
  *
  */
-public class TimeCard {
+public class TimeCard implements Comparable<TimeCard> {
 
     private static final String DATE = "Date";
     private static final String ACCOUNT = "Account";
@@ -134,7 +134,8 @@ public class TimeCard {
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
         List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
-                .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName)).collect(Collectors.toList());
+                .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName))
+                .collect(Collectors.toList());
         return theReturn;
     }
 
@@ -202,5 +203,26 @@ public class TimeCard {
                     .format(LINE_DOUBLE);
         }
         return sb.toString();
+    }
+
+    /**
+     * Compares TimeCard, in ascending order by (in precedence order) starting date,
+     * consultant, totalBillableHours and totalNonBillableHours.
+     * 
+     * @param other
+     *            the TimeCard to compare to
+     * @return a negative integer, zero, or a positive integer as this object is
+     *         less than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(TimeCard other) {
+        int diff = 0;
+        if (this != other) {
+            if ((diff = weekStartingDay.compareTo(other.weekStartingDay)) == 0)
+                if ((diff = consultant.compareTo(other.consultant)) == 0)
+                    if ((diff = Integer.compare(totalBillableHours, other.totalBillableHours)) == 0)
+                        diff = Integer.compare(getTotalNonBillableHours(), other.getTotalNonBillableHours());
+        }
+        return diff;
     }
 }

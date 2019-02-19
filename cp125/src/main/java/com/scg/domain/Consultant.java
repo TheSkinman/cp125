@@ -8,7 +8,7 @@ import com.scg.util.PersonalName;
  * @author Norman Skinner
  *
  */
-public class Consultant {
+public class Consultant implements Comparable<Consultant> {
 
     private PersonalName name;
 
@@ -40,5 +40,25 @@ public class Consultant {
     @Override
     public String toString() {
         return getName().toString();
+    }
+
+    /**
+     * Compares this Consultant object with the specified object for order. Returns
+     * a negative integer, zero, or a positive integer as this object is less than,
+     * equal to, or greater than the specified object, the consultant name is used
+     * to perform the comparison.
+     * 
+     * @param other
+     *            the Object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is
+     *         less than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(Consultant other) {
+        int diff = 0;
+        if (this != other) {
+            diff = name.compareTo(other.name);
+        }
+        return diff;
     }
 }

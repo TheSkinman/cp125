@@ -6,7 +6,7 @@ package com.scg.util;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class PersonalName {
+public class PersonalName implements Comparable<PersonalName> {
 
     private String firstName;
     private String lastName;
@@ -163,5 +163,16 @@ public class PersonalName {
     @Override
     public String toString() {
         return String.format("%s, %s %s", lastName, firstName, middleName).trim();
+    }
+
+    @Override
+    public int compareTo(PersonalName other) {
+        int diff = 0;
+        if (this != other) {
+            if ((diff = lastName.compareTo(other.lastName)) == 0)
+                if ((diff = firstName.compareTo(other.firstName)) == 0)
+                    diff = middleName.compareTo(other.middleName);
+        }
+        return diff;
     }
 }
