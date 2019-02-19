@@ -25,3 +25,8 @@ doc/
 
 ### Mac ###
 *.DS_Store
+cp125/TimeCardList\.ser
+
+cp125/ClientList\.ser
+
+cp125/invoices\.txt
