@@ -25,3 +25,8 @@ doc/
 
 ### Mac ###
 *.DS_Store
+
+### Project ###
+ClientList.ser
+TimeCardList.ser
+invoices.txt
