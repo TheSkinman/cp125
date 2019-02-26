@@ -128,9 +128,9 @@ public final class Assignment05 {
             accounts.clear();
             consultants.clear();
             timeCards.clear();
-
+------------------------------------------------------
             ListFactory.populateLists(accounts, consultants, timeCards);
-
+-----------------------------------------------------------------------------------------------
             // Create the Invoices
             final List<Invoice> invoices = createInvoices(accounts, timeCards);
             // Print them
