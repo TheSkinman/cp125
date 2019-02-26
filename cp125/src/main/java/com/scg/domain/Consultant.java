@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.util.Comparator;
+
 import com.scg.util.PersonalName;
 
 /**
@@ -11,6 +13,9 @@ import com.scg.util.PersonalName;
 public class Consultant implements Comparable<Consultant> {
 
     private PersonalName name;
+
+    private static Comparator<Consultant> natraulOrderComparator = Comparator
+            .comparing(Consultant::getName);
 
     /**
      * Creates a new instance of Consultant.
@@ -55,10 +60,7 @@ public class Consultant implements Comparable<Consultant> {
      */
     @Override
     public int compareTo(Consultant other) {
-        int diff = 0;
-        if (this != other) {
-            diff = name.compareTo(other.name);
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

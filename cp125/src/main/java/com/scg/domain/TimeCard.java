@@ -2,6 +2,7 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.scg.util.Address;
 
 /**
  * Represents a time card capable of storing a collection of a consultant's
@@ -33,6 +36,12 @@ public class TimeCard implements Comparable<TimeCard> {
     private LocalDate weekStartingDay;
     private int totalBillableHours;
     private int totalHours;
+
+    private static Comparator<TimeCard> natraulOrderComparator = Comparator
+            .comparing(TimeCard::getWeekStartingDay)
+            .thenComparing(TimeCard::getConsultant)
+            .thenComparing(TimeCard::getTotalBillableHours)
+            .thenComparing(TimeCard::getTotalNonBillableHours);
 
     /**
      * Creates a new instance of TimeCard
@@ -217,13 +226,7 @@ public class TimeCard implements Comparable<TimeCard> {
      */
     @Override
     public int compareTo(TimeCard other) {
-        int diff = 0;
-        if (this != other) {
-            if ((diff = weekStartingDay.compareTo(other.weekStartingDay)) == 0)
-                if ((diff = consultant.compareTo(other.consultant)) == 0)
-                    if ((diff = Integer.compare(totalBillableHours, other.totalBillableHours)) == 0)
-                        diff = Integer.compare(getTotalNonBillableHours(), other.getTotalNonBillableHours());
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

@@ -20,8 +20,12 @@ public class Address implements Comparable<Address> {
     private StateCode state;
     private String streetNumber;
     private Integer hashCode;
-    
-    private static Comparator<Address> natraulOrderComparator =  Comparator.comparing(Address::getState).thenComparing(Address::getPostalCode);
+
+    private static Comparator<Address> natraulOrderComparator = Comparator
+            .comparing(Address::getState)
+            .thenComparing(Address::getPostalCode)
+            .thenComparing(Address::getCity)
+            .thenComparing(Address::getStreetNumber);
 
     /**
      * Construct an Address.
@@ -158,6 +162,6 @@ public class Address implements Comparable<Address> {
     @Override
     public int compareTo(Address other) {
         if (this == other) return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);check
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

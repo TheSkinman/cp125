@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.util.Comparator;
+
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
 
@@ -14,6 +16,11 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
     private Address address;
     private String name;
     private PersonalName contact;
+
+    private static Comparator<ClientAccount> natraulOrderComparator = Comparator
+            .comparing(ClientAccount::getName)
+            .thenComparing(ClientAccount::getContact)
+            .thenComparing(ClientAccount::getAddress);
 
     /**
      * Creates a new instance of ClientAccount.
@@ -119,12 +126,7 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
      */
     @Override
     public int compareTo(ClientAccount other) {
-        int diff = 0;
-        if (this != other) {
-            if ((diff = name.compareTo(other.name)) == 0)
-                if ((diff = contact.compareTo(other.contact)) == 0)
-                    diff = address.compareTo(other.address);
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }
