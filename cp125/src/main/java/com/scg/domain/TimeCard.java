@@ -134,7 +134,8 @@ public class TimeCard implements Comparable<TimeCard> {
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
         List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
-                .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName))
+                .filter(ConsultantTime::isBillable)
+                .filter(t -> clientName.equals(t.getAccount().getName()))
                 .collect(Collectors.toList());
         return theReturn;
     }

@@ -5,6 +5,8 @@ package com.scg.util;
 
 import static java.util.Objects.isNull;
 
+import java.util.Comparator;
+
 /**
  * A simple mailing address. Does no validity checking for things like valid
  * states or postal codes. Instances of this class are immutable.
@@ -18,6 +20,8 @@ public class Address implements Comparable<Address> {
     private StateCode state;
     private String streetNumber;
     private Integer hashCode;
+    
+    private static Comparator<Address> natraulOrderComparator =  Comparator.comparing(Address::getState).thenComparing(Address::getPostalCode);
 
     /**
      * Construct an Address.
@@ -153,13 +157,7 @@ public class Address implements Comparable<Address> {
      */
     @Override
     public int compareTo(Address other) {
-        int diff = 0;
-        if (this != other) {
-            if ((diff = state.compareTo(other.state)) == 0)
-                if ((diff = postalCode.compareTo(other.postalCode)) == 0)
-                    if ((diff = city.compareTo(other.city)) == 0)
-                        diff = streetNumber.compareTo(other.streetNumber);
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);check
     }
 }
