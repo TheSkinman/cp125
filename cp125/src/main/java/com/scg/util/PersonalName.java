@@ -1,7 +1,7 @@
 package com.scg.util;
 
 import java.io.Serializable;
-
+import java.util.Comparator;
 /**
  * Encapsulates the first, middle and last name of a person.
  * 
@@ -13,6 +13,9 @@ public class PersonalName implements Serializable, Comparable<PersonalName> {
     private String firstName;
     private String lastName;
     private String middleName;
+
+    private static Comparator<PersonalName> natraulOrderComparator = Comparator.comparing(PersonalName::getLastName)
+            .thenComparing(PersonalName::getFirstName).thenComparing(PersonalName::getMiddleName);
 
     /**
      * Public constructor for creating a Personal Name object.
@@ -167,14 +170,21 @@ public class PersonalName implements Serializable, Comparable<PersonalName> {
         return String.format("%s, %s %s", lastName, firstName, middleName).trim();
     }
 
+    /**
+     * Compares this object with the specified object for order. Ordering by last
+     * name, first name and finally middle name. Returns a negative integer, zero,
+     * or a positive integer as this object is less than, equal to, or greater than
+     * the specified object.
+     * 
+     * @param other
+     *            the Object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is
+     *         less than, equal to, or greater than the specified object.
+     */
     @Override
     public int compareTo(PersonalName other) {
-        int diff = 0;
-        if (this != other) {
-            if ((diff = lastName.compareTo(other.lastName)) == 0)
-                if ((diff = firstName.compareTo(other.firstName)) == 0)
-                    diff = middleName.compareTo(other.middleName);
-        }
-        return diff;
+        if (this == other)
+            return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

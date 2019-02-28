@@ -14,6 +14,8 @@ import com.scg.domain.TimeCard;
  *
  */
 public class TimeCardListUtil {
+    private static final int DAYS_PER_WEEK = 7;
+    
     /**
      * Get a list of TimeCards for the specified consultant.
      * 

@@ -213,10 +213,10 @@ public class ConsultantTimeTest {
 		consultantTime = new ConsultantTime(date, account, skillType, hours);
 
 		// ACT
-		String result = consultantTime.toString();
+		String result = consultantTime.toString().replace("\n", "").replace("\r", "");
 
 		// ASSERT
-		String expected = "Company Name                 10/08/1968      8  Software Engineer\r\n";
+		String expected = "Company Name                 10/08/1968      8  Software Engineer";
 		assertEquals(expected, result);
 	}
 }

@@ -1,7 +1,7 @@
 package com.scg.domain;
 
 import java.io.Serializable;
-
+import java.util.Comparator;
 import com.scg.util.PersonalName;
 
 /**
@@ -13,6 +13,9 @@ import com.scg.util.PersonalName;
 public class Consultant implements Serializable, Comparable<Consultant> {
     private static final long serialVersionUID = -5135884238966407718L;
     private PersonalName name;
+
+    private static Comparator<Consultant> natraulOrderComparator = Comparator
+            .comparing(Consultant::getName);
 
     /**
      * Creates a new instance of Consultant.
@@ -57,10 +60,7 @@ public class Consultant implements Serializable, Comparable<Consultant> {
      */
     @Override
     public int compareTo(Consultant other) {
-        int diff = 0;
-        if (this != other) {
-            diff = name.compareTo(other.name);
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

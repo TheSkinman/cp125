@@ -3,6 +3,7 @@ package com.scg.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashSet;
@@ -12,6 +13,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.scg.util.Address;
 
 /**
  * Represents a time card capable of storing a collection of a consultant's
@@ -35,6 +38,12 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
     private LocalDate weekStartingDay;
     private int totalBillableHours;
     private int totalHours;
+
+    private static Comparator<TimeCard> natraulOrderComparator = Comparator
+            .comparing(TimeCard::getWeekStartingDay)
+            .thenComparing(TimeCard::getConsultant)
+            .thenComparing(TimeCard::getTotalBillableHours)
+            .thenComparing(TimeCard::getTotalNonBillableHours);
 
     /**
      * Creates a new instance of TimeCard
@@ -135,9 +144,10 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
         List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
-                .filter(p -> p.isBillable() && p.getAccount().getName().equals(clientName)).collect(Collectors.toList());
-        
-        return Collections.unmodifiableList(theReturn);
+                .filter(ConsultantTime::isBillable)
+                .filter(t -> clientName.equals(t.getAccount().getName()))
+                .collect(Collectors.toList());
+        return theReturn;
     }
 
     /**
@@ -217,13 +227,7 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
      */
     @Override
     public int compareTo(TimeCard other) {
-        int diff = 0;
-        if (this != other) {
-            if ((diff = weekStartingDay.compareTo(other.weekStartingDay)) == 0)
-                if ((diff = consultant.compareTo(other.consultant)) == 0)
-                    if ((diff = Integer.compare(totalBillableHours, other.totalBillableHours)) == 0)
-                        diff = Integer.compare(getTotalNonBillableHours(), other.getTotalNonBillableHours());
-        }
-        return diff;
+        if (this == other) return 0;
+        return this == other ? 0 : natraulOrderComparator.compare(this, other);
     }
 }

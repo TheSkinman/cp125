@@ -57,10 +57,10 @@ class InvoiceLineItemTest {
         Skill skill = Skill.SOFTWARE_ENGINEER;
         int hours = 8;
         InvoiceLineItem invoiceLineItem = new InvoiceLineItem(date, consultant, skill, hours);
-        String expected = "10/08/1968  last, first middle           Software Engineer        8    1,200.00\r\n";
+        String expected = "10/08/1968  last, first middle           Software Engineer        8    1,200.00";
         
         // ACT
-        String result = invoiceLineItem.toString();
+        String result = invoiceLineItem.toString().replace("\n", "").replace("\r", "");
         
         // ASSERT
         assertEquals(expected, result);
