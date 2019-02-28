@@ -85,7 +85,8 @@ public class DateRange {
      * @return true if the specified date is within this DateRange.
      */
     public boolean isInRange(LocalDate date) {
-        if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+        if (!date.isBefore(startDate) && endDate.isAfter(date)) 
+        {
             return true;
         }
         return false;

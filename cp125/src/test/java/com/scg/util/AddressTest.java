@@ -129,10 +129,10 @@ class AddressTest {
         address = new Address("123 Street", "Big City", StateCode.CA, "91111");
         
         // ACT
-        String result = address.toString();
+        String result = address.toString().replace("\n", "").replace("\r", "");
         
         // ASSERT
-        assertEquals("123 Street\r\nBig City, CA 91111 \r\n", result);
+        assertEquals("123 StreetBig City, CA 91111 ", result);
     }
 
 }

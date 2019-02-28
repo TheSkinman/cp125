@@ -49,8 +49,7 @@ public class TimeCardListUtil {
         // returnList = strm.filter(i ->
         // dateRange.isInRange(i.getWeekStartingDay())).collect(Collectors.toList());
 
-        List<TimeCard> returnList = timeCards.stream().filter(i -> dateRange.isInRange(i.getWeekStartingDay()) ||
-                dateRange.isInRange(i.getWeekStartingDay().plusDays(DAYS_PER_WEEK)))
+        List<TimeCard> returnList = timeCards.stream().filter(i -> dateRange.isInRange(i.getWeekStartingDay()))
                 .collect(Collectors.toList());
         return returnList;
     }
