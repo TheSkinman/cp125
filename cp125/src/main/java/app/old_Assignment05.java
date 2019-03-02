@@ -29,17 +29,17 @@ import com.scg.util.TimeCardListUtil;
 /**
  * Assignment 05 application.
  */
-public final class Assignment05 {
+public final class old_Assignment05 {
 	/** Character encoding to use. */
 	private static final String ENCODING = "ISO-8859-1";
 
 	/** This class' logger. */
-    private static final Logger log = LoggerFactory.getLogger(Assignment05.class);
+    private static final Logger log = LoggerFactory.getLogger(old_Assignment05.class);
 
     /**
      * Prevent instantiation.
      */
-    private Assignment05() {
+    private old_Assignment05() {
     }
 
     /**
@@ -128,9 +128,9 @@ public final class Assignment05 {
             accounts.clear();
             consultants.clear();
             timeCards.clear();
-------------------------------------------------------
+//------------------------------------------------------
             ListFactory.populateLists(accounts, consultants, timeCards);
------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
             // Create the Invoices
             final List<Invoice> invoices = createInvoices(accounts, timeCards);
             // Print them
