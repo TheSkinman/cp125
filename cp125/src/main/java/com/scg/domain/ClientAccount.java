@@ -128,6 +128,6 @@ public class ClientAccount implements Account, Serializable, Comparable<ClientAc
     @Override
     public int compareTo(ClientAccount other) {
         if (this == other) return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);
+        return natraulOrderComparator.compare(this, other);
     }
 }

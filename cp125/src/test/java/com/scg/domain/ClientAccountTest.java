@@ -102,4 +102,32 @@ public class ClientAccountTest {
 		// ASSERT
 		assertNotNull(clientAccount.getContact());
 	}
+
+    @Test
+    public void test_Consultant_CompareTo() {
+        // ARRANGE
+        PersonalName personalName1 = new PersonalName("a", "a", "a");
+        Address address1 = new Address("1 a", "a", StateCode.AK, "11111");
+        ClientAccount clientAccount1 = new ClientAccount("a", personalName1, address1 ); 
+        PersonalName personalName2 = new PersonalName("b", "b", "b");
+        Address address2 = new Address("2 b", "b", StateCode.CA, "22222");
+        ClientAccount clientAccount2 = new ClientAccount("b", personalName2, address2 ); 
+        PersonalName personalName3 = new PersonalName("a", "a", "a");
+        Address address3 = new Address("1 a", "a", StateCode.AK, "11111");
+        ClientAccount clientAccount3 = new ClientAccount("a", personalName3, address3 ); 
+
+        // ACT
+        int resultLess = clientAccount1.compareTo(clientAccount2);
+        int resultEqual = clientAccount1.compareTo(clientAccount3);
+        int resultEqualOtherWay = clientAccount3.compareTo(clientAccount1);
+        int resultEqualSame = clientAccount1.compareTo(clientAccount1);
+        int resultGreater = clientAccount2.compareTo(clientAccount1);
+
+        // ASSERT
+        assertTrue(resultLess < 0);
+        assertTrue(resultEqual == 0);
+        assertTrue(resultEqualOtherWay == 0);
+        assertTrue(resultEqualSame == 0);
+        assertTrue(resultGreater > 0);
+    }
 }

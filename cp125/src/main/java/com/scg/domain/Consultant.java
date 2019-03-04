@@ -1,8 +1,16 @@
 package com.scg.domain;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Comparator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.scg.util.PersonalName;
+
+import app.Assignment05;
 
 /**
  * A consultant for the SCG, just has a PersonalName.
@@ -12,10 +20,10 @@ import com.scg.util.PersonalName;
  */
 public class Consultant implements Serializable, Comparable<Consultant> {
     private static final long serialVersionUID = -5135884238966407718L;
+    private static final Logger log = LoggerFactory.getLogger(Consultant.class);
     private PersonalName name;
 
-    private static Comparator<Consultant> natraulOrderComparator = Comparator
-            .comparing(Consultant::getName);
+    private static Comparator<Consultant> natraulOrderComparator = Comparator.comparing(Consultant::getName);
 
     /**
      * Creates a new instance of Consultant.
@@ -60,7 +68,31 @@ public class Consultant implements Serializable, Comparable<Consultant> {
      */
     @Override
     public int compareTo(Consultant other) {
-        if (this == other) return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);
+        if (this == other)
+            return 0;
+        return natraulOrderComparator.compare(this, other);
+    }
+
+    private Object writeReplace() {
+        log.info(this.getName().toString());
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(ObjectInputStream ois) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = -5135884238966407718L;
+        private PersonalName name;
+
+        SerializationProxy(final Consultant consultant) {
+            name = consultant.name;
+        }
+
+        private Object readResolve() {
+            log.info(name.toString());
+            return new Consultant(name);
+        }
     }
 }

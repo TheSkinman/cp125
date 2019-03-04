@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.scg.util;
 
 import static java.util.Objects.isNull;
@@ -163,6 +160,6 @@ public class Address implements Serializable, Comparable<Address> {
     @Override
     public int compareTo(Address other) {
         if (this == other) return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);
+        return natraulOrderComparator.compare(this, other);
     }
 }

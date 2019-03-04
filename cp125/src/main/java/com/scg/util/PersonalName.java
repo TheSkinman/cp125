@@ -183,8 +183,7 @@ public class PersonalName implements Serializable, Comparable<PersonalName> {
      */
     @Override
     public int compareTo(PersonalName other) {
-        if (this == other)
-            return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);
+        if (this == other) return 0;
+        return natraulOrderComparator.compare(this, other);
     }
 }

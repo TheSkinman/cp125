@@ -53,8 +53,7 @@ public class Invoice {
                 throw new FileNotFoundException(errorMessage);
             }
         } catch (IOException err) {
-            log.error("Failed to load properties due to the following IOException...");
-            log.error(err.toString());
+            log.error("Failed to load properties due to the following IOException...", err);
         }
 
         // Set the loaded values or load with defaults.

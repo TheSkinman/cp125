@@ -70,4 +70,29 @@ public class ConsultantTest {
 		// ASSERT
 		assertTrue(Objects.equals(personalName, result));
 	}
+
+    @Test
+    public void test_Consultant_CompareTo() {
+        // ARRANGE
+        PersonalName personalName1 = new PersonalName("a", "a", "a");
+        Consultant consultant1 = new Consultant(personalName1); 
+        PersonalName personalName2 = new PersonalName("b", "b", "b");
+        Consultant consultant2 = new Consultant(personalName2); 
+        PersonalName personalName3 = new PersonalName("a", "a", "a");
+        Consultant consultant3 = new Consultant(personalName3); 
+
+        // ACT
+        int resultLess = consultant1.compareTo(consultant2);
+        int resultEqual = consultant1.compareTo(consultant3);
+        int resultEqualOtherWay = consultant3.compareTo(consultant1);
+        int resultEqualSame = consultant1.compareTo(consultant1);
+        int resultGreater = consultant2.compareTo(consultant1);
+
+        // ASSERT
+        assertTrue(resultLess < 0);
+        assertTrue(resultEqual == 0);
+        assertTrue(resultEqualOtherWay == 0);
+        assertTrue(resultEqualSame == 0);
+        assertTrue(resultGreater > 0);
+    }
 }

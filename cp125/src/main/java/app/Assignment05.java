@@ -149,18 +149,18 @@ public class Assignment05 {
         }
     }
     
-    private static <T> List<T> loadList(String fileName) {
+    private static <T> List<T> loadList(String file) {
         List<T> returnList = null;
-        try (ObjectInputStream objectInputStram = new ObjectInputStream(new FileInputStream(fileName));) {
+        try (ObjectInputStream objectInputStram = new ObjectInputStream(new FileInputStream(file));) {
             returnList = (List<T>)objectInputStram.readObject();
         } catch(ClassNotFoundException ex) {
-            log.error("There was a problem finding the class for file [" + fileName + "]",ex);
+            log.error("There was a problem finding the class for file [" + file + "]",ex);
             return null;
         } catch (IOException ex) {
-            log.error("There was a problem loading the file [" + fileName + "]",ex);
+            log.error("There was a problem loading the file [" + file + "]",ex);
             return null;
         }
-        log.info("");
+        log.info("File [{}] loaded successfully.", file);
         return returnList;
     }
 }

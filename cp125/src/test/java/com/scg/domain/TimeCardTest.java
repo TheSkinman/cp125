@@ -8,17 +8,33 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+
+import com.scg.util.Address;
 import com.scg.util.PersonalName;
+import com.scg.util.StateCode;
 
 /**
  * @author Norman Skinner
  *
  */
 public class TimeCardTest {
-	private TimeCard timeCard;
+	private static final String TEST_FILE_NAME = "./testFile_delete.ser";
+	private static final Logger log = LoggerFactory.getLogger(TimeCardTest.class);
+    private TimeCard timeCard;
 	private Account account1;
 	private Account account2;
 	private Consultant consultant;
@@ -220,4 +236,77 @@ public class TimeCardTest {
 		// ASSERT
 		assertEquals("TimeCard [getConsultantHours()=[], getTotalBillableHours()=0, getTotalHours()=0, getNonTotalBilableHours()=0, getWeekStartingDay()=1968-10-08]", result);
 	}
+
+    @Test
+    public void test_TestSerialDeserializer() {
+        // ARRANGE
+        timeCard = new TimeCard(consultant, weekStartDay);
+        List<TimeCard> tc1 = new ArrayList<>();
+        tc1.add(timeCard);
+        
+        // ACT
+        try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(TEST_FILE_NAME));) {
+            objectOutputStram.writeObject(tc1);
+            log.info("File [{}] saved successfully.", TEST_FILE_NAME);
+        } catch (IOException ex) {
+            log.error("Failded to save file [" + TEST_FILE_NAME + "]", ex);
+        }
+        
+        List<TimeCard> tc2 = null;
+        try (ObjectInputStream objectInputStram = new ObjectInputStream(new FileInputStream(TEST_FILE_NAME));) {
+            tc2 = (List<TimeCard>)objectInputStram.readObject();
+        } catch(ClassNotFoundException ex) {
+            log.error("There was a problem finding the class for file [" + TEST_FILE_NAME + "]",ex);
+        } catch (IOException ex) {
+            log.error("There was a problem loading the file [" + TEST_FILE_NAME + "]",ex);
+        }
+        
+        // ASSERT
+        assertEquals(tc1, tc2);
+    }
+
+    @Test
+    public void test_Consultant_CompareTo() {
+        // ARRANGE
+        PersonalName personalName1 = new PersonalName("a", "a", "a");
+        Consultant consultant1 = new Consultant(personalName1);
+        LocalDate weekStartDay1 = LocalDate.of(1968, 10, 8);
+        TimeCard timeCard1 = new TimeCard(consultant1, weekStartDay1);
+        consultantTime1 = new ConsultantTime(weekStartDay1, account1, Skill.SOFTWARE_ENGINEER, 1);
+        consultantTime2 = new ConsultantTime(weekStartDay1, account2, Skill.SOFTWARE_TESTER, 2);
+        timeCard1.addConsultantTime(consultantTime1);
+        timeCard1.addConsultantTime(consultantTime2);
+
+        PersonalName personalName2 = new PersonalName("b", "b", "b");
+        Consultant consultant2 = new Consultant(personalName2);
+        LocalDate weekStartDay2 = LocalDate.of(1968, 10, 9);
+        TimeCard timeCard2 = new TimeCard(consultant2, weekStartDay2);
+        consultantTime1 = new ConsultantTime(weekStartDay2, account1, Skill.SOFTWARE_ENGINEER, 1);
+        consultantTime2 = new ConsultantTime(weekStartDay2, account2, Skill.SOFTWARE_TESTER, 2);
+        timeCard2.addConsultantTime(consultantTime1);
+        timeCard2.addConsultantTime(consultantTime2);
+
+        PersonalName personalName3 = new PersonalName("a", "a", "a");
+        Consultant consultant3 = new Consultant(personalName3);
+        LocalDate weekStartDay3 = LocalDate.of(1968, 10, 8);
+        TimeCard timeCard3 = new TimeCard(consultant3, weekStartDay);
+        consultantTime1 = new ConsultantTime(weekStartDay3, account1, Skill.SOFTWARE_ENGINEER, 1);
+        consultantTime2 = new ConsultantTime(weekStartDay3, account2, Skill.SOFTWARE_TESTER, 2);
+        timeCard3.addConsultantTime(consultantTime1);
+        timeCard3.addConsultantTime(consultantTime2);
+
+        // ACT
+        int resultLess = timeCard1.compareTo(timeCard2);
+        int resultEqual = timeCard1.compareTo(timeCard3);
+        int resultEqualOtherWay = timeCard3.compareTo(timeCard1);
+        int resultEqualSame = timeCard1.compareTo(timeCard1);
+        int resultGreater = timeCard2.compareTo(timeCard1);
+
+        // ASSERT
+        assertTrue(resultLess < 0);
+        assertTrue(resultEqual == 0);
+        assertTrue(resultEqualOtherWay == 0);
+        assertTrue(resultEqualSame == 0);
+        assertTrue(resultGreater > 0);
+    }
 }

@@ -4,9 +4,12 @@
 package com.scg.util;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 /**
  * @author Norman Skinner (skinman@uw.edu)
@@ -40,23 +43,25 @@ class AddressTest {
         // ARRANGE
         address = new Address("123 Street", "Big City", StateCode.CA, "91111");
         addres2 = new Address("123 Street", "Big City", StateCode.CA, "91111");
-        
+
         // ACT
         int hash1 = address.hashCode();
         int hash2 = addres2.hashCode();
-        
+        int hash3 = addres2.hashCode();
+
         // ASSERT
         assertEquals(hash1, hash2);
+        assertEquals(hash2, hash3);
     }
 
     @Test
     void test_HashCode_NULL() {
         // ARRANGE
-        address = new Address(null,null,null,null);
-        
+        address = new Address(null, null, null, null);
+
         // ACT
         int hash = address.hashCode();
-        
+
         // ASSERT
         assertEquals(923521, hash);
     }
@@ -69,7 +74,7 @@ class AddressTest {
         // ARRANGE
         address = new Address(streetNumber, city, state, postalCode);
         addres2 = new Address(streetNumber, city, state, postalCode);
-        
+
         // ACT
         boolean result01 = address.equals(addres2);
         boolean result02 = address.equals(address);
@@ -78,7 +83,7 @@ class AddressTest {
         boolean result04 = address.equals(city);
 
         address = new Address(streetNumber, city, state, postalCode);
-        addres2 = new Address(null,null,null,null);
+        addres2 = new Address(null, null, null, null);
 
         boolean result05 = addres2.equals(address);
         address = new Address(streetNumber, null, state, postalCode);
@@ -90,9 +95,7 @@ class AddressTest {
         address = new Address(null, null, null, null);
         boolean result09 = addres2.equals(address);
 
-        
-        
-        address   = new Address(streetNumber, city, state, postalCode);
+        address = new Address(streetNumber, city, state, postalCode);
         boolean result10 = address.equals(addres2);
         addres2 = new Address(streetNumber, "Small City", state, postalCode);
         boolean result11 = address.equals(addres2);
@@ -102,7 +105,7 @@ class AddressTest {
         boolean result13 = address.equals(addres2);
         addres2 = new Address(streetNumber, city, StateCode.FL, postalCode);
         boolean result14 = address.equals(addres2);
-        
+
         // ASSERT
         assertTrue(result01);
         assertTrue(result02);
@@ -127,12 +130,36 @@ class AddressTest {
     void test_ToString() {
         // ARRANGE
         address = new Address("123 Street", "Big City", StateCode.CA, "91111");
-        
+
         // ACT
         String result = address.toString().replace("\n", "").replace("\r", "");
-        
+
         // ASSERT
         assertEquals("123 StreetBig City, CA 91111 ", result);
     }
 
+    /**
+     * Test method for {@link com.scg.util.Address#toString()}.
+     */
+    @Test
+    void test_CompareTo() {
+        // ARRANGE
+        Address address1 = new Address("1 A St.", "Seattle", StateCode.WA, "98101");
+        Address address2 = new Address("3 A St.", "Seattle", StateCode.WA, "98101");
+        Address address3 = new Address("1 A St.", "Seattle", StateCode.WA, "98101");
+
+        // ACT
+        int resultLess = address1.compareTo(address2);
+        int resultEqual = address1.compareTo(address3);
+        int resultEqualOtherWay = address3.compareTo(address1);
+        int resultEqualSame = address1.compareTo(address1);
+        int resultGreater = address2.compareTo(address1);
+
+        // ASSERT
+        assertTrue(resultLess < 0);
+        assertTrue(resultEqual == 0);
+        assertTrue(resultEqualOtherWay == 0);
+        assertTrue(resultEqualSame == 0);
+        assertTrue(resultGreater > 0);
+    }
 }

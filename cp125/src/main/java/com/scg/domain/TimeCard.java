@@ -228,6 +228,6 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
     @Override
     public int compareTo(TimeCard other) {
         if (this == other) return 0;
-        return this == other ? 0 : natraulOrderComparator.compare(this, other);
+        return natraulOrderComparator.compare(this, other);
     }
 }
