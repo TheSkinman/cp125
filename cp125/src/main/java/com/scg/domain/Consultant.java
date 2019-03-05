@@ -84,15 +84,21 @@ public class Consultant implements Serializable, Comparable<Consultant> {
 
     private static class SerializationProxy implements Serializable {
         private static final long serialVersionUID = -5135884238966407718L;
-        private PersonalName name;
+        //private PersonalName name;
+        final String lastName;
+        final String firstName;
+        final String middleName;
 
         SerializationProxy(final Consultant consultant) {
-            name = consultant.name;
+            final PersonalName name = consultant.getName();
+            lastName = name.getLastName();
+            firstName = name.getFirstName();
+            middleName = name.getMiddleName();
         }
 
         private Object readResolve() {
-            log.info(name.toString());
-            return new Consultant(name);
+            log.info(String.format("%s, %s %s",lastName, firstName, middleName));
+            return new Consultant(new PersonalName(lastName, firstName, middleName));
         }
     }
 }

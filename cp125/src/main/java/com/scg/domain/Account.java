@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 /**
  * Defines an account as having a name and being either billable or no-billable,
  * all accounts must implement.
@@ -7,7 +9,7 @@ package com.scg.domain;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public interface Account {
+public interface Account extends Serializable {
     /**
      * Getter for the name of this account.
      * 

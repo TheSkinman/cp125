@@ -12,7 +12,7 @@ import com.scg.util.PersonalName;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class ClientAccount implements Account, Serializable, Comparable<ClientAccount> {
+public class ClientAccount implements Account, Comparable<ClientAccount> {
     private static final long serialVersionUID = -5127341550616865045L;
     private Address address;
     private String name;

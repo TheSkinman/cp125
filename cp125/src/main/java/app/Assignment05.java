@@ -149,6 +149,7 @@ public class Assignment05 {
         }
     }
     
+    @SuppressWarnings("unchecked")
     private static <T> List<T> loadList(String file) {
         List<T> returnList = null;
         try (ObjectInputStream objectInputStram = new ObjectInputStream(new FileInputStream(file));) {
