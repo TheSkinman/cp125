@@ -1,11 +1,13 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 /**
  * Accounts which can not be billed - non-billable accounts, such as sick leave, vacation, or business development.
  * @author Norman Skinner
  *
  */
-public enum NonBillableAccount implements Account {
+public enum NonBillableAccount implements Serializable, Account {
     /** Business Development. */
     BUSINESS_DEVELOPMENT("Business Development"),
     /** Sick Leave. */

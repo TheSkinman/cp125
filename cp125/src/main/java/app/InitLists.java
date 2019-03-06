@@ -32,6 +32,8 @@ public class InitLists {
      *
      * @param args
      *            Command line arguments.
+     * @throws Exception
+     *             throws on any exception
      */
     public static void main(final String[] args) throws Exception {
         // Create lists to be populated by factory
