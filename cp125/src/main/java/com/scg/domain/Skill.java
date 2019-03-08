@@ -2,7 +2,7 @@ package com.scg.domain;
 
 import java.io.Serializable;
 
-public enum Skill implements Serializable, Comparable<Skill> {
+public enum Skill implements Serializable, Comparable<Skill> { 
     /** Project manager skill. */
     PROJECT_MANGER("Project Manager", 250),
     /** Engineer skill. */

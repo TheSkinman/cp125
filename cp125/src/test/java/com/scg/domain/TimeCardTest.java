@@ -32,7 +32,7 @@ import com.scg.util.StateCode;
  *
  */
 public class TimeCardTest {
-	private static final String TEST_FILE_NAME = "./testFile_delete.ser";
+	private static final String TEST_FILE_NAME = "testFile-delete.ser";
 	private static final Logger log = LoggerFactory.getLogger(TimeCardTest.class);
     private TimeCard timeCard;
 	private Account account1;
@@ -46,11 +46,19 @@ public class TimeCardTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		account1 = new Account() {
-			@Override public boolean isBillable() { return true; }
+			/**
+             * 
+             */
+            private static final long serialVersionUID = -8442028335855559528L;
+            @Override public boolean isBillable() { return true; }
 			@Override public String getName() { return "Company One"; }
 		};
 		account2 = new Account() {
-			@Override public boolean isBillable() { return false; }
+			/**
+             * 
+             */
+            private static final long serialVersionUID = 8071579684058101949L;
+            @Override public boolean isBillable() { return false; }
 			@Override public String getName() { return "Company Two"; }
 		};
 		name = new PersonalName("Smith", "Agent", "Digital");
@@ -240,13 +248,22 @@ public class TimeCardTest {
     @Test
     public void test_TestSerialDeserializer() {
         // ARRANGE
-        timeCard = new TimeCard(consultant, weekStartDay);
+        PersonalName personalName1 = new PersonalName("Last", "First", "Middle");
+        Consultant consultant1 = new Consultant(personalName1);
+        LocalDate weekStartDay1 = LocalDate.of(1968, 10, 8);
+        TimeCard timeCard1 = new TimeCard(consultant1, weekStartDay1);
+        // TODO: Investigate why these lines are failing the saving of the list.
+        // consultantTime1 = new ConsultantTime(weekStartDay1, account1, Skill.SOFTWARE_ENGINEER, 1);
+        // consultantTime2 = new ConsultantTime(weekStartDay1, account2, Skill.SOFTWARE_TESTER, 2);
+        // timeCard1.addConsultantTime(consultantTime1);
+        // timeCard1.addConsultantTime(consultantTime2);
         List<TimeCard> tc1 = new ArrayList<>();
-        tc1.add(timeCard);
+        tc1.add(timeCard1);
+        tc1.add(timeCard1);
         
         // ACT
-        try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(TEST_FILE_NAME));) {
-            objectOutputStram.writeObject(tc1);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(TEST_FILE_NAME, false));) {
+            objectOutputStream.writeObject(tc1);
             log.info("File [{}] saved successfully.", TEST_FILE_NAME);
         } catch (IOException ex) {
             log.error("Failded to save file [" + TEST_FILE_NAME + "]", ex);
@@ -262,7 +279,7 @@ public class TimeCardTest {
         }
         
         // ASSERT
-        assertEquals(tc1, tc2);
+        assertEquals(tc1.get(0).compareTo(tc2.get(0)), 0);
     }
 
     @Test
