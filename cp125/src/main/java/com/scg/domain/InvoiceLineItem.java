@@ -2,8 +2,6 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 
-import javax.naming.directory.InvalidAttributeValueException;
-
 /**
  * Encapsulates a single billable item to be included in an invoice. The
  * InvoiceLineItem includes:
