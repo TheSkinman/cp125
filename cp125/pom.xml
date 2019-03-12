@@ -5,7 +5,7 @@
 	<groupId>com.scg</groupId>
 	<artifactId>cp125</artifactId>
 	<packaging>jar</packaging>
-	<version>06</version>
+	<version>07</version>
 	<name>cp125</name>
 	<!-- Properties -->
 	<properties>
