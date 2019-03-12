@@ -1,5 +1,6 @@
 package com.scg.beans;
 
+import java.beans.PropertyVetoException;
 import java.time.LocalDate;
 
 import javax.swing.event.EventListenerList;
@@ -37,10 +38,10 @@ public class HumanResourceManager {
     public void adjustPayRate(StaffConsultant c, int newPayRate) {
         double raisePercentage = (newPayRate - c.getPayRate())/ (double)c.getPayRate();
         log.info(String.format("%% change = (%1$d - %2$d)/%2$d = %3$10.6f", newPayRate, c.getPayRate(), raisePercentage));
-        c.setPayRate(newPayRate);
-        if (c.getPayRate() == newPayRate) {
+        try {
+            c.setPayRate(newPayRate);
             log.info("Approved pay adjustment for {}", c.getName());
-        } else {
+        } catch (PropertyVetoException e) {
             log.info("Denied pay adjustment for {}", c.getName());
         }
     }
@@ -76,7 +77,7 @@ public class HumanResourceManager {
      * @param c
      *            the consultant resigning
      */
-    public void acceptResignation(Consultant c) {
+    public synchronized void acceptResignation(Consultant c) {
         TerminationListener[] listeners;
         listeners = listenerList.getListeners(TerminationListener.class);
         for (TerminationListener listener : listeners) {
@@ -92,7 +93,7 @@ public class HumanResourceManager {
      * @param c
      *            the consultant being terminated
      */
-    public void terminate(Consultant c) {
+    public synchronized void terminate(Consultant c) {
         TerminationListener[] listeners;
         listeners = listenerList.getListeners(TerminationListener.class);
         for (TerminationListener listener : listeners) {

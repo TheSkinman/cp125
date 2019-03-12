@@ -1,11 +1,9 @@
 package com.scg.beans;
 
-import java.util.EventListener;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Eeoc implements TerminationListener, EventListener {
+public class Eeoc implements TerminationListener {
     private static final Logger log = LoggerFactory.getLogger(Eeoc.class);
 
     private int forcedTerminationCount;

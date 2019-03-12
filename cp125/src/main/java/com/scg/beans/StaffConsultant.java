@@ -9,9 +9,6 @@ import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
 import java.io.Serializable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.scg.domain.Consultant;
 import com.scg.util.PersonalName;
 
@@ -24,7 +21,6 @@ import com.scg.util.PersonalName;
  *
  */
 public class StaffConsultant extends Consultant implements Serializable {
-    private static final Logger log = LoggerFactory.getLogger(StaffConsultant.class);
     private static final String BE_POSITIVE = " must be a positive value.";
 
     private static final long serialVersionUID = 5144982420201138358L;
@@ -79,6 +75,34 @@ public class StaffConsultant extends Consultant implements Serializable {
     }
 
     /**
+     * Get the current pay rate.
+     * 
+     * @return the pay rate in cents
+     */
+    public int getPayRate() {
+        return rate;
+    }
+
+    /**
+     * Set the pay rate. Fires the VetoableChange event and if approved the
+     * PropertyChange event.
+     * 
+     * @param payRate
+     *            the pay rate in cents
+     * @throws PropertyVetoException
+     *             if a veto occurs
+     */
+    public void setPayRate(int payRate) throws PropertyVetoException {
+        if (payRate < 0)
+            throw new IllegalArgumentException("Pay Rate " + BE_POSITIVE);
+
+        int oldPayRate = rate;
+        vcs.fireVetoableChange(PAY_RATE_PROPERTY_NAME, oldPayRate, payRate);
+        rate = payRate;
+        pcs.firePropertyChange(PAY_RATE_PROPERTY_NAME, oldPayRate, payRate);
+    }
+
+    /**
      * Adds a payRate property change listener.
      * 
      * @param l
@@ -86,36 +110,6 @@ public class StaffConsultant extends Consultant implements Serializable {
      */
     public void addPayRateListener(PropertyChangeListener l) {
         pcs.addPropertyChangeListener(PAY_RATE_PROPERTY_NAME, l);
-    }
-
-    /**
-     * Adds a general property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void addPropertyChangeListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(l);
-    }
-
-    /**
-     * Adds a sickLeaveHours property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void addSickLeaveHoursListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
-    }
-
-    /**
-     * Adds a vacationHours property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void addVacationHoursListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
     }
 
     /**
@@ -129,33 +123,6 @@ public class StaffConsultant extends Consultant implements Serializable {
     }
 
     /**
-     * Get the current pay rate.
-     * 
-     * @return the pay rate in cents
-     */
-    public int getPayRate() {
-        return rate;
-    }
-
-    /**
-     * Get the available sick leave.
-     * 
-     * @return the available sick leave hours
-     */
-    public int getSickLeaveHours() {
-        return sickLeave;
-    }
-
-    /**
-     * Get the available vacation hours.
-     * 
-     * @return the available vacation hours
-     */
-    public int getVacationHours() {
-        return vacation;
-    }
-
-    /**
      * Removes a payRate property change listener.
      * 
      * @param l
@@ -166,66 +133,42 @@ public class StaffConsultant extends Consultant implements Serializable {
     }
 
     /**
-     * Remove a general property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void removePropertyChangeListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(l);
-    }
-
-    /**
-     * Removes a sickLeaveHours property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void removeSickLeaveHoursListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
-    }
-
-    /**
-     * Removes a vacationHours property change listener.
-     * 
-     * @param l
-     *            the listener
-     */
-    public void removeVacationHoursListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
-    }
-
-    /**
      * Removes a vetoable change listener.
      * 
      * @param l
      *            the listener
      */
     public void removeVetoableChangeListener(VetoableChangeListener l) {
-        vcs.removeVetoableChangeListener("vetoable", l);
+        vcs.removeVetoableChangeListener(PAY_RATE_PROPERTY_NAME, l);
     }
 
     /**
-     * Set the pay rate. Fires the VetoableChange event and if approved the
-     * PropertyChange event.
+     * Adds a general property change listener.
      * 
-     * @param payRate
-     *            the pay rate in cents
-     * @throws PropertyVetoException
-     *             if a veto occurs
+     * @param l
+     *            the listener
      */
-    public void setPayRate(int payRate) {
-        if (payRate < 0)
-            throw new IllegalArgumentException("Pay Rate " + BE_POSITIVE);
-    
-        int oldPayRate = rate;
-        try {
-            vcs.fireVetoableChange(PAY_RATE_PROPERTY_NAME, oldPayRate, payRate);
-        } catch (PropertyVetoException e) {
-            return;
-        }
-        rate = payRate;
-        pcs.firePropertyChange(PAY_RATE_PROPERTY_NAME, oldPayRate, payRate);
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
+
+    /**
+     * Adds a vacationHours property change listener.
+     * 
+     * @param l
+     *            the listener
+     */
+    public void addVacationHoursListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
+    }
+
+    /**
+     * Get the available sick leave.
+     * 
+     * @return the available sick leave hours
+     */
+    public int getSickLeaveHours() {
+        return sickLeave;
     }
 
     /**
@@ -241,6 +184,97 @@ public class StaffConsultant extends Consultant implements Serializable {
         int oldsickLeaveHours = sickLeave;
         sickLeave = sickLeaveHours;
         pcs.firePropertyChange(SICK_LEAVE_HOURS_PROPERTY_NAME, oldsickLeaveHours, sickLeave);
+    }
+
+    /**
+     * Adds a sickLeaveHours property change listener.
+     * 
+     * @param l
+     *            the listener
+     */
+    public void addSickLeaveHoursListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
+    }
+
+    /**
+     * Removes a sickLeaveHours property change listener.
+     * 
+     * @param l
+     *            the listener
+     */
+    public void removeSickLeaveHoursListener(PropertyChangeListener l) {
+        pcs.removePropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
+    }
+
+    /**
+     * Get the available vacation hours.
+     * 
+     * @return the available vacation hours
+     */
+    public int getVacationHours() {
+        return vacation;
+    }
+
+    /**
+     * Remove a general property change listener.
+     * 
+     * @param l
+     *            the listener
+     */
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+        pcs.removePropertyChangeListener(l);
+    }
+
+    /**
+     * Removes a vacationHours property change listener.
+     * 
+     * @param l
+     *            the listener
+     */
+    public void removeVacationHoursListener(PropertyChangeListener l) {
+        pcs.removePropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
+    }
+
+    /**
+     * Calculate the hash code.
+     * 
+     * @return the hash code value
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((pcs == null) ? 0 : pcs.hashCode());
+        result = prime * result + rate;
+        result = prime * result + sickLeave;
+        result = prime * result + vacation;
+        result = prime * result + ((vcs == null) ? 0 : vcs.hashCode());
+        return result;
+    }
+
+    /**
+     * Compare names for equivalence.
+     * 
+     * @param other
+     *            the object to compare to
+     * @return true if all the name elements have the same value
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (other == null)
+            return false;
+        if (getClass() != other.getClass())
+            return false;
+        StaffConsultant otherSC = (StaffConsultant) other;
+        if (name == null) {
+            if (otherSC.name != null)
+                return false;
+        } else if (!name.equals(otherSC.name))
+            return false;
+        return true;
     }
 
     /**

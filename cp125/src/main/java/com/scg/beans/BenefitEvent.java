@@ -19,13 +19,16 @@ public class BenefitEvent extends EventObject implements Serializable {
 
     private Consultant consultant;
     private LocalDate effectiveDate;
-    private static Optional<Boolean> medicalStatus = Optional.of(false);
-    private static Optional<Boolean> dentalStatus = Optional.of(false);
+    private Optional<Boolean> enrolledInMendical = Optional.of(false);
+    private Optional<Boolean> enrolledInDental = Optional.of(false);
 
-    private BenefitEvent(Object source, Consultant consultant, LocalDate effectiveDate) {
+    private BenefitEvent(Object source, Consultant consultant, LocalDate effectiveDate, Optional<Boolean> enrolledInMendical, Optional<Boolean> enrolledInDental) {
         super(source);
         this.consultant = consultant;
         this.effectiveDate = effectiveDate;
+        this.enrolledInMendical = enrolledInMendical;
+        this.enrolledInDental = enrolledInDental;
+        
     }
 
     /**
@@ -40,8 +43,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      * @return a new event object
      */
     public static BenefitEvent enrollMedical(Object source, Consultant consultant, LocalDate effectiveDate) {
-        medicalStatus = Optional.of(true);
-        return new BenefitEvent(source, consultant, effectiveDate);
+        return new BenefitEvent(source, consultant, effectiveDate, Optional.of(true), Optional.empty());
     }
 
     /**
@@ -56,8 +58,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      * @return a new event object
      */
     public static BenefitEvent cancelMedical(Object source, Consultant consultant, java.time.LocalDate effectiveDate) {
-        medicalStatus = Optional.of(false);
-        return new BenefitEvent(source, consultant, effectiveDate);
+        return new BenefitEvent(source, consultant, effectiveDate, Optional.of(false), Optional.empty());
     }
 
     /**
@@ -72,8 +73,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      * @return a new event object
      */
     public static BenefitEvent enrollDental(Object source, Consultant consultant, java.time.LocalDate effectiveDate) {
-        dentalStatus = Optional.of(true);
-        return new BenefitEvent(source, consultant, effectiveDate);
+        return new BenefitEvent(source, consultant, effectiveDate, Optional.empty(), Optional.of(true));
     }
 
     /**
@@ -88,8 +88,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      * @return a new event object
      */
     public static BenefitEvent cancelDental(Object source, Consultant consultant, java.time.LocalDate effectiveDate) {
-        dentalStatus = Optional.of(true);
-        return new BenefitEvent(source, consultant, effectiveDate);
+        return new BenefitEvent(source, consultant, effectiveDate, Optional.empty(), Optional.of(false));
     }
 
     /**
@@ -99,7 +98,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      *         enrollment event.
      */
     public Optional<Boolean> medicalStatus() {
-        return medicalStatus;
+        return enrolledInMendical;
     }
 
     /**
@@ -109,7 +108,7 @@ public class BenefitEvent extends EventObject implements Serializable {
      *         enrollment event.
      */
     public Optional<Boolean> dentalStatus() {
-        return dentalStatus;
+        return enrolledInDental;
     }
 
     /**

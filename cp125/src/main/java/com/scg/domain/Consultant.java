@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.scg.util.PersonalName;
 
-import app.Assignment05;
-
 /**
  * A consultant for the SCG, just has a PersonalName.
  * 

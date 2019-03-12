@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +68,6 @@ public class Invoice {
 
     private ClientAccount client;
     private Month invoiceMonth;
-    private LocalDate invoiceDate;
     private LocalDate startDate;
     private int totalCharges;
     private int totalHours;
@@ -92,7 +90,6 @@ public class Invoice {
         this.invoiceMonth = invoiceMonth;
         startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
         lineItems = new ArrayList<>();
-        invoiceDate = LocalDate.now();
     }
 
     // protected method for testing verification

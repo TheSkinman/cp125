@@ -14,7 +14,6 @@ import com.scg.domain.TimeCard;
  *
  */
 public class TimeCardListUtil {
-    private static final int DAYS_PER_WEEK = 7;
     
     /**
      * Get a list of TimeCards for the specified consultant.
@@ -61,19 +60,17 @@ public class TimeCardListUtil {
      *            the list of time cards to sort
      */
     public static void sortByConsultantName(List<TimeCard> timeCards) {
-        Collections.sort(timeCards, new Comparator<TimeCard>() {
-            public int compare(TimeCard t1, TimeCard t2) {
-                int diff = 0;
-                if (t1 != t2) {
-                    if ((diff = t1.getConsultant().getName().getLastName()
-                            .compareTo(t2.getConsultant().getName().getLastName())) == 0)
-                        if ((diff = t1.getConsultant().getName().getFirstName()
-                                .compareTo(t2.getConsultant().getName().getFirstName())) == 0)
-                            diff = t1.getConsultant().getName().getMiddleName()
-                                    .compareTo(t2.getConsultant().getName().getMiddleName());
-                }
-                return diff;
+        Collections.sort(timeCards, (t1, t2)->  {
+            int diff = 0;
+            if (t1 != t2) {
+                if ((diff = t1.getConsultant().getName().getLastName()
+                        .compareTo(t2.getConsultant().getName().getLastName())) == 0)
+                    if ((diff = t1.getConsultant().getName().getFirstName()
+                            .compareTo(t2.getConsultant().getName().getFirstName())) == 0)
+                        diff = t1.getConsultant().getName().getMiddleName()
+                                .compareTo(t2.getConsultant().getName().getMiddleName());
             }
+            return diff;
         });
     }
 
@@ -84,14 +81,12 @@ public class TimeCardListUtil {
      *            the list of time cards to sort
      */
     public static void sortByStartDate(List<TimeCard> timeCards) {
-        Collections.sort(timeCards, new Comparator<TimeCard>() {
-            public int compare(TimeCard t1, TimeCard t2) {
-                int diff = 0;
-                if (t1 != t2) {
-                    diff = t1.getWeekStartingDay().compareTo(t2.getWeekStartingDay());
-                }
-                return diff;
+        Collections.sort(timeCards, (t1, t2) -> {
+            int diff = 0;
+            if (t1 != t2) {
+                diff = t1.getWeekStartingDay().compareTo(t2.getWeekStartingDay());
             }
+            return diff;
         });
     }
 }

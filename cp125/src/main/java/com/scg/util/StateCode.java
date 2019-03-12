@@ -1,7 +1,5 @@
 package com.scg.util;
 
-import java.io.Serializable;
-
 /**
  * U. S. Postal state codes.
  * 

@@ -1,4 +1,4 @@
-package test;
+package com.scg.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

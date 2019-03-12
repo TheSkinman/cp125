@@ -3,8 +3,8 @@ package com.scg.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.scg.util.Address;
 
 /**
  * Represents a time card capable of storing a collection of a consultant's
@@ -142,8 +140,7 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
      * @return list of billable hours for the client.
      */
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
-
-        List<ConsultantTime> theReturn = (List<ConsultantTime>) consultantHours.stream()
+        List<ConsultantTime> theReturn = consultantHours.stream()
                 .filter(ConsultantTime::isBillable)
                 .filter(t -> clientName.equals(t.getAccount().getName()))
                 .collect(Collectors.toList());
@@ -158,7 +155,7 @@ public class TimeCard implements Serializable, Comparable<TimeCard> {
      *         starting day
      */
     @Override
-    public String toString() { // TimeCar for <consultant> day of week
+    public String toString() { // TimeCard for <consultant> day of week
         return "TimeCard [getConsultantHours()=" + getConsultantHours() + ", getTotalBillableHours()="
                 + getTotalBillableHours() + ", getTotalHours()=" + getTotalHours() + ", getNonTotalBilableHours()="
                 + getTotalNonBillableHours() + ", getWeekStartingDay()=" + getWeekStartingDay() + "]";

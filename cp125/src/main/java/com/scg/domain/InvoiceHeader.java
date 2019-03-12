@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.Formatter;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.scg.util.Address;
 
 /**

@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
-import java.util.EventListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class CompensationManager implements PropertyChangeListener, VetoableChangeListener, EventListener {
+public class CompensationManager implements PropertyChangeListener, VetoableChangeListener {
     private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
     private static final String VETOABLE_PAY_RATE = "%s pay rate change, from %d to %d for %s";
 

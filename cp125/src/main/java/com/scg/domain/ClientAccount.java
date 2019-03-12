@@ -1,7 +1,7 @@
 package com.scg.domain;
 
-import java.io.Serializable;
 import java.util.Comparator;
+
 import com.scg.util.Address;
 import com.scg.util.PersonalName;
 

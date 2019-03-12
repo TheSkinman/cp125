@@ -3,9 +3,6 @@ package com.scg.beans;
 import java.io.Serializable;
 import java.util.EventObject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.scg.domain.Consultant;
 
 /**
@@ -15,7 +12,6 @@ import com.scg.domain.Consultant;
  *
  */
 public class TerminationEvent extends EventObject implements Serializable {
-    private static final Logger log = LoggerFactory.getLogger(TerminationEvent.class);
     private static final long serialVersionUID = -6258437135074903734L;
 
     private final Consultant consultant;
