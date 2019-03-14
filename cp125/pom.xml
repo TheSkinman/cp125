@@ -12,12 +12,25 @@
 		<student>SkinnerNR</student>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>cp125-repository</id>
+			<name>Repository for CP125</name>
+			<url>https://faculty.washington.edu/rmoul/repository</url>
+		</repository>
+	</repositories>
 	<dependencies>
+		<!-- CP125 Support Library -->
+		<dependency>
+			<groupId>edu.uw.ext</groupId>
+			<artifactId>cp125-support</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-lang3</artifactId>
-		    <version>3.8.1</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.8.1</version>
 		</dependency>
 		<!-- JUnit 5 section -->
 		<dependency>
@@ -32,19 +45,19 @@
 		</dependency>
 		<!-- SLF4j section -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.stefanbirkner</groupId>
-		    <artifactId>system-rules</artifactId>
-		    <version>1.3.0</version>
+			<groupId>com.github.stefanbirkner</groupId>
+			<artifactId>system-rules</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 	</dependencies>
 	<!-- Build and Plugins -->
