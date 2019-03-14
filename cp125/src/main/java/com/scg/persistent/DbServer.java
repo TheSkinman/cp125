@@ -13,7 +13,9 @@ import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
 import com.scg.domain.Invoice;
 import com.scg.domain.TimeCard;
+import com.scg.util.Address;
 import com.scg.util.PersonalName;
+import com.scg.util.StateCode;
 
 /**
  * Provides a programmatic interface to store and access objects in the
@@ -23,6 +25,9 @@ import com.scg.util.PersonalName;
  *
  */
 public class DbServer {
+    
+    private static final String INSERT_CLIENTS = "INSERT INTO clients (name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_CLIENTS = "SELECT name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name FROM clients";
     private static final String INSERT_CONSULTANT = "INSERT INTO CONSULTANTS (LAST_NAME, FIRST_NAME, MIDDLE_NAME) VALUES (?, ?, ?)";
     private static final String SELECT_CONSULTANTS = "SELECT last_name, first_name, middle_name FROM consultants";
     private final String dbUrl;
@@ -61,6 +66,19 @@ public class DbServer {
      *             if any database operations fail
      */
     public void addClient(ClientAccount client) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
+            try (PreparedStatement ps = conn.prepareStatement(INSERT_CLIENTS);) {
+                ps.setString(1, client.getName());
+                ps.setString(2, client.getAddress().getStreetNumber());
+                ps.setString(3, client.getAddress().getCity());
+                ps.setString(4, client.getAddress().getState().toString());
+                ps.setString(5, client.getAddress().getPostalCode());
+                ps.setString(6, client.getContact().getLastName());
+                ps.setString(7, client.getContact().getFirstName());
+                ps.setString(8, client.getContact().getMiddleName());
+                ps.execute();
+            }
+        }
     }
 
     /**
@@ -72,22 +90,27 @@ public class DbServer {
      *             if any database operations fail
      */
     public List<ClientAccount> getClients() throws SQLException {
-        // List<ClientAccount> returnClients = new ArrayList<>();
-        // try (Connection conn = DriverManager.getConnection(dbUrl, username,
-        // password);) {
-        // Statement stmt = conn.createStatement();
-        // ResultSet rs = stmt.executeQuery(SELECT_CONSULTANTS);
-        //
-        // while (rs.next()) {
-        // returnClients.add(new Clie)
-        // System.out.print(rs.getString("NAME") + "\n");
-        // }
-        //
-        // System.out.println("DONE");
-        // return null;
-        // }
-        //
-        return null;
+        List<ClientAccount> returnClientAccount = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
+            try (Statement stmt = conn.createStatement();) {
+                try (ResultSet rs = stmt.executeQuery(SELECT_CLIENTS);) {
+                    while (rs.next()) {
+                        String name = rs.getString("name");
+                        String streetNumber = rs.getString("street");
+                        String city = rs.getString("city");
+                        String state = rs.getString("state");
+                        String postalCode = rs.getString("postal_code");
+                        String lastName = rs.getString("contact_last_name");
+                        String firstName = rs.getString("contact_first_name");
+                        String middleName = rs.getString("contact_middle_name");
+                        PersonalName contact = new PersonalName(lastName, firstName, middleName);
+                        Address address = new Address(streetNumber, city, StateCode.valueOf(state), postalCode);
+                        returnClientAccount.add(new ClientAccount(name, contact, address));
+                    }
+                }
+            }
+        }
+        return returnClientAccount;
     }
 
     /**
