@@ -1,6 +1,5 @@
 package com.scg.persistent;
 
-import java.time.Month;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,11 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
@@ -34,7 +31,6 @@ import com.scg.util.StateCode;
  *
  */
 public class DbServer {
-    private static final Logger log = LoggerFactory.getLogger(DbServer.class);
     private static final String INSERT_CLIENTS = "INSERT INTO clients (name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_CLIENTS = "SELECT name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name FROM clients";
     private static final String INSERT_CONSULTANT = "INSERT INTO CONSULTANTS (LAST_NAME, FIRST_NAME, MIDDLE_NAME) VALUES (?, ?, ?)";
@@ -224,7 +220,7 @@ public class DbServer {
             try (PreparedStatement ps = conn.prepareStatement(INSERT_NON_BILLABLE_HOURS);) {
                 for (ConsultantTime ct : timeCard.getConsultantHours()) {
                     if (null != ct && !ct.isBillable()) {
-                        ps.setString(1, ((NonBillableAccount)ct.getAccount()).name());
+                        ps.setString(1, ((NonBillableAccount) ct.getAccount()).name());
                         ps.setInt(2, timecard_id);
                         ps.setString(3, ct.getDate().toString());
                         ps.setInt(4, ct.getHours());
@@ -239,7 +235,7 @@ public class DbServer {
         try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
             try (PreparedStatement ps = conn.prepareStatement(INSERT_BILLABLE_HOURS);) {
                 for (ConsultantTime ct : timeCard.getConsultantHours()) {
-                    if (null != ct && ct.isBillable() ) {
+                    if (null != ct && ct.isBillable()) {
                         ps.setString(1, ct.getAccount().getName());
                         ps.setInt(2, timecard_id);
                         ps.setString(3, ct.getDate().toString());
@@ -279,10 +275,6 @@ public class DbServer {
                 ps.setString(3, monthEnd.toString());
                 try (ResultSet rs = ps.executeQuery();) {
                     while (rs.next()) {
-                        
-                        
-// SELECT b.date, c.last_name, c.first_name, c.middle_name, b.skill, s.rate, b.hours 
-
                         String lastName = rs.getString("last_name");
                         String firstName = rs.getString("first_name");
                         String middleName = rs.getString("middle_name");
@@ -291,7 +283,7 @@ public class DbServer {
                         Skill skill = Skill.valueOf(rs.getString("skill"));
                         int hours = rs.getInt("hours");
                         InvoiceLineItem lineItem = new InvoiceLineItem(date, consultant, skill, hours);
-                        returnInvoice.addLineItem(lineItem );
+                        returnInvoice.addLineItem(lineItem);
                     }
                 }
             }

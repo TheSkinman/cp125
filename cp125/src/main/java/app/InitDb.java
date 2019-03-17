@@ -53,31 +53,31 @@ public class InitDb {
     }
 
     private static void storeClientList(List<ClientAccount> list) {
-        for (ClientAccount ca : list) {
+        for (ClientAccount clientAccount : list) {
             try {
-                db.addClient(ca);
-            } catch (SQLException e) {
-                log.error("Attempting to store a Client Account", e);
+                db.addClient(clientAccount);
+            } catch (SQLException err) {
+                log.error("Attempting to store a Client Account={}, Exception={}", clientAccount, err);
             }
         }
     }
     
     private static void storeConsultantList(List<Consultant> list) {
-        for (Consultant ca : list) {
+        for (Consultant consultant : list) {
             try {
-                db.addConsultant(ca);
-            } catch (SQLException e) {
-                log.error("Attempting to store a Consultant", e);
+                db.addConsultant(consultant);
+            } catch (SQLException err) {
+                log.error("Attempting to store a Consultant={}, Exception={}", consultant, err);
             }
         }
     }
     
     private static void storeTimcardList(List<TimeCard> list) {
-        for (TimeCard tc : list) {
+        for (TimeCard timeCard : list) {
             try {
-                db.addTimeCard(tc);
-            } catch (SQLException e) {
-                log.error("Attempting to store a Time Card", e);
+                db.addTimeCard(timeCard);
+            } catch (SQLException err) {
+                log.error("Attempting to store a Time Card={}, Exception={}", timeCard, err);
             }
         }
     }

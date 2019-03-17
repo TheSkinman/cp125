@@ -17,7 +17,7 @@ import com.scg.domain.Invoice;
 import com.scg.persistent.DbServer;
 
 /**
- * Assignment 05 application.
+ * Assignment 07 application.
  */
 public class Assignment07 {
     /** Character encoding to use. */
