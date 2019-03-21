@@ -46,17 +46,11 @@ public class TimeCardTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		account1 = new Account() {
-			/**
-             * 
-             */
             private static final long serialVersionUID = -8442028335855559528L;
             @Override public boolean isBillable() { return true; }
 			@Override public String getName() { return "Company One"; }
 		};
 		account2 = new Account() {
-			/**
-             * 
-             */
             private static final long serialVersionUID = 8071579684058101949L;
             @Override public boolean isBillable() { return false; }
 			@Override public String getName() { return "Company Two"; }

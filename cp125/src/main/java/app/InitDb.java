@@ -19,6 +19,7 @@ import com.scg.util.ListFactory;
 public class InitDb {
     /** This class' logger. */
     private static final Logger log = LoggerFactory.getLogger(InitDb.class);
+    
     private static String dbUrl = "jdbc:derby://localhost:1527/memory:scgDb";
     private static String username = "student";
     private static String password = "student";

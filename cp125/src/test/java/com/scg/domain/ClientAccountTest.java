@@ -1,6 +1,7 @@
 package com.scg.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,14 +18,20 @@ import com.scg.util.StateCode;
  *
  */
 public class ClientAccountTest {
-	private ClientAccount clientAccount; 
+	private static final String COMPANY = "Company";
+    private ClientAccount clientAccount; 
+    private ClientAccount clientAccoun2; 
 	private PersonalName personalName;
+	private PersonalName badPersonName;
 	private Address address;
+    private Address badAddress;
 	
 	@BeforeEach
 	public void setUp() throws Exception {
 		personalName = new PersonalName("last", "first", "middle");
+		badPersonName = new PersonalName("AAAA", "BBBB", "CCCC");
 		address = new Address("1325 4th Ave #400", "Seattle", StateCode.WA, "98101");
+        badAddress = new Address("1 street", "Boise", StateCode.ID, "89022");
 	}
 
 	@Test
@@ -65,6 +72,60 @@ public class ClientAccountTest {
         
         // ASSERT
         assertEquals(address, result);
+    }
+    
+    @Test
+    void test_EqualsObject() {
+        // ARRANGE
+        clientAccount = new ClientAccount(COMPANY, personalName, address);
+        clientAccoun2 = new ClientAccount(COMPANY, personalName, address);
+
+        // ACT
+        boolean result01 = clientAccount.equals(clientAccoun2);
+        boolean result02 = clientAccount.equals(clientAccount);
+        boolean result03 = clientAccount.equals(null);
+        @SuppressWarnings("unlikely-arg-type")
+        boolean result04 = clientAccount.equals(address);
+
+        clientAccount = new ClientAccount(COMPANY, personalName, address);
+        clientAccoun2 = new ClientAccount(null, null, null);
+
+        boolean result05 = clientAccoun2.equals(clientAccount);
+        clientAccount = new ClientAccount(COMPANY, null, address);
+        boolean result06 = clientAccoun2.equals(clientAccount);
+        clientAccount = new ClientAccount(COMPANY, null, address);
+        boolean result07 = clientAccoun2.equals(clientAccount);
+        clientAccount = new ClientAccount(COMPANY, null, null);
+        boolean result08 = clientAccoun2.equals(clientAccount);
+        clientAccount = new ClientAccount(null, null, null);
+        boolean result09 = clientAccoun2.equals(clientAccount);
+
+        clientAccount = new ClientAccount(COMPANY, personalName, address);
+        boolean result10 = clientAccount.equals(clientAccoun2);
+        clientAccoun2 = new ClientAccount(COMPANY, badPersonName, address);
+        boolean result11 = clientAccount.equals(clientAccoun2);
+        clientAccoun2 = new ClientAccount("Bad Company", personalName, address);
+        boolean result12 = clientAccount.equals(clientAccoun2);
+        clientAccoun2 = new ClientAccount(COMPANY, null, address);
+        boolean result13 = clientAccount.equals(clientAccoun2);
+        clientAccoun2 = new ClientAccount(COMPANY, personalName, badAddress);
+        boolean result14 = clientAccount.equals(clientAccoun2);
+
+        // ASSERT
+        assertTrue(result01);
+        assertTrue(result02);
+        assertFalse(result03);
+        assertFalse(result04);
+        assertFalse(result05);
+        assertFalse(result06);
+        assertFalse(result07);
+        assertFalse(result08);
+        assertTrue(result09);
+        assertFalse(result10);
+        assertFalse(result11);
+        assertFalse(result12);
+        assertFalse(result13);
+        assertFalse(result14);
     }
 
 	@Test

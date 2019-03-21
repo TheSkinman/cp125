@@ -1,6 +1,7 @@
 package com.scg.persistent;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,15 @@ import com.scg.util.StateCode;
  *
  */
 public class DbServer {
+    private static final int NON_BILLABLE_ACCOUNT_NAME = 1;
+    private static final int NON_BILLABLE_TIMECARD_ID = 2;
+    private static final int NON_BILLABLE_DATE = 3;
+    private static final int NON_BILLABLE_HOURS = 4;
+    private static final int BILLABLE_ACCOUNT_NAME = 1;
+    private static final int BILLABLE_TIMECARD_ID = 2;
+    private static final int BILLABLE_DATE = 3;
+    private static final int BILLABLE_SKILL = 4;
+    private static final int BILLABLE_HOURS = 5;
     private static final String INSERT_CLIENTS = "INSERT INTO clients (name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_CLIENTS = "SELECT name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name FROM clients";
     private static final String INSERT_CONSULTANT = "INSERT INTO CONSULTANTS (LAST_NAME, FIRST_NAME, MIDDLE_NAME) VALUES (?, ?, ?)";
@@ -77,20 +87,20 @@ public class DbServer {
      *             if any database operations fail
      */
     public void addClient(ClientAccount client) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(INSERT_CLIENTS);) {
-                ps.setString(1, client.getName());
-                ps.setString(2, client.getAddress().getStreetNumber());
-                ps.setString(3, client.getAddress().getCity());
-                ps.setString(4, client.getAddress().getState().toString());
-                ps.setString(5, client.getAddress().getPostalCode());
-                ps.setString(6, client.getContact().getLastName());
-                ps.setString(7, client.getContact().getFirstName());
-                ps.setString(8, client.getContact().getMiddleName());
-                ps.execute();
-                conn.commit();
-            }
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);
+                PreparedStatement ps = conn.prepareStatement(INSERT_CLIENTS);) {
+            ps.setString(1, client.getName());
+            ps.setString(2, client.getAddress().getStreetNumber());
+            ps.setString(3, client.getAddress().getCity());
+            ps.setString(4, client.getAddress().getState().toString());
+            ps.setString(5, client.getAddress().getPostalCode());
+            ps.setString(6, client.getContact().getLastName());
+            ps.setString(7, client.getContact().getFirstName());
+            ps.setString(8, client.getContact().getMiddleName());
+            ps.execute();
+            conn.commit();
         }
+
     }
 
     /**
@@ -188,63 +198,55 @@ public class DbServer {
     public void addTimeCard(TimeCard timeCard) throws SQLException {
         // Get the consultants ID number from the consultant table.
         int consultant_id = 0;
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(SELECT_CONSULTANT_ID);) {
-                ps.setString(1, timeCard.getConsultant().getName().getLastName());
-                ps.setString(2, timeCard.getConsultant().getName().getFirstName());
-                ps.setString(3, timeCard.getConsultant().getName().getMiddleName());
-                try (ResultSet rs = ps.executeQuery();) {
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);
+                PreparedStatement ps_TimeCard = conn.prepareStatement(INSERT_TIMECARD, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps_Consultant = conn.prepareStatement(SELECT_CONSULTANT_ID);
+                PreparedStatement ps_NonBillable = conn.prepareStatement(INSERT_NON_BILLABLE_HOURS);
+                PreparedStatement ps_Billable = conn.prepareStatement(INSERT_BILLABLE_HOURS);) {
+            try {
+                conn.setAutoCommit(false);
+                ps_Consultant.setString(1, timeCard.getConsultant().getName().getLastName());
+                ps_Consultant.setString(2, timeCard.getConsultant().getName().getFirstName());
+                ps_Consultant.setString(3, timeCard.getConsultant().getName().getMiddleName());
+                try (ResultSet rs = ps_Consultant.executeQuery();) {
                     if (rs.next())
                         consultant_id = rs.getInt("id");
                 }
-            }
-        }
 
-        // Insert new record into the timecard table and get the ID for the new record.
-        int timecard_id = 0;
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(INSERT_TIMECARD, Statement.RETURN_GENERATED_KEYS);) {
-                ps.setInt(1, consultant_id);
-                ps.setString(2, timeCard.getWeekStartingDay().toString());
-                ps.execute();
+                // Insert new record into the timecard table and get the ID for the new record.
+                int timecard_id = 0;
+                ps_TimeCard.setInt(1, consultant_id);
+                ps_TimeCard.setString(2, timeCard.getWeekStartingDay().toString());
+                ps_TimeCard.execute();
                 conn.commit();
-                try (ResultSet rs = ps.getGeneratedKeys();) {
+                try (ResultSet rs = ps_TimeCard.getGeneratedKeys();) {
                     if (rs.next())
                         timecard_id = rs.getInt(1);
                 }
-            }
-        }
 
-        // Insert the non billable hours
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(INSERT_NON_BILLABLE_HOURS);) {
-                for (ConsultantTime ct : timeCard.getConsultantHours()) {
-                    if (null != ct && !ct.isBillable()) {
-                        ps.setString(1, ((NonBillableAccount) ct.getAccount()).name());
-                        ps.setInt(2, timecard_id);
-                        ps.setString(3, ct.getDate().toString());
-                        ps.setInt(4, ct.getHours());
-                        ps.execute();
-                    }
-                }
-                conn.commit();
-            }
-        }
-
-        // Insert the billable hours
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(INSERT_BILLABLE_HOURS);) {
                 for (ConsultantTime ct : timeCard.getConsultantHours()) {
                     if (null != ct && ct.isBillable()) {
-                        ps.setString(1, ct.getAccount().getName());
-                        ps.setInt(2, timecard_id);
-                        ps.setString(3, ct.getDate().toString());
-                        ps.setString(4, ct.getSkill().name());
-                        ps.setInt(5, ct.getHours());
-                        ps.execute();
-                    }
+                        // Insert the billable hours
+                        ps_Billable.setString(BILLABLE_ACCOUNT_NAME, ct.getAccount().getName());  
+                        ps_Billable.setInt(BILLABLE_TIMECARD_ID, timecard_id);
+                        ps_Billable.setString(BILLABLE_DATE, ct.getDate().toString());
+                        ps_Billable.setString(BILLABLE_SKILL, ct.getSkill().name());
+                        ps_Billable.setInt(BILLABLE_HOURS, ct.getHours());
+                        ps_Billable.execute();
+                    } else {
+                        // Insert the non billable hours
+                        ps_NonBillable.setString(NON_BILLABLE_ACCOUNT_NAME, ((NonBillableAccount) ct.getAccount()).name());
+                        ps_NonBillable.setInt(NON_BILLABLE_TIMECARD_ID, timecard_id);
+                        ps_NonBillable.setString(NON_BILLABLE_DATE, ct.getDate().toString());
+                        ps_NonBillable.setInt(NON_BILLABLE_HOURS, ct.getHours());
+                        ps_NonBillable.execute();
+                    } //   (account_name, timecard_id, date, hours)
+                    
+                    
                 }
                 conn.commit();
+            } catch (Exception err) {
+                conn.rollback();
             }
         }
     }
@@ -266,27 +268,27 @@ public class DbServer {
      */
     public Invoice getInvoice(ClientAccount client, Month month, int year) throws SQLException {
         Invoice returnInvoice = new Invoice(client, month, year);
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);) {
-            try (PreparedStatement ps = conn.prepareStatement(SELECT_INVOICE);) {
-                LocalDate monthStart = LocalDate.of(year, month, 1);
-                LocalDate monthEnd = monthStart.plusMonths(1).minusDays(1);
-                ps.setString(1, client.getName());
-                ps.setString(2, monthStart.toString());
-                ps.setString(3, monthEnd.toString());
-                try (ResultSet rs = ps.executeQuery();) {
-                    while (rs.next()) {
-                        String lastName = rs.getString("last_name");
-                        String firstName = rs.getString("first_name");
-                        String middleName = rs.getString("middle_name");
-                        LocalDate date = LocalDate.parse(rs.getString("date"));
-                        Consultant consultant = new Consultant(new PersonalName(lastName, firstName, middleName));
-                        Skill skill = Skill.valueOf(rs.getString("skill"));
-                        int hours = rs.getInt("hours");
-                        InvoiceLineItem lineItem = new InvoiceLineItem(date, consultant, skill, hours);
-                        returnInvoice.addLineItem(lineItem);
-                    }
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password);
+                PreparedStatement ps = conn.prepareStatement(SELECT_INVOICE);) {
+            LocalDate monthStart = LocalDate.of(year, month, 1);
+            LocalDate monthEnd = monthStart.plusMonths(1).minusDays(1);
+            ps.setString(1, client.getName());
+            ps.setString(2, monthStart.toString());
+            ps.setString(3, monthEnd.toString());
+            try (ResultSet rs = ps.executeQuery();) {
+                while (rs.next()) {
+                    String lastName = rs.getString("last_name");
+                    String firstName = rs.getString("first_name");
+                    String middleName = rs.getString("middle_name");
+                    LocalDate date = LocalDate.parse(rs.getString("date"));
+                    Consultant consultant = new Consultant(new PersonalName(lastName, firstName, middleName));
+                    Skill skill = Skill.valueOf(rs.getString("skill"));
+                    int hours = rs.getInt("hours");
+                    InvoiceLineItem lineItem = new InvoiceLineItem(date, consultant, skill, hours);
+                    returnInvoice.addLineItem(lineItem);
                 }
             }
+
         }
         return returnInvoice;
     }
