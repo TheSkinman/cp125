@@ -60,8 +60,8 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
     /**
      * Indicates whether some other object is "equal to" this one.
      * 
-     * @param the
-     *            reference to other object with which to compare.
+     * @param other
+     *            the reference to other object with which to compare.
      * @return true if ClientAccount has the same name as the the other object
      *         argument; false otherwise.
      */
