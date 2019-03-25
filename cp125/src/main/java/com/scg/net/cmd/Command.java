@@ -2,6 +2,8 @@ package com.scg.net.cmd;
 
 import java.io.Serializable;
 
+import com.scg.net.server.CommandProcessor;
+
 /**
  * The interface of all Command objects, implements the command role in the
  * Command design pattern.

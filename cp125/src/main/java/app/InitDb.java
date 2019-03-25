@@ -51,6 +51,13 @@ public class InitDb {
         storeClientList(accounts);
         storeConsultantList(consultants);
         storeTimcardList(timeCards);
+        
+        
+        
+        
+        
+        
+        
     }
 
     private static void storeClientList(List<ClientAccount> list) {
