@@ -1,26 +1,29 @@
 package com.scg.net.cmd;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import com.scg.domain.ClientAccount;
-
 /**
- * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
+ * This Command will cause the CommandProcessor to shutdown the server, this
+ * command has no target, so target type is Void.
+ * 
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public final class ShutdownCommand extends AbstractCommand<ClientAccount> {
+public final class ShutdownCommand extends AbstractCommand<Void> {
     private static final long serialVersionUID = -5917364448228198875L;
-    
-    public ShutdownCommand(ClientAccount target) {
-        throw new NotImplementedException("Not implemented yet.");
+
+    /**
+     * Construct an ShutdownCommand.
+     */
+    public ShutdownCommand() {
+        super();
     }
 
     /**
-     * Execute this Command by calling receiver.execute(this).
+     * The method called by the receiver. This method must be implemented by
+     * subclasses to send a reference to themselves to the receiver by calling
+     * receiver.execute(this).
      */
     @Override
     public void execute() {
-        throw new NotImplementedException("Not implemented yet.");
+        getReceiver().execute(this);
     }
 }

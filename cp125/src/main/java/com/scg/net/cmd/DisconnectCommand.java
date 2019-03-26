@@ -1,19 +1,20 @@
 package com.scg.net.cmd;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import com.scg.domain.ClientAccount;
+import com.scg.net.server.CommandProcessor;
 
 /**
- * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
+ * The command to disconnect, this command has no target, so target type is Void.
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public final class DisconnectCommand extends AbstractCommand<ClientAccount> {
+public final class DisconnectCommand extends AbstractCommand<Void> {
     private static final long serialVersionUID = -5917364448228198875L;
     
-    public DisconnectCommand(ClientAccount target) {
-        throw new NotImplementedException("Not implemented yet.");
+    /**
+     * Construct an DisconnectCommand.
+     */
+    public DisconnectCommand() {
+        super();
     }
 
     /**
@@ -21,6 +22,6 @@ public final class DisconnectCommand extends AbstractCommand<ClientAccount> {
      */
     @Override
     public void execute() {
-        throw new NotImplementedException("Not implemented yet.");
+        getReceiver().execute(this);
     }
 }

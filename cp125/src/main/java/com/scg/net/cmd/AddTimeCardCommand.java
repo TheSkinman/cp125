@@ -1,20 +1,24 @@
 package com.scg.net.cmd;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import com.scg.domain.ClientAccount;
+import com.scg.domain.TimeCard;
+import com.scg.net.server.CommandProcessor;
 
 /**
- * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
+ * Command that adds a TimeCard to the server's list of TimeCards, target type
+ * is TimeCards.
+ * 
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public final class AddTimeCardCommand extends AbstractCommand<ClientAccount> {
+public final class AddTimeCardCommand extends AbstractCommand<TimeCard> {
     private static final long serialVersionUID = -5917364448228198875L;
-    private ClientAccount target;
-    
-    public AddTimeCardCommand(ClientAccount target) {
-        this.target = target;
+
+    /**
+     * Construct an AddTimeCardCommand with a target.
+     * @param target the target of this Command.
+     */
+    public AddTimeCardCommand(TimeCard target) {
+        super(target);
     }
 
     /**
@@ -22,6 +26,6 @@ public final class AddTimeCardCommand extends AbstractCommand<ClientAccount> {
      */
     @Override
     public void execute() {
-        throw new NotImplementedException("Not implemented yet.");
+        getReceiver().execute(this);
     }
 }

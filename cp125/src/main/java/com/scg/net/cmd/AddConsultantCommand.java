@@ -1,19 +1,22 @@
 package com.scg.net.cmd;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import com.scg.domain.ClientAccount;
+import com.scg.domain.Consultant;
+import com.scg.net.server.CommandProcessor;
 
 /**
- * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
+ * The command to add a Consultant to a list maintained by the server, target type is Consultant.
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public final class AddConsultantCommand extends AbstractCommand<ClientAccount> {
+public final class AddConsultantCommand extends AbstractCommand<Consultant> {
     private static final long serialVersionUID = -5917364448228198875L;
     
-    public AddConsultantCommand(ClientAccount target) {
-        throw new NotImplementedException("Not implemented yet.");
+    /**
+     * Construct an AddConsultantCommand with a target.
+     * @param target The target of this Command.
+     */
+    public AddConsultantCommand(Consultant target) {
+        super(target);
     }
 
     /**
@@ -21,6 +24,6 @@ public final class AddConsultantCommand extends AbstractCommand<ClientAccount> {
      */
     @Override
     public void execute() {
-        throw new NotImplementedException("Not implemented yet.");
+        getReceiver().execute(this);
     }
 }

@@ -43,7 +43,7 @@ public class Assignment08Server {
         ListFactory.populateLists(clientList, consultantList, timeCards);
         timeCards = null;
 
-        InvoiceServer is = new InvoiceServer(10888, clientList, consultantList, "test_01");
+        InvoiceServer is = new InvoiceServer(10888, clientList, consultantList, "target/server");
         is.run();
         
         

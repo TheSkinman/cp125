@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.ServerSocket;
@@ -15,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
+import com.scg.net.cmd.AbstractCommand;
+import com.scg.net.cmd.Command;
 
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -59,15 +63,18 @@ public class InvoiceServer {
      * dispatching them to the CommandProcesser.
      */
     public void run() {
-        try {
-            serverSocket = new ServerSocket(port);
-            logger.info("Server ready on port " + port + "...");
+        try (ServerSocket listenSocket = new ServerSocket(port);) {
+            serverSocket = listenSocket;
+            logger.info("Server ready on Internet address: " + serverSocket.getLocalSocketAddress() + " and port "
+                    + serverSocket.getLocalPort());
 
-            while (true) {
-                Socket clientSocket = serverSocket.accept(); // blocks
-                logger.info("accepted");
-                
-                serviceConnection(clientSocket);
+            while (!serverSocket.isClosed()) {
+                logger.info("listening for client...");
+                try (Socket clientSocket = serverSocket.accept();) { // blocks
+                    logger.info("accepted");
+
+                    serviceConnection(clientSocket);
+                }
             }
         } catch (IOException ex) {
             logger.error("Server error: " + ex);
@@ -90,31 +97,33 @@ public class InvoiceServer {
      */
     void serviceConnection(Socket client) {
         try {
-            logger.info("serviceConnection...");
-            InputStream inStrm = client.getInputStream();
-            Reader rdr = new InputStreamReader(inStrm);
-            BufferedReader br = new BufferedReader(rdr);
-            while (true) {
-                String s = br.readLine();
+            logger.debug("serviceConnection - opening stream...");
+            // ObjectOutputStream os = new ObjectOutputStream(client.getOutputStream());
+            // os.close();
+            ObjectInputStream is = new ObjectInputStream(client.getInputStream());
 
-                if (s == null || s.equals("quit")) {
-                    logger.info("quiting");
-                    break;
-                } else if (s.equals("exit")) {
-                    logger.info("exiting");
-                    serverSocket.close();
-                    //serverSocket = null;
-                    break;
+            final CommandProcessor receiver = new CommandProcessor(client, clientList, consultantList, this);
+            receiver.setOutPutDirectoryName(outputDirectoryName);
+
+            while (!client.isClosed()) {
+                logger.debug("serviceConnection - reading object...");
+
+                final Object obj = is.readObject();
+
+                if (obj == null) {
+                    is.close();
+                    client.close();
+                } else {
+                    final Command<?> command = (Command<?>) obj;
+                    command.setReceiver(receiver);
+                    command.execute();
                 }
-
-                logger.info(s);
             }
-
-            br.close();
             client.close();
-        } catch (IOException ex) {
-            logger.error("Server error: " + ex);
-        }    }
+        } catch (IOException | ClassNotFoundException ex) {
+            logger.error("Server error: ", ex);
+        }
+    }
 
     /**
      * Shutdown the server.
@@ -124,9 +133,8 @@ public class InvoiceServer {
             serverSocket.close();
             logger.info("Server shutdown.");
         } catch (IOException e) {
-            logger.error("Server failed to shutdoen, ", e);
+            logger.error("Server failed to shutdown, ", e);
         }
         serverSocket = null;
     }
-
 }

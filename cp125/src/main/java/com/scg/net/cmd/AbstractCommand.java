@@ -15,7 +15,7 @@ import com.scg.net.server.CommandProcessor;
  */
 public abstract class AbstractCommand<T> implements Serializable, Command<T> {
     private static final long serialVersionUID = 7357453670913210375L;
-    private CommandProcessor receiver;
+    private transient CommandProcessor receiver;
     private T target;
 
     /**
@@ -68,7 +68,8 @@ public abstract class AbstractCommand<T> implements Serializable, Command<T> {
      */
     @Override
     public String toString() {
-        return "AbstractCommand [receiver=" + receiver + ", target=" + target + "]";
+        // get class and sub class
+        return "[class=" + this.getClass().getName() + "]";
     }
 
 }

@@ -43,17 +43,11 @@ public class Assignment08 {
         final List<TimeCard> timeCards = new ArrayList<>();
         ListFactory.populateLists(accounts, consultants, timeCards);
         
-        //Socket clientSocket = new Socket("http://localhost", 10888);
-        
-        
+        // Create an invoice client and run it. 
         InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
-        //ic.run();
+        ic.run();
         
-        ic.sendShutdown("localhost", 10888);
-        
-                
-        
-        
+        // Shut down the server.
         
     }
 

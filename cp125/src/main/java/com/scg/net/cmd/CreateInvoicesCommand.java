@@ -1,19 +1,23 @@
 package com.scg.net.cmd;
 
-import org.apache.commons.lang3.NotImplementedException;
+import java.time.LocalDate;
 
-import com.scg.domain.ClientAccount;
+import com.scg.net.server.CommandProcessor;
 
 /**
- * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
+ * The command to create invoices for a specified month, target type is LocalDate.
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public final class CreateInvoicesCommand extends AbstractCommand<ClientAccount> {
+public final class CreateInvoicesCommand extends AbstractCommand<LocalDate> {
     private static final long serialVersionUID = -5917364448228198875L;
     
-    public CreateInvoicesCommand(ClientAccount target) {
-        throw new NotImplementedException("Not implemented yet.");
+    /**
+     * Construct a CreateInvoicesCommand with a target month, which should be obtained by getting the desired month constant from LocalDate.
+     * @param target the target month.
+     */
+    public CreateInvoicesCommand(LocalDate target) {
+        super(target);
     }
 
     /**
@@ -21,6 +25,6 @@ public final class CreateInvoicesCommand extends AbstractCommand<ClientAccount> 
      */
     @Override
     public void execute() {
-        throw new NotImplementedException("Not implemented yet.");
+        getReceiver().execute(this);
     }
 }
