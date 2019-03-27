@@ -54,8 +54,8 @@ public abstract class AbstractCommand<T> implements Serializable, Command<T> {
     /**
      * Set the CommandProcessor that will execute this Command.
      * 
-     * @param the
-     *            receiver for this Command.
+     * @param receiver
+     *            the receiver for this Command.
      */
     @Override
     public void setReceiver(CommandProcessor receiver) {

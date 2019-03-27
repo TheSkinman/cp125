@@ -1,7 +1,5 @@
 package app;
 
-import java.net.Socket;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,6 @@ import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
 import com.scg.net.client.InvoiceClient;
-import com.scg.persistent.DbServer;
 import com.scg.util.ListFactory;
 
 /**
@@ -44,12 +41,15 @@ public class Assignment08 {
         ListFactory.populateLists(accounts, consultants, timeCards);
         
         // Create an invoice client and run it. 
+        log.info("Assignment 8 is now starting up the client...");
         InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
         ic.run();
         ic = null;
         
         // Shut down the server.
         InvoiceClient.sendShutdown("localhost", 10888);
+        log.info("Assignment 8 is now ending the client.");
+
     }
 
 }

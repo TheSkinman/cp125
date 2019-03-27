@@ -41,10 +41,10 @@ public class Assignment08Server {
         ListFactory.populateLists(clientList, consultantList, timeCards);
         timeCards = null;
 
-        log.info("Assignment 8 is now starting up the server...");
+        log.info("Assignment 8 Server is now starting up the server...");
         InvoiceServer is = new InvoiceServer(10888, clientList, consultantList, "target/server");
         is.run();
-        log.info("Assignment 8 now ending.");
+        log.info("Assignment 8 Server now ending.");
     }
 
 }
