@@ -88,6 +88,8 @@ public class InvoiceClient {
             sendTimeCards(out);
 
             // Create the invoice
+            INVOICE_MONTH = Month.MARCH;
+            INVOICE_YEAR = 2017;
             createInvoices(out, INVOICE_MONTH, INVOICE_YEAR);
             
             // Disconnect
@@ -182,7 +184,7 @@ public class InvoiceClient {
         sendCommand(out, new CreateInvoicesCommand(LocalDate.of(year, month, 1)));
     }
 
-    private void sendCommand(ObjectOutputStream out, Command<?> command) {
+    private static void sendCommand(ObjectOutputStream out, Command<?> command) {
         logger.debug("Sending the following command to the server: " + command);
         try {
             out.writeObject(command);
@@ -202,22 +204,17 @@ public class InvoiceClient {
      *            the port for the server.
      */
     public static void sendShutdown(String host, int port) {
-        // call from mMAIN
+        // call from MAIN
         try {
             logger.debug("Sending shutdown to {} on {}", host, port);
             Socket clientSocket = new Socket(host, port);
-
-            // logger.debug("Opening streams to server...");
-            // ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
-            // // shutdown input
-            // is.close();
-
-            ObjectOutputStream os = new ObjectOutputStream(clientSocket.getOutputStream());
+            ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 
             logger.debug("Sending shutdown command to server...");
-            ShutdownCommand shutdown = new ShutdownCommand();
-            os.writeObject(shutdown);
-            System.out.println("Envoi des informations au serveur ...");
+            sendCommand(out, new ShutdownCommand());
+            out.close();
+            clientSocket.close();
+            logger.debug("END OF LINE...");
 
             clientSocket.close();
         } catch (IOException e) {

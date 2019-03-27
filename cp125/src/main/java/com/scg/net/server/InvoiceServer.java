@@ -68,7 +68,7 @@ public class InvoiceServer {
             logger.info("Server ready on Internet address: " + serverSocket.getLocalSocketAddress() + " and port "
                     + serverSocket.getLocalPort());
 
-            while (!serverSocket.isClosed()) {
+            while (serverSocket != null && !serverSocket.isClosed()) {
                 logger.info("listening for client...");
                 try (Socket clientSocket = serverSocket.accept();) { // blocks
                     logger.info("accepted");
@@ -130,8 +130,10 @@ public class InvoiceServer {
      */
     void shutdown() {
         try {
-            serverSocket.close();
-            logger.info("Server shutdown.");
+            logger.info("Server shutting down...");
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
         } catch (IOException e) {
             logger.error("Server failed to shutdown, ", e);
         }

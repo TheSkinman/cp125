@@ -1,6 +1,5 @@
 package app;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
 import com.scg.net.server.InvoiceServer;
-import com.scg.persistent.DbServer;
 import com.scg.util.ListFactory;
 
 /**
@@ -43,12 +41,10 @@ public class Assignment08Server {
         ListFactory.populateLists(clientList, consultantList, timeCards);
         timeCards = null;
 
+        log.info("Assignment 8 is now starting up the server...");
         InvoiceServer is = new InvoiceServer(10888, clientList, consultantList, "target/server");
         is.run();
-        
-        
-        
-        
+        log.info("Assignment 8 now ending.");
     }
 
 }

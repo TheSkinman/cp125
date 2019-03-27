@@ -12,8 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.mockito.internal.util.reflection.GenericTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +25,6 @@ import com.scg.net.cmd.AddTimeCardCommand;
 import com.scg.net.cmd.CreateInvoicesCommand;
 import com.scg.net.cmd.DisconnectCommand;
 import com.scg.net.cmd.ShutdownCommand;
-import com.sun.media.jfxmedia.track.Track.Encoding;
 
 /**
  * The command processor for the invoice server. Implements the receiver role in
@@ -137,11 +134,11 @@ public class CommandProcessor {
                         return;
                     }
                 }
-                final String outFileName = String.format("%s%sInvoice.txt", client.getName().replaceAll(" ", ""),
+                final String outFileName = String.format("%s-%s-Invoice.txt", client.getName().replaceAll(" ", ""),
                         monthString);
                 final File outFile = new File(this.outputDirectoryName, outFileName);
                 try (PrintStream printOut = new PrintStream(new FileOutputStream(outFile), true, ENCODING);) {
-                        printOut.println(invoice.toReportString());
+                    printOut.println(invoice.toReportString());
                 } catch (UnsupportedEncodingException err) {
                     logger.error("Unable to write the encoding format: {}", err);
                 } catch (FileNotFoundException err) {

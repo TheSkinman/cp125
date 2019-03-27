@@ -46,9 +46,10 @@ public class Assignment08 {
         // Create an invoice client and run it. 
         InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
         ic.run();
+        ic = null;
         
         // Shut down the server.
-        
+        InvoiceClient.sendShutdown("localhost", 10888);
     }
 
 }
