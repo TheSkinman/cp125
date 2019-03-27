@@ -13,16 +13,16 @@ import com.scg.net.client.InvoiceClient;
 import com.scg.util.ListFactory;
 
 /**
- * Assignment 04 application.
+ * Assignment 09 application.
  */
-public class Assignment08 {
+public class Assignment09 {
     /** This class' logger. */
-    private static final Logger log = LoggerFactory.getLogger(Assignment08.class);
+    private static final Logger log = LoggerFactory.getLogger(Assignment09.class);
 
     /**
      * Prevent instantiation.
      */
-    private Assignment08() {}
+    private Assignment09() {}
 
     /**
      * The application method.
@@ -41,14 +41,14 @@ public class Assignment08 {
         ListFactory.populateLists(accounts, consultants, timeCards);
         
         // Create an invoice client and run it. 
-        log.info("Assignment 8 is now starting up the client...");
+        log.info("Assignment 9 is now starting up the client...");
         InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
         ic.run();
         ic = null;
         
         // Shut down the server.
         InvoiceClient.sendShutdown("localhost", 10888);
-        log.info("Assignment 8 is now ending the client.");
+        log.info("Assignment 9 is now ending the client.");
 
     }
 
