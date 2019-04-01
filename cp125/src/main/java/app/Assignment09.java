@@ -42,12 +42,48 @@ public class Assignment09 {
         
         // Create an invoice client and run it. 
         log.info("Assignment 9 is now starting up the client...");
-        InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
-        ic.run();
-        ic = null;
+        
+        log.info("Creating all three threads...");
+        Thread t1 = new Thread() {
+            @Override
+            public void run () {
+                log.info("Thread-1: Startging...");
+                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
+                ic.run();
+            }
+        };
+        Thread t2 = new Thread() {
+            @Override
+            public void run () {
+                log.info("Thread-2: Startging...");
+                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
+                ic.run();
+            }
+        };
+        Thread t3 = new Thread() {
+            @Override
+            public void run () {
+                log.info("Thread-3: Startging...");
+                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
+                ic.run();
+            }
+        };
+        
+        // Start the threads
+        log.info("Starting all three threads...");
+        t1.start();
+        t2.start();
+        t3.start();
+        
+        // Wait for threads to complete
+        log.info("Waiting on all three threads...");
+        t1.join();
+        t2.join();
+        t3.join();
         
         // Shut down the server.
-        InvoiceClient.sendShutdown("localhost", 10888);
+        log.info("Threads joined, sending seperate shutdown command...");
+        //InvoiceClient.sendShutdown("localhost", 10888);
         log.info("Assignment 9 is now ending the client.");
 
     }

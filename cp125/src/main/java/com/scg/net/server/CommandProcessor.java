@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
@@ -22,6 +23,7 @@ import com.scg.domain.TimeCard;
 import com.scg.net.cmd.AddClientCommand;
 import com.scg.net.cmd.AddConsultantCommand;
 import com.scg.net.cmd.AddTimeCardCommand;
+import com.scg.net.cmd.Command;
 import com.scg.net.cmd.CreateInvoicesCommand;
 import com.scg.net.cmd.DisconnectCommand;
 import com.scg.net.cmd.ShutdownCommand;
@@ -35,12 +37,13 @@ import com.scg.net.cmd.ShutdownCommand;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class CommandProcessor {
+public class CommandProcessor implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(CommandProcessor.class);
     private static final String ENCODING = "ISO-8859-1"; // found in assignment 7 for out put to screen
     private List<ClientAccount> clientList;
     private List<Consultant> consultantList;
     private Socket clientSocket;
+    private String name;
     private String outputDirectoryName;
     private InvoiceServer server;
     private List<TimeCard> timeCardList;
@@ -50,6 +53,9 @@ public class CommandProcessor {
      * 
      * @param connection
      *            the Socket connecting the server to the client.
+     * @param name
+     *            the name assigned to this CommandProcessor by the server; mostly
+     *            for logging.
      * @param clientList
      *            the ClientList to add Clients to.
      * @param consultantList
@@ -57,9 +63,10 @@ public class CommandProcessor {
      * @param server
      *            the server that created this command processor
      */
-    CommandProcessor(Socket connection, List<ClientAccount> clientList, List<Consultant> consultantList,
+    CommandProcessor(Socket connection, String name, List<ClientAccount> clientList, List<Consultant> consultantList,
             InvoiceServer server) {
         this.clientSocket = connection;
+        this.name = name;
         this.clientList = clientList;
         this.consultantList = consultantList;
         this.timeCardList = new ArrayList<>();
@@ -83,7 +90,7 @@ public class CommandProcessor {
      *            the command to execute.
      */
     public void execute(AddTimeCardCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         this.timeCardList.add(command.getTarget());
     }
 
@@ -94,7 +101,7 @@ public class CommandProcessor {
      *            the command to execute.
      */
     public void execute(AddClientCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         this.clientList.add(command.getTarget());
     }
 
@@ -105,7 +112,7 @@ public class CommandProcessor {
      *            the command to execute.
      */
     public void execute(AddConsultantCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         this.consultantList.add(command.getTarget());
     }
 
@@ -116,7 +123,7 @@ public class CommandProcessor {
      *            the command to execute.
      */
     public void execute(CreateInvoicesCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         Invoice invoice = null;
         LocalDate invoiceDate = command.getTarget();
         final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("MMMMyyyy");
@@ -155,7 +162,7 @@ public class CommandProcessor {
      *            the input DisconnectCommand.
      */
     public void execute(DisconnectCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         try {
             clientSocket.close();
         } catch (IOException e) {
@@ -171,13 +178,40 @@ public class CommandProcessor {
      *            the input ShutdownCommand.
      */
     public void execute(ShutdownCommand command) {
-        logger.info("executing " + command);
+        logger.info("{}: executing " + command, name);
         try {
             clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             server.shutdown();
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            logger.debug("serviceConnection - opening stream...");
+            ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
+            setOutPutDirectoryName(outputDirectoryName + "/" + this.name);
+
+            while (!clientSocket.isClosed()) {
+                logger.debug("serviceConnection - reading object...");
+
+                final Object obj = is.readObject();
+
+                if (obj == null) {
+                    is.close();
+                    clientSocket.close();
+                } else {
+                    final Command<?> command = (Command<?>) obj;
+                    command.setReceiver(this);
+                    command.execute();
+                }
+            }
+            clientSocket.close();
+        } catch (IOException | ClassNotFoundException ex) {
+            logger.error("Server error: ", ex);
         }
     }
 }

@@ -37,6 +37,7 @@ public class InvoiceServer {
     private String outputDirectoryName;
     private int port;
     private ServerSocket serverSocket;
+    private static int threadNumber = 1;
 
     /**
      * Construct an InvoiceServer with a port.
@@ -56,6 +57,9 @@ public class InvoiceServer {
         this.clientList = clientList;
         this.consultantList = consultantList;
         this.outputDirectoryName = outputDirectoryName;
+        
+//        Runtime runTime = Runtime.getRuntime();
+//        runTime.addShutdownHook(new InvoiceServerShutdownHook(clientList, consultantList, outputDirectoryName));
     }
 
     /**
@@ -70,10 +74,16 @@ public class InvoiceServer {
 
             while (serverSocket != null && !serverSocket.isClosed()) {
                 logger.info("listening for client...");
-                try (Socket clientSocket = serverSocket.accept();) { // blocks
+                try (Socket clientSocket = serverSocket.accept();) {
                     logger.info("accepted");
-
-                    serviceConnection(clientSocket);
+                    
+                    String threadName = String.format("thread_%03d", threadNumber++);
+                    final CommandProcessor receiver = new CommandProcessor(clientSocket, threadName, clientList, consultantList,
+                            this);
+                    receiver.setOutPutDirectoryName(outputDirectoryName);
+                    
+                    Thread thread = new Thread(receiver);
+                    thread.start();
                 }
             }
         } catch (IOException ex) {
@@ -86,42 +96,6 @@ public class InvoiceServer {
                     logger.error("Error closing server socket. " + ioex);
                 }
             }
-        }
-    }
-
-    /**
-     * Read and process commands from the provided socket.
-     * 
-     * @param client
-     *            the socket to read from
-     */
-    void serviceConnection(Socket client) {
-        try {
-            logger.debug("serviceConnection - opening stream...");
-            // ObjectOutputStream os = new ObjectOutputStream(client.getOutputStream());
-            // os.close();
-            ObjectInputStream is = new ObjectInputStream(client.getInputStream());
-
-            final CommandProcessor receiver = new CommandProcessor(client, clientList, consultantList, this);
-            receiver.setOutPutDirectoryName(outputDirectoryName);
-
-            while (!client.isClosed()) {
-                logger.debug("serviceConnection - reading object...");
-
-                final Object obj = is.readObject();
-
-                if (obj == null) {
-                    is.close();
-                    client.close();
-                } else {
-                    final Command<?> command = (Command<?>) obj;
-                    command.setReceiver(receiver);
-                    command.execute();
-                }
-            }
-            client.close();
-        } catch (IOException | ClassNotFoundException ex) {
-            logger.error("Server error: ", ex);
         }
     }
 
