@@ -1,13 +1,6 @@
 package com.scg.net.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -17,10 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
-import com.scg.net.cmd.AbstractCommand;
-import com.scg.net.cmd.Command;
-
-import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * The server for creating new clients, consultants and time cards as well as
@@ -37,7 +26,7 @@ public class InvoiceServer {
     private String outputDirectoryName;
     private int port;
     private ServerSocket serverSocket;
-    private static int threadNumber = 1;
+    private static int threadNumber;
 
     /**
      * Construct an InvoiceServer with a port.
@@ -57,9 +46,6 @@ public class InvoiceServer {
         this.clientList = clientList;
         this.consultantList = consultantList;
         this.outputDirectoryName = outputDirectoryName;
-        
-//        Runtime runTime = Runtime.getRuntime();
-//        runTime.addShutdownHook(new InvoiceServerShutdownHook(clientList, consultantList, outputDirectoryName));
     }
 
     /**
@@ -67,6 +53,9 @@ public class InvoiceServer {
      * dispatching them to the CommandProcesser.
      */
     public void run() {
+        Runtime runTime = Runtime.getRuntime();
+        runTime.addShutdownHook(new InvoiceServerShutdownHook(clientList,
+                consultantList, outputDirectoryName));
         try (ServerSocket listenSocket = new ServerSocket(port);) {
             serverSocket = listenSocket;
             logger.info("Server ready on Internet address: " + serverSocket.getLocalSocketAddress() + " and port "
@@ -74,17 +63,18 @@ public class InvoiceServer {
 
             while (serverSocket != null && !serverSocket.isClosed()) {
                 logger.info("listening for client...");
-                try (Socket clientSocket = serverSocket.accept();) {
-                    logger.info("accepted");
-                    
-                    String threadName = String.format("thread_%03d", threadNumber++);
-                    final CommandProcessor receiver = new CommandProcessor(clientSocket, threadName, clientList, consultantList,
-                            this);
-                    receiver.setOutPutDirectoryName(outputDirectoryName);
-                    
-                    Thread thread = new Thread(receiver);
-                    thread.start();
-                }
+                Socket clientSocket = null;
+
+                clientSocket = serverSocket.accept();
+                threadNumber++;
+
+                String threadName = String.format("thread_%03d", threadNumber);
+                final CommandProcessor receiver = new CommandProcessor(clientSocket, threadName, clientList,
+                        consultantList, this);
+                receiver.setOutPutDirectoryName(outputDirectoryName);
+
+                Thread thread = new Thread(receiver);
+                thread.start();
             }
         } catch (IOException ex) {
             logger.error("Server error: " + ex);

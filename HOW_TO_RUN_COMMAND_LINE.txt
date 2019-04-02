@@ -1,0 +1,19 @@
+SQL Type    Java Type   Method
+ARRAY   Array getArray
+BIGINT  long    getLong
+BINARY byte[] getBytes BIT boolean getBoolean BLOB java.sql.Blob getBlob CHAR String getString CLOB java.sql.Clob getClob DATE java.sql.Date getDate DECIMAL java.math.BigDecimal getBigDecimal DOUBLE double getDouble FLOAT double getDouble INTEGER int getInt 
+
+
+import org.apache.commons.lang3.NotImplementedException;
+throw new NotImplementedException("Not implemented yet.");
+
+
+
+java -classpath target/classes;%HOME%\.m2\repository\org\slf4j\slf4j-api\1.7.22\slf4j-api-1.7.22.jar;%HOME%\.m2\repository\org\slf4j\slf4j-jdk14\1.7.22\slf4j-jdk14-1.7.22.jar;C:\Users\Norma\.m2\repository\org\apache\commons\commons-lang3\3.8.1\commons-lang3-3.8.1.jar  app.Assignment09Server
+
+
+java -classpath ^
+target/classes:^
+$HOME/.m2/repository/org/slf4j/slf4j-api/1.7.22/slf4j-api-1.7.22.jar:^
+$HOME/.m2/repository/org/slf4j/slf4j-jdk14/1.7.22/slf4j-jdk14-1.7.22.jar ^
+app.Assignment09ServerinvoiceServer

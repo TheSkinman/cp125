@@ -2,8 +2,6 @@ package com.scg.net.cmd;
 
 import java.time.LocalDate;
 
-import com.scg.net.server.CommandProcessor;
-
 /**
  * The command to create invoices for a specified month, target type is LocalDate.
  * @author Norman Skinner (skinman@uw.edu)

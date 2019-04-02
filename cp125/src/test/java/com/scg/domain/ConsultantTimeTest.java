@@ -31,7 +31,8 @@ public class ConsultantTimeTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		account = new Account() {
-			private String name = "Company Name";
+			private static final long serialVersionUID = -604193129343258323L;
+            private String name = "Company Name";
 
 			@Override
 			public boolean isBillable() {
@@ -47,7 +48,8 @@ public class ConsultantTimeTest {
 		skillType = Skill.SOFTWARE_ENGINEER;
 		hours = 8;
 		accountOther = new Account() {
-			private String name = "Another Company";
+			private static final long serialVersionUID = 7972372426314899209L;
+            private String name = "Another Company";
 
 			@Override
 			public boolean isBillable() {

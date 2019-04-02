@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,23 +96,4 @@ public final class TimeCardListUtil_ExtraTest {
         assertEquals(timeCard1, timeCardsSame.get(0));
         assertEquals(timeCard1, timeCardsSame.get(1));
     }
-
-//    /** Test for the getTimeCardsForDateRange method. */
-//    @Test
-//    public void testGetTimeCardsForDateRange() {
-//        final DateRange dateRange = new DateRange("2007-02-11", "2007-02-17");
-//
-//        final List<TimeCard> selected = TimeCardListUtil.getTimeCardsForDateRange(timeCards, dateRange);
-//
-//        assertEquals(1, selected.size());
-//    }
-
-//    /** Test for the getTimeCardsForConsultant method. */
-//    @Test
-//    public void testGetTimeCardsForConsultant() {
-//        final List<TimeCard> selected = TimeCardListUtil.getTimeCardsForConsultant(timeCards, programmer);
-//        assertEquals(2, selected.size());
-//        assertEquals(timeCard1, selected.get(0));
-//        assertEquals(timeCard3, selected.get(1));
-//    }
 }

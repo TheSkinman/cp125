@@ -1,7 +1,6 @@
 package com.scg.net.cmd;
 
 import com.scg.domain.TimeCard;
-import com.scg.net.server.CommandProcessor;
 
 /**
  * Command that adds a TimeCard to the server's list of TimeCards, target type

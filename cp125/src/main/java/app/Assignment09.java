@@ -1,6 +1,7 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,47 +44,28 @@ public class Assignment09 {
         // Create an invoice client and run it. 
         log.info("Assignment 9 is now starting up the client...");
         
-        log.info("Creating all three threads...");
-        Thread t1 = new Thread() {
-            @Override
-            public void run () {
-                log.info("Thread-1: Startging...");
-                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
-                ic.run();
-            }
-        };
-        Thread t2 = new Thread() {
-            @Override
-            public void run () {
-                log.info("Thread-2: Startging...");
-                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
-                ic.run();
-            }
-        };
-        Thread t3 = new Thread() {
-            @Override
-            public void run () {
-                log.info("Thread-3: Startging...");
-                InvoiceClient ic = new InvoiceClient("localhost", 10888, timeCards);
-                ic.run();
-            }
-        };
+        log.info("Creating all three threads...");        
+        final List<TimeCard> unModTimeCards = Collections.unmodifiableList(timeCards);
+        
+        final InvoiceClient ic1 = new InvoiceClient("localhost", 10888, unModTimeCards);
+        final InvoiceClient ic2 = new InvoiceClient("localhost", 10888, unModTimeCards);
+        final InvoiceClient ic3 = new InvoiceClient("localhost", 10888, unModTimeCards);
         
         // Start the threads
         log.info("Starting all three threads...");
-        t1.start();
-        t2.start();
-        t3.start();
+        ic1.start();
+        ic2.start();
+        ic3.start();
         
         // Wait for threads to complete
         log.info("Waiting on all three threads...");
-        t1.join();
-        t2.join();
-        t3.join();
+        ic1.join();
+        ic2.join();
+        ic3.join();
         
         // Shut down the server.
         log.info("Threads joined, sending seperate shutdown command...");
-        //InvoiceClient.sendShutdown("localhost", 10888);
+        InvoiceClient.sendShutdown("localhost", 10888);
         log.info("Assignment 9 is now ending the client.");
 
     }

@@ -1,7 +1,6 @@
 package com.scg.net.cmd;
 
 import com.scg.domain.Consultant;
-import com.scg.net.server.CommandProcessor;
 
 /**
  * The command to add a Consultant to a list maintained by the server, target type is Consultant.

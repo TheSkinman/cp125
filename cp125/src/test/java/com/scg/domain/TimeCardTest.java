@@ -6,10 +6,6 @@ package com.scg.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,14 +14,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import com.scg.util.Address;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.scg.util.PersonalName;
-import com.scg.util.StateCode;
 
 /**
  * @author Norman Skinner
@@ -239,6 +235,7 @@ public class TimeCardTest {
 		assertEquals("TimeCard [getConsultantHours()=[], getTotalBillableHours()=0, getTotalHours()=0, getNonTotalBilableHours()=0, getWeekStartingDay()=1968-10-08]", result);
 	}
 
+    @SuppressWarnings("unchecked")
     @Test
     public void test_TestSerialDeserializer() {
         // ARRANGE

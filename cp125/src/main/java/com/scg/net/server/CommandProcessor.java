@@ -91,7 +91,7 @@ public class CommandProcessor implements Runnable {
      */
     public void execute(AddTimeCardCommand command) {
         logger.info("{}: executing " + command, name);
-        this.timeCardList.add(command.getTarget());
+        timeCardList.add(command.getTarget());
     }
 
     /**
@@ -100,9 +100,14 @@ public class CommandProcessor implements Runnable {
      * @param command
      *            the command to execute.
      */
-    public void execute(AddClientCommand command) {
+    public synchronized void execute(AddClientCommand command) {
         logger.info("{}: executing " + command, name);
-        this.clientList.add(command.getTarget());
+        final ClientAccount newClientAccount = command.getTarget();
+        synchronized(clientList) {
+            if (!clientList.contains(newClientAccount)) {
+                clientList.add(newClientAccount);
+            }
+        }
     }
 
     /**
@@ -111,9 +116,16 @@ public class CommandProcessor implements Runnable {
      * @param command
      *            the command to execute.
      */
-    public void execute(AddConsultantCommand command) {
+    public synchronized void execute(AddConsultantCommand command) {
         logger.info("{}: executing " + command, name);
-        this.consultantList.add(command.getTarget());
+        consultantList.add(command.getTarget());
+        
+        final Consultant newConsultant = command.getTarget();
+        synchronized(consultantList) {
+            if (!consultantList.contains(newConsultant)) {
+                consultantList.add(newConsultant);
+            }
+        }
     }
 
     /**
@@ -128,28 +140,30 @@ public class CommandProcessor implements Runnable {
         LocalDate invoiceDate = command.getTarget();
         final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("MMMMyyyy");
         final String monthString = dtFormatter.format(invoiceDate);
-        for (final ClientAccount client : this.clientList) {
-            invoice = new Invoice(client, invoiceDate.getMonth(), invoiceDate.getYear());
-            for (final TimeCard currentTimeCard : this.timeCardList) {
-                invoice.extractLineItems(currentTimeCard);
-            }
-            if (invoice.getTotalHours() > 0) {
-                final File serverDir = new File(this.outputDirectoryName);
-                if (!serverDir.exists()) {
-                    if (!serverDir.mkdirs()) {
-                        logger.error("Failed to create directory:" + serverDir.getAbsolutePath());
-                        return;
-                    }
+        synchronized (clientList) {
+            for (final ClientAccount client : this.clientList) {
+                invoice = new Invoice(client, invoiceDate.getMonth(), invoiceDate.getYear());
+                for (final TimeCard currentTimeCard : this.timeCardList) {
+                    invoice.extractLineItems(currentTimeCard);
                 }
-                final String outFileName = String.format("%s-%s-Invoice.txt", client.getName().replaceAll(" ", ""),
-                        monthString);
-                final File outFile = new File(this.outputDirectoryName, outFileName);
-                try (PrintStream printOut = new PrintStream(new FileOutputStream(outFile), true, ENCODING);) {
-                    printOut.println(invoice.toReportString());
-                } catch (UnsupportedEncodingException err) {
-                    logger.error("Unable to write the encoding format: {}", err);
-                } catch (FileNotFoundException err) {
-                    logger.error("File not found: {}", err);
+                if (invoice.getTotalHours() > 0) {
+                    final File serverDir = new File(this.outputDirectoryName);
+                    if (!serverDir.exists()) {
+                        if (!serverDir.mkdirs()) {
+                            logger.error("Failed to create directory:" + serverDir.getAbsolutePath());
+                            return;
+                        }
+                    }
+                    final String outFileName = String.format("%s-%s-Invoice.txt", client.getName().replaceAll(" ", ""),
+                            monthString);
+                    final File outFile = new File(this.outputDirectoryName, outFileName);
+                    try (PrintStream printOut = new PrintStream(new FileOutputStream(outFile), true, ENCODING);) {
+                        printOut.println(invoice.toReportString());
+                    } catch (UnsupportedEncodingException err) {
+                        logger.error("Unable to write the encoding format: {}", err);
+                    } catch (FileNotFoundException err) {
+                        logger.error("File not found: {}", err);
+                    }
                 }
             }
         }
@@ -190,9 +204,10 @@ public class CommandProcessor implements Runnable {
 
     @Override
     public void run() {
+        ObjectInputStream is = null;
         try {
             logger.debug("serviceConnection - opening stream...");
-            ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
+            is = new ObjectInputStream(clientSocket.getInputStream());
             setOutPutDirectoryName(outputDirectoryName + "/" + this.name);
 
             while (!clientSocket.isClosed()) {
@@ -212,6 +227,14 @@ public class CommandProcessor implements Runnable {
             clientSocket.close();
         } catch (IOException | ClassNotFoundException ex) {
             logger.error("Server error: ", ex);
+        } finally {
+            try {
+                is.close();
+                clientSocket.close();
+            } catch (IOException err) {
+                logger.error("Problem: {}", err);
+            }
         }
+        
     }
 }

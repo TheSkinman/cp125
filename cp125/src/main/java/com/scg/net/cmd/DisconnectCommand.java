@@ -1,7 +1,5 @@
 package com.scg.net.cmd;
 
-import com.scg.net.server.CommandProcessor;
-
 /**
  * The command to disconnect, this command has no target, so target type is Void.
  * @author Norman Skinner (skinman@uw.edu)

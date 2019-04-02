@@ -1,5 +1,15 @@
 package com.scg.net.server;
 
+import java.io.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,6 +28,10 @@ import com.scg.domain.Consultant;
  */
 public final class InvoiceServerShutdownHook extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceServerShutdownHook.class);
+
+    /** Character encoding to use. Assignment 5 */
+    private static final String ENCODING = "ISO-8859-1";
+
     private List<ClientAccount> clientList;
     private List<Consultant> consultantList;
     private String outputDirectoryName;
@@ -46,6 +60,66 @@ public final class InvoiceServerShutdownHook extends Thread {
      */
     @Override
     public void run() {
-        logger.info("SHUTDOWN THE BIG DOGS!!!");
+
+        Console console = System.console();
+        try {
+            @SuppressWarnings("resource") // don't want to close console or System.out
+            PrintWriter consoleWriter = (console != null) ? console.writer()
+                    : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
+
+            // Make sure the directory is ALIVE!
+            final File serverDir = new File(this.outputDirectoryName);
+            if (!serverDir.exists()) {
+                if (!serverDir.mkdirs()) {
+                    logger.error("Failed to create directory:" + serverDir.getAbsolutePath());
+                    return;
+                }
+            }
+            consoleWriter.println("=================================================");
+
+            // Print ClientAccount List to file
+            synchronized (clientList) {
+                final File outClientListFile = new File(this.outputDirectoryName, "ClientAccountList.ser");
+                try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(outClientListFile));) {
+                    objectOutputStram.writeObject(clientList);
+                    logger.info("File [{}] saved successfully.", outClientListFile);
+                } catch (IOException ex) {
+                    logger.error("Failded to save file [" + outClientListFile + "]", ex);
+                }
+                
+                for (ClientAccount ca : clientList) {
+                    consoleWriter.println(ca);
+                    consoleWriter.println("-------------------------------------------------");
+                }
+                
+                
+//                consoleWriter.print(clientList.toString());
+            }
+                
+         // Print Consultant List to file
+            synchronized (consultantList) {
+                final File outConsultantListFile = new File(this.outputDirectoryName, "ConsultantList.ser");
+                try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(outConsultantListFile));) {
+                    objectOutputStram.writeObject(consultantList);
+                    logger.info("File [{}] saved successfully.", outConsultantListFile);
+                } catch (IOException ex) {
+                    logger.error("Failded to save file [" + outConsultantListFile + "]", ex);
+                }
+                
+                for (Consultant c : consultantList) {
+                    consoleWriter.println(c);
+                    consoleWriter.println("-------------------------------------------------");
+                }
+                
+//                consoleWriter.print(consultantList.toString());
+            }            
+            
+            
+            consoleWriter.println("Complete! Shutting down!!!");
+        
+        
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Printing of invoices failed.", e);
+        }
     }
 }

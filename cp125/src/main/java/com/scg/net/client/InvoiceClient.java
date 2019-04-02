@@ -1,24 +1,17 @@
 package com.scg.net.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.scg.domain.ClientAccount;
 import com.scg.domain.Consultant;
-import com.scg.domain.Invoice;
 import com.scg.domain.TimeCard;
 import com.scg.net.cmd.AddClientCommand;
 import com.scg.net.cmd.AddConsultantCommand;
@@ -39,7 +32,7 @@ import com.scg.util.StateCode;
  * @author Norman Skinner (skinman@uw.edu)
  *
  */
-public class InvoiceClient {
+public class InvoiceClient extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceClient.class);
     private Month INVOICE_MONTH;
     private int INVOICE_YEAR;
@@ -67,13 +60,11 @@ public class InvoiceClient {
      * Runs this InvoiceClient, sending clients, consultants, and time cards to the
      * server, then sending the command to create invoices for a specified month.
      */
+    @Override
     public void run() {
         logger.debug("Start socket to {} on {}", host, port);
         ObjectOutputStream out = null;
         try (Socket clientSocket = new Socket(host, port);) {
-
-            // connect to input then shut down
-            // ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
 
             logger.debug("Opening streams to server...");
             out = new ObjectOutputStream(clientSocket.getOutputStream());

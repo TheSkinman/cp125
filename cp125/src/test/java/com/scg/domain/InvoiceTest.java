@@ -32,28 +32,6 @@ class InvoiceTest {
         assertEquals("1616 Index Ct.", invoice.getBizAddress().getStreetNumber());
     }
 
-//    @Test
-//    void test_Invoice_LoadNonExistingFileFails() {
-//        // ARRANGE
-//        String name = "Small Business";
-//        PersonalName contact = new PersonalName("last", "first", "middle");
-//        Address address = new Address("123 Street", "City", StateCode.AL, "12345");
-//        ClientAccount client = new ClientAccount(name, contact, address);
-//        Month invoiceMonth = Month.OCTOBER;
-//        int invoiceYear = 1968;
-//        invoice = new Invoice(client, invoiceMonth, invoiceYear);
-//
-//        // ACT
-//        invoice.loadProperties("thisFileNameDoesNotExist.properties");
-//        
-//        // ASSERT
-//        assertEquals("The Default Company", invoice.getBizName());
-//        assertEquals("Los Default", invoice.getBizAddress().getCity());
-//        assertEquals("12345", invoice.getBizAddress().getPostalCode());
-//        assertEquals(StateCode.CA, invoice.getBizAddress().getState());
-//        assertEquals("1234 Default St.", invoice.getBizAddress().getStreetNumber());
-//    }
-
     @Test
     void test_AddLineItem() {
         // ARRANGE
@@ -161,6 +139,7 @@ class InvoiceTest {
         TimeCard timeCard = new TimeCard(consultant, weekStartDay);
         LocalDate date = LocalDate.of(1968, 10, 8);
         Account account = new Account() {
+            private static final long serialVersionUID = -483015861398344904L;
             @Override public boolean isBillable() { return true; }
             @Override public String getName() { return name; }
         };
@@ -193,6 +172,7 @@ class InvoiceTest {
         TimeCard timeCard = new TimeCard(consultant, weekStartDay);
         LocalDate date = LocalDate.of(1968, 8, 8);
         Account account = new Account() {
+            private static final long serialVersionUID = 1318290521636344179L;
             @Override public boolean isBillable() { return true; }
             @Override public String getName() { return name; }
         };
@@ -225,6 +205,7 @@ class InvoiceTest {
         TimeCard timeCard = new TimeCard(consultant, weekStartDay);
         LocalDate date = LocalDate.of(1969, 10, 8);
         Account account = new Account() {
+            private static final long serialVersionUID = -6221789367148721152L;
             @Override public boolean isBillable() { return true; }
             @Override public String getName() { return name; }
         };
