@@ -100,8 +100,9 @@ public class CommandProcessor implements Runnable {
      * @param command
      *            the command to execute.
      */
-    public synchronized void execute(AddClientCommand command) {
+    public void execute(AddClientCommand command) {
         logger.info("{}: executing " + command, name);
+        
         final ClientAccount newClientAccount = command.getTarget();
         synchronized(clientList) {
             if (!clientList.contains(newClientAccount)) {
@@ -116,9 +117,8 @@ public class CommandProcessor implements Runnable {
      * @param command
      *            the command to execute.
      */
-    public synchronized void execute(AddConsultantCommand command) {
+    public void execute(AddConsultantCommand command) {
         logger.info("{}: executing " + command, name);
-        consultantList.add(command.getTarget());
         
         final Consultant newConsultant = command.getTarget();
         synchronized(consultantList) {

@@ -27,6 +27,9 @@ import com.scg.domain.Consultant;
  *
  */
 public final class InvoiceServerShutdownHook extends Thread {
+    private static final String LINE_DOUBLE = "=================================================";
+    private static final String LINE_SINGLE = "-------------------------------------------------";
+
     private static final Logger logger = LoggerFactory.getLogger(InvoiceServerShutdownHook.class);
 
     /** Character encoding to use. Assignment 5 */
@@ -75,48 +78,46 @@ public final class InvoiceServerShutdownHook extends Thread {
                     return;
                 }
             }
-            consoleWriter.println("=================================================");
+            consoleWriter.println(LINE_DOUBLE);
 
             // Print ClientAccount List to file
             synchronized (clientList) {
-                final File outClientListFile = new File(this.outputDirectoryName, "ClientAccountList.ser");
-                try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(outClientListFile));) {
-                    objectOutputStram.writeObject(clientList);
-                    logger.info("File [{}] saved successfully.", outClientListFile);
-                } catch (IOException ex) {
-                    logger.error("Failded to save file [" + outClientListFile + "]", ex);
+                final File outClientListFile = new File(this.outputDirectoryName, "ClientAccountList.txt");
+                try (PrintStream printOut = new PrintStream(new FileOutputStream(outClientListFile, false), true, ENCODING);) {
+                    for (ClientAccount ca : clientList) {
+                        printOut.println(ca.toString());
+                        printOut.println(LINE_SINGLE);
+                        consoleWriter.println(ca);
+                        consoleWriter.println(LINE_SINGLE);
+                    }
+                } catch (UnsupportedEncodingException err) {
+                    logger.error("Unable to write the encoding format: {}", err);
+                } catch (FileNotFoundException err) {
+                    logger.error("File not found: {}", err);
                 }
-                
-                for (ClientAccount ca : clientList) {
-                    consoleWriter.println(ca);
-                    consoleWriter.println("-------------------------------------------------");
-                }
-                
-                
-//                consoleWriter.print(clientList.toString());
             }
+
+            consoleWriter.println(LINE_DOUBLE);
                 
          // Print Consultant List to file
             synchronized (consultantList) {
-                final File outConsultantListFile = new File(this.outputDirectoryName, "ConsultantList.ser");
-                try (ObjectOutputStream objectOutputStram = new ObjectOutputStream(new FileOutputStream(outConsultantListFile));) {
-                    objectOutputStram.writeObject(consultantList);
-                    logger.info("File [{}] saved successfully.", outConsultantListFile);
-                } catch (IOException ex) {
-                    logger.error("Failded to save file [" + outConsultantListFile + "]", ex);
+                final File outConsultantListFile = new File(this.outputDirectoryName, "ConsultantList.txt");
+                try (PrintStream printOut = new PrintStream(new FileOutputStream(outConsultantListFile, false), true, ENCODING);) {
+                    for (Consultant c : consultantList) {
+                        printOut.println(c.toString());
+                        printOut.println(LINE_SINGLE);
+                        consoleWriter.println(c);
+                        consoleWriter.println(LINE_SINGLE);
+                    }
+                } catch (UnsupportedEncodingException err) {
+                    logger.error("Unable to write the encoding format: {}", err);
+                } catch (FileNotFoundException err) {
+                    logger.error("File not found: {}", err);
                 }
-                
-                for (Consultant c : consultantList) {
-                    consoleWriter.println(c);
-                    consoleWriter.println("-------------------------------------------------");
-                }
-                
-//                consoleWriter.print(consultantList.toString());
-            }            
+           }            
             
-            
+            consoleWriter.println(LINE_DOUBLE);
             consoleWriter.println("Complete! Shutting down!!!");
-        
         
         } catch (UnsupportedEncodingException e) {
             logger.error("Printing of invoices failed.", e);
